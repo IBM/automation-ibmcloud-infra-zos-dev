@@ -9,6 +9,30 @@ if [[ ! -d "${SRC_DIR}" ]]; then
   SRC_DIR="${SCRIPT_DIR}"
 fi
 
+# check if colima is installed, and apply dns override if no override file already exists
+if command -v colima &> /dev/null
+then
+  if [ ! -f ~/.lima/_config/override.yaml ]; then
+    echo "applying colima dns override..."
+
+    COLIMA_STATUS="$(colima status 2>&1)"
+    SUB='colima is running'
+    if [[ "$COLIMA_STATUS" == *"$SUB"* ]]; then
+      echo "stopping colima"
+      colima stop
+    fi
+
+    echo "writing ~/.lima/_config/override.yaml"
+    mkdir -p ~/.lima/_config
+    printf "useHostResolver: false\ndns:\n- 8.8.8.8" > ~/.lima/_config/override.yaml
+
+    if [[ "$COLIMA_STATUS" == *"$SUB"* ]]; then
+      echo "restarting colima"
+      colima start
+    fi
+  fi
+fi
+
 DOCKER_IMAGE="quay.io/cloudnativetoolkit/terraform:v1.1"
 
 SUFFIX=$(echo $(basename ${SCRIPT_DIR}) | base64 | sed -E "s/[^a-zA-Z0-9_.-]//g" | sed -E "s/.*(.{5})/\1/g")
