@@ -66,8 +66,8 @@ Clone this repository to access the automation to provision this reference archi
 | BOM ID | Name                                                                                        | Description                                                                                                                                             | Run Time |
 |--------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------| -------- |
 | 000    | [000 - IBM z/OS Dev Account Setup](./000-ibm-zdev-account-setup)                            | Set up account and provision a set of account-wide services. This is intended to only be run one time in an account                                     | 5 Mins   |
-| 100    | [100 - IBM z/OS Dev Shared Services](./100-ibm-zdev-shared-services)                        | Provision a set of common cloud managed services that can be shared with **Edge** and **Development** VPCs                                                      | 5 Mins   |
-| 110    | [110 - IBM z/OS Dev Network VPC](./110-ibm-zdev-edge-vpc)                                   | Provision an **Edge VPC** with Client to Site VPN & Bastion                                                                                             | 10 Mins  |
+| 100    | [100 - IBM z/OS Dev Shared Services](./100-ibm-zdev-shared-services)                        | Provision a set of common cloud managed services that can be shared with **Network** and **Development** VPCs                                           | 5 Mins   |
+| 110    | [110 - IBM z/OS Dev Network VPC](./110-ibm-zdev-edge-vpc)                                   | Provision an **Network VPC** with Client to Site VPN & Bastion                                                                                          | 10 Mins  |
 | 120    | [120 - IBM z/OS Dev Development VPC no OpenShift](./120-ibm-zdev-development-vpc) | Provision a **Development VPC** with IBM Z Virtual Server and connect to Transit Gateway                                                                | 45 mins  |
 | 130    | [130 - IBM z/OS Dev Development OpenShift Cluster](./130-ibm-zdev-development-vpc-openshift) | Provision a **Development VPC** with IBM Z Virtual Server, Red Hat OpenShift Cluster and connect to Transit Gateway                                     | 45 mins  |
 | 160    | [160 - IBM z/OS Dev Developer Tools Cluster](./160-ibm-zdev-openshift-dev-tools)            | Provision a set of common CNCF developer tools into Red Hat OpenShift to provide a DevSecOps SDLC that support industry common best practices for CI/CD | 20 mins  |
@@ -112,7 +112,7 @@ For proof of technology environments we recommend using the `auto-init` feature.
    ```
    ./setup-workspace.sh -a ocp
    ```
-4. Update **terraform.tfvars** in the `/workspace/current` directory with the appropriate values for your deployment. Note: The values are currently set up to separate resource groups for common services, edge, and development resources. These can be changed to all use the same resource group, if desired.
+4. Update **terraform.tfvars** in the `/workspace/current` directory with the appropriate values for your deployment. Note: The values are currently set up to provision all resources in a single resource groups. These can be changed to all use separate resources groups for common services, network, and development resources, if desired.
 
 ## Terraform Apply
 
