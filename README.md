@@ -199,7 +199,7 @@ To connect to the IBM Z Virtual Server:
    ```
 
    You must use the `ibmuser` username, but be sure to replace the `<IP ADDRESS>` with your VSI's IP address.
-7. Once you are connected, you will ser terminal output, and can execute the `ls /` command to see the VSI operating system file structure.
+7. Once you are connected, you will see terminal output, and can execute the `ls /` command to see the VSI operating system file structure.
 
    ```
    $ ssh -i ./ssh-zos-vsi ibmuser@10.10.40.4
