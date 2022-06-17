@@ -188,13 +188,15 @@ To connect to the IBM Z Virtual Server:
 5. Navigate to the layer that created the VSI instance.
    - If you chose the `vpc` architecture, navigate to the `120-ibm-zdev-development-vpc` folder.
    - If you chose the `ocp` architecture, navigate to the `130-ibm-zdev-development-vpc-openshift` folder.
+
+### SSH Connection 
 6. Use `ssh` to connect to the VSI instance using the SSH key that was generated for this project.
 
    ```
-   ssh -i ./ssh-zos-vsi ibmuser@10.10.10.4
+   ssh -i ./ssh-zos-vsi ibmuser@<IP ADDRESS>
    ```
 
-   You must use the `ibmuser` username, but be sure to replace the `10.10.10.4` with your VSI's IP address.
+   You must use the `ibmuser` username, but be sure to replace the `<IP ADDRESS>` with your VSI's IP address.
 7. Once you are connected, you will ser terminal output, and can execute the `ls /` command to see the VSI operating system file structure.
 
    ```
@@ -203,6 +205,19 @@ To connect to the IBM Z Virtual Server:
    SYSTEM   bin      dev      etc      global   lib      opt      rsusr    samples  tmp      u        usr      var
    IBMUSER : /u/ibmuser : >
    ```
+
+### Z Terminal Emulation
+
+You can also connect to the Z VSI instance using the [`tnz`](https://github.com/ibm/tnz) terminal emulator as a 3270 terminal interface.   
+
+9. Follow the installation instructions located at https://github.com/ibm/tnz#installing
+10. Add `zti` to your PATH using `export PATH=/home/devops/.local/bin:$PATH`
+11. Start the terminal emulator using the `zti` command.
+12. Once the 3270 terminal emulator is running, connect to the VSI using `GOTO <IP Address>`, replacing `<IP ADDRESS>` with your VSI's IP address.  For example: `GOTO 10.10.0.4`.
+
+![3270 terminal emulator](./z-terminal.png)
+
+
 
 ## How to Generate this repository from the source Bill of Materials.
 

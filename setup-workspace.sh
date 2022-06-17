@@ -7,7 +7,7 @@ Usage()
 {
    echo "Creates a workspace folder and populates it with architectures."
    echo
-   echo "Usage: setup-workspace.sh -t TEMPLATE_FLAVOR -a REF_ARCH"
+   echo "Usage: setup-workspace.sh -a REF_ARCH"
    echo "  options:"
    #echo "  t     the template to use for the deployment (small or full)"
    echo "  a     the reference architecture to deploy (vpc or ocp or all)"
