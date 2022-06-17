@@ -32,6 +32,7 @@ This suite of automation can be used for a Proof of Technology environment, or u
 
 **Development VPC**
 
+- Virtual Server Instance running IBM Z, LinuxONE (S390x Architecture)  
 - Red Hat OpenShift cluster with SDLC tools provided from the [Cloud-Native Toolkit](https://cloudnativetoolkit.dev/)
 
 **Developer Tools installed into OpenShift**
@@ -45,9 +46,6 @@ This suite of automation can be used for a Proof of Technology environment, or u
 - Pre-validated Tekton Pipelines and Tasks
 - CLI Tools to assit pipeline creation
 
-This set of automation packages was generated using the open-source [`isacable`](https://github.com/cloud-native-toolkit/iascable) tool. This tool enables a [Bill of Material yaml](https://github.com/cloud-native-toolkit/automation-solutions/tree/main/boms/infrastracture/ibmcloud/zos-dev) file to describe your IBM Cloud architecture, which it then generates the terraform modules into a package of infrastructure as code that you can use to accelerate the configuration of your IBM Cloud environment. Iascable generates standard terraform templates that can be executed from any terraform environment.
-
-> The `iascable` tool is targeted for use by advanced SRE developers. It requires deep knowledge of how the modules plug together into a customized architecture. This repository is a fully tested output from that tool. This makes it ready to consume for projects. 
 
 The following diagram gives a visual representation of the what your IBM Cloud account will contain after the automation has been successfully executed.
 
@@ -68,15 +66,15 @@ Clone this repository to access the automation to provision this reference archi
 | 000    | [000 - IBM z/OS Dev Account Setup](./000-ibm-zdev-account-setup)                            | Set up account and provision a set of account-wide services. This is intended to only be run one time in an account                                     | 5 Mins   |
 | 100    | [100 - IBM z/OS Dev Shared Services](./100-ibm-zdev-shared-services)                        | Provision a set of common cloud managed services that can be shared with a Edge, **Management** and **Workload** VPCs                                   | 5 Mins   |
 | 110    | [110 - IBM z/OS Dev Network VPC](./110-ibm-zdev-edge-vpc)                                   | Provision an **Edge VPC** with Client to Site VPN & Bastion                                                                                             | 10 Mins  |
-| 120    | [120 - IBM z/OS Dev Development VPC no OpenShift](./120-ibm-zdev-development-vpc) | Provision a **Development VPC** with and Red Hat OpenShift Cluster and connect to Transit Gateway                                             | 45 mins  |
-| 130    | [130 - IBM z/OS Dev Development OpenShift Cluster](./130-ibm-zdev-development-vpc-openshift) | Provision a **Development VPC** with and Red Hat OpenShift Cluster and connect to Transit Gateway                                             | 45 mins  |
+| 120    | [120 - IBM z/OS Dev Development VPC no OpenShift](./120-ibm-zdev-development-vpc) | Provision a **Development VPC** with IBM Z Virtual Server and connect to Transit Gateway                                                                | 45 mins  |
+| 130    | [130 - IBM z/OS Dev Development OpenShift Cluster](./130-ibm-zdev-development-vpc-openshift) | Provision a **Development VPC** with IBM Z Virtual Server, Red Hat OpenShift Cluster and connect to Transit Gateway                                     | 45 mins  |
 | 160    | [160 - IBM z/OS Dev Developer Tools Cluster](./160-ibm-zdev-openshift-dev-tools)            | Provision a set of common CNCF developer tools into Red Hat OpenShift to provide a DevSecOps SDLC that support industry common best practices for CI/CD | 20 mins  |
 
 ### Configuration guidance
 
 There are a couple of things to keep in mind when preparing to deploy the architectures that will impact the naming conventions:
 
-#### Creating multiple Management or Workload deployments
+#### Creating multiple Management 
 
 If you are planning to create multiple instances of the Development architecture in the same account, the following must be accounted for:
 
@@ -103,19 +101,16 @@ For proof of technology environments we recommend using the `auto-init` feature.
 
 ### Terraform IasC Automation
 
-1. Clone this repository to your local SRE laptop or into a secure terminal. Open a shell into the cloned directory.
-2. Determine what type of deployment you will be doing. There are currently two template FLAVORS available:
-   - `full`: Full IBM Cloud reference architecture deployment, including a Key Protect instance.
-   - `small`: IBM reference architecture scaled down for a POC environment deployment. This includes Key Protect and the clusters have been reduced to single region.
-3. Determine which reference architecture you will be deploying. There are currently two options available:
+1. Clone this repository to your local SRE laptop or into a secure terminal. Open a shell into the cloned directory. 
+2. Determine which reference architecture you will be deploying. There are currently two options available:
    - `vpc`: IBM Cloud - VPC with virtual servers reference architecture
    - `ocp`: IBM Cloud - VPC with Red Hat OpenShift reference architecture
-   - `all`: Will copy all the terraform bundles into your workspace bundles prefixed `000` to `170`
-4. Run the `setup-workspace.sh -t {FLAVOR} -a {ARCH}` script to create a copy of the Terraform scripts in a `workspace/` directory and generate the SSH keys needed for the various VSI instances.
+   - `all`: Will copy all the terraform bundles into your workspace bundles prefixed `000` to `160`
+3. Run the `setup-workspace.sh -a {ARCH}` script to create a copy of the Terraform scripts in a `/workspace/current` directory and generate the SSH keys needed for the various VSI instances.
    ```
-   ./setup-workspace.sh -t small -a all
+   ./setup-workspace.sh -a ocp
    ```
-5. Update **terraform.tfvars** in the `workspace/` directory with the appropriate values for your deployment. Note: The values are currently set up to separate resource resource groups for common services, edge, management, and workload resources. These can be changed to all use the same resource group, if desired.
+4. Update **terraform.tfvars** in the `/workspace/current` directory with the appropriate values for your deployment. Note: The values are currently set up to separate resource groups for common services, edge, and development resources. These can be changed to all use the same resource group, if desired.
 
 ## Terraform Apply
 
@@ -128,7 +123,7 @@ There are two methods of deployment: automatic or manual:
 
 ### Automatically apply the entire solution
 
-User the `./apply-all.sh` script to deploy all components of this solution automatically.  If you chose this option, skip ahead to the **Connecting to VPN** section.
+User the `./apply-all.sh` script to deploy all components of this solution automatically.  This will deploy all layers of the solution, and automatically connect to the VPN to install development tools in the OpenShift cluster.  If you chose this option, skip ahead to the **Connecting to VPN** section to connect your local machine to the VPN instance..
 
 ### Manually apply each architecture in the solution
 
@@ -136,15 +131,14 @@ User the `./apply-all.sh` script to deploy all components of this solution autom
 
    > This `launch.sh` currently has a dependency on Docker Desktop we are working on alternative solution. 
 
-2. The container should have opened in the `/terraform/workspace` as the working directory which should be mounted from repository directory on the host.
-3. Change directory to the terraform directory that will be applied (e.g. `000-account-setup` and `100-common-services`)
+2. The container should have opened in the `/terraform` as the working directory which should be mounted from repository directory on the host.  ⚠ Be sure to change to the `/workspace/current` directory.
+3. Change directory to the terraform layer that will be applied (e.g. `000-account-setup` and `100-common-services`)
 4. Initialize the environment with `terraform init`
 5. Apply the terraform with `terraform apply -auto-approve`. If all is configured properly you should not be prompted again and the terraform should run to completion.
 6. It is recommended to run Terraform bundles in this order:
    - `000`
    - `110`
-   - `130`
-   - `150`
+   - `120`|`130` (you should not run both)
    - Connect to the VPN (see instructions below)
    - `160`
 
@@ -166,8 +160,6 @@ User the `./apply-all.sh` script to deploy all components of this solution autom
 > 2. Delete the `terraform.tfstate` file
 > 3. Re-run the `terraform apply` command
 
-> We are working on an air gapped install of developer tools from within the private VPC network for Management Cluster. 
-
 
 
 ## Connecting to VPN
@@ -183,11 +175,11 @@ To connect to vpn:
 5. From your local operating system, use the vpn profile to connect the OpenVPN client to the VPN server.
 
 
-## Connecting to ZOS Virtual Server
+## Connecting to IBM Z, LinuxONE Virtual Server
 
-You can connect to the ZOS Virtual Server instance using the ssh key that was generated when the VSI was provisioned.
+You can connect to the IBM Z Virtual Server instance using the ssh key that was generated when the VSI was provisioned.
 
-To connect to the ZOS Virtual Server:
+To connect to the IBM Z Virtual Server:
 
 1. Navigate to https://cloud.ibm.com/vpc-ext/compute/vs and find the Z VSI instance that was created.  It will have a name similar to `development-vpc-server00`, but may change depending on the name prefix that was specified in the `terraform.tfvars` file.  Copy the IP address of the VSI.
 2. Connect the OpenVPN client
@@ -212,222 +204,15 @@ To connect to the ZOS Virtual Server:
    IBMUSER : /u/ibmuser : >
    ```
 
+## How to Generate this repository from the source Bill of Materials.
 
-## Post Install of SCC Collectors
+This set of automation packages was generated using the open-source [`isacable`](https://github.com/cloud-native-toolkit/iascable) tool. This tool enables a [Bill of Material yaml](https://github.com/cloud-native-toolkit/automation-solutions/tree/main/boms/infrastracture/ibmcloud/zos-dev) file to describe your IBM Cloud architecture, which it then generates the terraform modules into a package of infrastructure as code that you can use to accelerate the configuration of your IBM Cloud environment. Iascable generates standard terraform templates that can be executed from any terraform environment.
 
-> **Limitations**: Currently, the managed SCC collector cannot be installed and configured using automation. As the APIs become available these steps will be updated.
+> The `iascable` tool is targeted for use by advanced SRE developers. It requires deep knowledge of how the modules plug together into a customized architecture. This repository is a fully tested output from that tool. This makes it ready to consume for projects.
 
-The following post installation steps are required to enable scans of the infrastructure using the Security and Compliance Center. This configuration must only be performed one time.
+## Uninstalling & Troubleshooting
 
-1. Register the API key with [Security and Compliance Console](#register-scc-api-key) console.
+Please refer to the [Troubleshooting Guide](./TROUBLESHOOTING.md) for uninstallation instructions and instructions to correct common issues.
 
-2. [Create an IBM-managed collector with private endpoints](#generate-ssc-collector) by following the instructions below.
+If you continue to experience issues with this automation, please [file an issue](https://github.com/IBM/automation-ibmcloud-infra-zos-dev/issues) or reach out on our [public Dischord server](https://discord.com/channels/955514069815808010/955514069815808013).
 
-3. [Install the SCC collector](#install-scc-collector) into the already provisioned VSI's within the collector.
-
-4. Once installed into the **Management** and **Workload** remember to activate them to start collecting compliance evidence for you Virtual Private Cloud configurations.
-
-5. Review the scan results in the [Security and Compliance Center](https://cloud.ibm.com/security-compliance/overview)
-
-### <a name="register-scc-apikey"></a> Register an API key with SCC
-
-Set API Key for Security and compliance
-
-1. Open the IBM Cloud console to the **Security and Compliance** tool - https://cloud.ibm.com/security-compliance/overview
-2. Under **Manage Posture**, click **Configure** > **Settings**.
-3. Open the **Credentials** tab and click **Create** to create a new credential. Provide the following values:
-   - **Name**: Provide a descriptive name for the credential
-   - **Purpose**: `Discovery/Collection`
-4. Click **Next** to advance to the next page. Provide the following values:
-   - **Credential type**: `IBM Cloud`
-   - **IBM API key**: Enter your IBM Cloud API key
-5. Press **Create** to register the API key.
-
-### <a name="generate-ssc-collector"></a> Generate an IBM-managed SCC collector with private endpoints
-
-An SCC collector is required to scan the infrastructure within the account for vulnerabilities.
-
-1. Open the IBM Cloud console to the **Security and Compliance** tool - https://cloud.ibm.com/security-compliance/overview.
-2. Under **Manage Posture**, click **Configure** > **Settings**.
-3. On the **Collectors** tab, click **Create**. Provide `ibm-managed` for the collector **name** and press **Next**.
-4. On the **Configuration** tab, provide the following values:
-   - **Managed by**: `IBM`
-   - **Endpoint type**: `Private`
-5. Click **Create** to define the collector instance.
-6. From the **Collectors** tab you will see the collector provisioning. It will take several minutes for the collector to be available.
-
-## Configure Security and Compliance for an SCC scan
-
-The following steps are required to set up an SCC scan of the environment after the SCC collectors have been installed. All of the following steps will be performed within the Security and Compliance center - https://cloud.ibm.com/security-compliance/overview
-
-### 1. Create an inventory
-
-1. Open the SCC inventory page - https://cloud.ibm.com/security-compliance/inventory
-2. Click **Create** to create a new inventory
-3. Provide a **name** for the inventory. Provide a name that identifies the environment you are scanning.
-4. Press **Next**.
-5. Check the collector(s) that have been registered for the environment. If the SCC collector steps have been performed successfully the collectors should be in **Ready** state.
-6. Click "Save" to create the inventory.
-
-### 2. Create a scope
-
-A scope will define the collection of resources upon which the scan will be performed. Multiple scopes can be created for the same resources so how these scopes are defined is up to you. For now it is assumed you will have one scope per environment (i.e. one for management and one for workload).
-
-1. Open the SCC scope page - https://cloud.ibm.com/security-compliance/scopes
-2. Click **Create** to create a new scope
-3. Provide a **name** for the scope (e.g. management).
-4. Click **Next**
-5. If you have previously created a scope and provided IBM Cloud credentials you can pick it from the list. If not click **Create +** to add a new one.
-   1. Provide a name for the credential that will identify it for later use
-   2. Select `Both` for the **Purpose**
-   3. Press **Next**
-   4. Pick `IBM Cloud` for the **Credential type**
-   5. Provide your **IBM API key** for the account
-   6. Press **Create** to create the credential
-   7. Make sure the newly created credential is selected in the **Credentials** field of Scope dialog
-6. Press **Next** on the Scope page to proceed to the "Collectors" pane
-7. Select the collector(s) that will be used for the environment
-8. Click **Next**
-9. Click **Create** to create the scope
-
-Creating the scope should kick off the Discovery scan which will take 10-30 minutes depending upon how many resources are in the environment.
-
-### 3. Scope the inventory to the desired resources
-
-After the initial Discovery scan, the scope will include **all** of the resources in the account. In most cases you will want to restrict the resources in the scope to those that are related to the particular environment.
-
-1. Open the SCC scope page - https://cloud.ibm.com/security-compliance/scopes
-2. Click on the name of the scope that you want to update.
-3. In the "Inventory" section of the Scope page, click the **Edit** button.
-4. Select/deselect the resources that should be included in the scope. Likely you will want to select just the resource group(s) that make up the environment. (Be sure to include the HPCS resource group, shared services, and environment resource group in scope.)
-5. Click \*_Save_ to update the scope.
-
-**Note:** An on-demand Discovery scan can be triggered if you need to update the inventory after changes in the environment. (See next step)
-
-### 4. Run an on-demand scan
-
-Now that the scope is set up, on-demand scans can be performed to get the validation results and update the inventory.
-
-1. Open the SCC scope page - https://cloud.ibm.com/security-compliance/scopes
-2. Find the scope against which you want to run a scan in the table.
-3. Click the action menu on the right-hand side of the row (the vertical three dots) and select **On-demand scan**
-4. Select `Validation` to run a validation scan. (This will also trigger a Discovery scan that runs before the validation.)
-5. Select `IBM Cloud for Financial Services v0.1` for the **Profile**
-6. Click **Create** to start the scan.
-
-Depending on the number of resources in the scope, the scan will take 20-40 minutes.
-
-### 5. View the scan results
-
-1. Open the SCC scans page - https://cloud.ibm.com/security-compliance/scans
-2. Once the scan is completed you will see an entry for the scan result in the page.
-3. Click on the scan to see the results
-
-### 6. Schedule regular scans of the environment
-
-On-demand scans can be run at any point but you can also schedule scans to be regularly run against the environment.
-
-1. Open the SCC scans page - https://cloud.ibm.com/security-compliance/scans
-2. Click the **Scheduled scans** tab
-3. Click **Schedule** to create a scheduled scan
-4. Provide a **name** for the scan
-5. Select `Validation` for the **Scan type**
-6. Select the scope from the previous step for the **Scope**
-7. Select `IBM Cloud for Financial Services v0.1` for the **Profile**
-8. Click **Next**
-9. Provide the schedule information for how frequently and for what duration the scan should run.
-10. Click **Create** to create the scheduled scan
-
-## Known Exceptions
-
-The following exceptions are know when an SCC scan is performed on the reference architecure. These will need to be resolved for a production deployment. They are linked to the VPN client configuration.
-
-### <a name="exceptions"></a> SCC Scan Exceptions
-
-| Goal ID | Goal Description                                                                                                              | Severity | Exception description                                                                                                                                                                                                 |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 3000404 | Check that the inbound rules in a VPC security group do not contain any rules that specify source IP 0.0.0.0/0 to SSH port 22 | Critical | The VPN security group requires access on port 22 from 0.0.0.0/0                                                                                                                                                      |
-| 3000410 | Check that no VPC security groups have inbound ports open to the internet (0.0.0.0/0)                                         | Critical | The OpenVPN server requires access to the internet                                                                                                                                                                    |
-| 3000411 | Check that no VPC security groups have outbound ports open to the internet (0.0.0.0/0)                                        | Critical | The SCC collector currently requires access to the internet                                                                                                                                                           |
-| 3000441 | Check whether no VPC access control lists allow ingress from 0.0.0.0/0 to port 22                                             | Critical | VPC access control list does not restrict ingress from 0.0.0.0/0 to port 22                                                                                                                                           |
-| 3000452 | Check whether no VPC network access control lists allow egress to 0.0.0.0/0 to any port                                       | Critical | The SCC collector and OpenShift cluster require egress to 0.0.0.0/0                                                                                                                                                   |
-| 3000451 | Check whether no VPC network access control lists allow ingress from 0.0.0.0/0 to any port                                    | Critical | The VPN server requires ingress from 0.0.0.0/0                                                                                                                                                                        |
-| 3000448 | Check whether Virtual Private Cloud (VPC) has no public gateways attached at the time of provisioning                         | High     | Public gateways give the subnets access to the internet. In the POT environment public gateways are currently needed for the SCC collector and for pipeline in the OpenShift cluster to access development resources. |
-| 3000449 | Check whether Virtual Private Cloud (VPC) has no public gateways attached                                                     | High     | Same as previous                                                                                                                                                                                                      |
-| 3000467 | Check whether subnet does not have public gateway attached.                                                                   | High     | Same as previous                                                                                                                                                                                                      |
-| 3000454 | Check whether virtual server does not have a Floating IP                                                                      | High     | The OpenVPN virtual server instance uses a floating IP so that it can be accessed outside the private network for both SSH (port 22) access to configure VPN and VPN (port 1194) access.                              |
-| 3000116 | Check whether Cloud Object Storage bucket resiliency is set to cross region                                                   | Medium   | Current conflict between encrypted buckets and cross-region buckets                                                                                                                                                   |
-| 3000234 | Check whether Hyper Protect Crypto Services instance is enabled with a dual authorization deletion policy                     | Low      | For the POT environment, requireing dual authorization to delete a key would make cleanup and management much more difficult                                                                                          |
-
-## Deploy First Application into Red Hat OpenShift
-
-IBM is a multi-cloud company and we fully embrace consistent development tooling across cloud enviroments including IBM Cloud.
-
-We recommend using the RedHat OpenShift developer tools for container based development. The Cloud-Native Toolkit gives a consistent developer experience and a set of SDLC tools (Software Delivery LifeCycle) that run inside on any OpenShift environment. These tools are installed as part of `160` and `170`. You can find more information about the toolkit here. [Cloud-Native Toolkit](https://cloudnativetoolkit.dev/)  
-
-**Prerequisites**
-
-1. Ensure VPN is on
-2. Follow the [Cloud Native Toolkit Dev-Setup guide](https://cloudnativetoolkit.dev/learning/dev-setup/) to configure dependencies.
-3. Create your first application pipeline using OpenShift Pipelines (Tekton) using the [Cloud Native Toolkit Continuous Integration Fast-start tutorial](https://cloudnativetoolkit.dev/learning/fast-ci/).
-4. Configure your first Continuous Delivery application using OpenShift GitOps (ArgoCD) by following the [Cloud Native Toolkit Countinuous Delivery Fast-start tutorial](https://cloudnativetoolkit.dev/learning/fast-cd/).
-
-## (Optional) Cloud Satellite Setup & OpenShift Marketplace Add
-
-Cloud Satellite can be used to deploy your application to a managed OpenShift environment anywhere on prem, on the Edge, or other Cloud providers.
-
-Deploying Satellite involves the following steps:
-
-1. Creating a Satellite location
-2. Attach hosts to your location
-3. Assigning hosts to the Satellite control plane
-
-Detailed instructions for this can be found here in the [Satellite docs](https://cloud.ibm.com/docs/satellite?topic=satellite-getting-started)
-
-## Adding RedHat Marketplace to a ROKS Satellite Cluster
-
-Post installation of Cloud Satellite, the RedHat Marketplace is not added automatically within the OpenShift Cluster. This needs to be setup manually.
-
-If you try and install one of the Red Hat Marketplace operators though you’ll find a problem with being unable to pull the operator image.
-
-You must register your ROKS on Satellite cluster with the Red Hat Marketplace following instructions here: https://marketplace.redhat.com/en-us/workspace/clusters/add/register.
-
-**NOTE**: Registering for the marketplace right now is currently only supported with a US based email address. After registering the marketplace will be available to all users of the cluster regardless of location.
-
-This will create a new namespace `openshift-redhat-marketplace` and a global pull secret.
-
-After step 5 in the Red Hat Marketplace instructions above, you need to restart your workers manually as the update pull secret script doesn’t get applied immediately.
-
-**Prerequisite**
-
-`oc cli version 4.6.23+`
-available here: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.6.23/
-
-1.  List your satellite clusters you have access to:
-    `ibmcloud ks cluster ls`
-
-2.  List workers for your satellite cluster:
-    `ibmcloud oc worker ls -c <cluster name from list above>`
-
-3.  Restart each of the workers (**Note** this could potentially cause an application outage if done all at once)
-    `ibmcloud oc worker reload -c gp-satellite-openshift-cluster -w <workerID>`
-
-## Reference
-
-### <a name="generate-ssh-keys"></a> Generate SSH Keys
-
-You need to create a set of unique keys that will be configured for the various components that are provisioned by the Terraform automation.
-
-1. The command to generate the ssh keys is `ssh-keygen -t rsa -b 3072 -N "" -f {name}`
-
-2. You will want to run the command 6 times to generate the keys. If you are keeping with the names in the **terraform.tfvars** file then run the following:
-
-   ```shell
-   ssh-keygen -t rsa -b 3072 -N "" -f ssh-edge-bastion -q
-   ssh-keygen -t rsa -b 3072 -N "" -f ssh-mgmt-scc -q
-   ssh-keygen -t rsa -b 3072 -N "" -f ssh-workload-scc -q
-   ```
-   
-
-
-## Troubleshooting
