@@ -16,9 +16,6 @@
 ## cs_resource_group_name: The name of the resource group
 #cs_resource_group_name=""
 
-## cs_name_prefix: The prefix name for the service. If not provided it will default to the resource group name
-#cs_name_prefix=""
-
 ## kms_region: Geographic location of the resource (e.g. us-south, us-east)
 #kms_region=""
 
@@ -28,14 +25,23 @@
 ## mgmt_name_prefix: The name_prefix used to build the name if one is not provided. If used the name will be `{name_prefix}-{label}`
 #mgmt_name_prefix="base"
 
-## mgmt_worker_count: The number of worker nodes that should be provisioned for classic infrastructure
-#mgmt_worker_count="3"
+## cs_name_prefix: The prefix name for the service. If not provided it will default to the resource group name
+#cs_name_prefix=""
 
-## cluster_flavor: The machine type that will be provisioned for classic infrastructure
-#cluster_flavor="bx2.4x16"
+## dev_ssh_vsi_public_key: The public key provided for the ssh key. If empty string is provided then a new key will be generated.
+#dev_ssh_vsi_public_key=""
 
-## mgmt_worker_subnet_count: The number of subnets that should be provisioned
-#mgmt_worker_subnet_count="3"
+## dev_ssh_vsi_private_key: The private key provided for the ssh key. If empty string is provided then a new key will be generated.
+#dev_ssh_vsi_private_key=""
+
+## dev_ssh_vsi_public_key_file: The name of the file containing the public key provided for the ssh key. If empty string is provided then a new key will be generated.
+#dev_ssh_vsi_public_key_file=""
+
+## dev_ssh_vsi_private_key_file: The name of the file containing the private key provided for the ssh key. If empty string is provided then a new key will be generated.
+#dev_ssh_vsi_private_key_file=""
+
+## _count: The number of subnets that should be provisioned
+#_count="1"
 
 ## vpe-subnets__count: The number of subnets that should be provisioned
 #vpe-subnets__count="3"

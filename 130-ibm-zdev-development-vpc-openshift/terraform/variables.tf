@@ -425,6 +425,41 @@ variable "ibm-vpc-gateways_tags" {
   description = "Tags that should be added to the instance"
   default = "[]"
 }
+variable "dev_ssh_vsi_name" {
+  type = string
+  description = "(Optional) Name given to the ssh key instance. If not provided it will be generated using prefix_name"
+  default = ""
+}
+variable "dev_ssh_vsi_label" {
+  type = string
+  description = "(Optional) Label used for the instance. It will be added to the name_prefix to create the name if the name is not provided."
+  default = "zos-vsi"
+}
+variable "dev_ssh_vsi_public_key" {
+  type = string
+  description = "The public key provided for the ssh key. If empty string is provided then a new key will be generated."
+  default = ""
+}
+variable "dev_ssh_vsi_private_key" {
+  type = string
+  description = "The private key provided for the ssh key. If empty string is provided then a new key will be generated."
+  default = ""
+}
+variable "dev_ssh_vsi_public_key_file" {
+  type = string
+  description = "The name of the file containing the public key provided for the ssh key. If empty string is provided then a new key will be generated."
+  default = ""
+}
+variable "dev_ssh_vsi_private_key_file" {
+  type = string
+  description = "The name of the file containing the private key provided for the ssh key. If empty string is provided then a new key will be generated."
+  default = ""
+}
+variable "dev_ssh_vsi_rsa_bits" {
+  type = number
+  description = "The number of bits for the rsa key, if it will be generated"
+  default = 3072
+}
 variable "worker-subnets_zone_offset" {
   type = number
   description = "The offset for the zone where the subnet should be created. The default offset is 0 which means the first subnet should be created in zone xxx-1"
@@ -458,7 +493,7 @@ variable "worker-subnets_provision" {
 variable "worker-subnets_acl_rules" {
   type = string
   description = "List of rules to set on the subnet access control list"
-  default = "[{\"name\":\"allow-vpn-ingress\",\"action\":\"allow\",\"direction\":\"inbound\",\"source\":\"0.0.0.0/0\",\"destination\":\"10.0.0.0/8\"},{\"name\":\"allow-vpn-egress\",\"action\":\"allow\",\"direction\":\"inbound\",\"source\":\"10.0.0.0/8\",\"destination\":\"0.0.0.0/0\"},{\"action\":\"allow\",\"destination\":\"10.0.0.0/8\",\"direction\":\"inbound\",\"source\":\"0.0.0.0/0\",\"tcp\":{\"port_max\":23,\"port_min\":22,\"source_port_max\":23,\"source_port_min\":22},\"udp\":{\"port_max\":23,\"port_min\":22,\"source_port_max\":23,\"source_port_min\":22}},{\"action\":\"allow\",\"destination\":\"0.0.0.0/0\",\"direction\":\"outbound\",\"source\":\"10.0.0.0/8\",\"tcp\":{\"port_max\":23,\"port_min\":22,\"source_port_max\":23,\"source_port_min\":22},\"udp\":{\"port_max\":23,\"port_min\":22,\"source_port_max\":23,\"source_port_min\":22}}]"
+  default = "[{\"name\":\"allow-vpn-ingress\",\"action\":\"allow\",\"direction\":\"inbound\",\"source\":\"0.0.0.0/0\",\"destination\":\"10.0.0.0/8\"},{\"name\":\"allow-vpn-egress\",\"action\":\"allow\",\"direction\":\"inbound\",\"source\":\"10.0.0.0/8\",\"destination\":\"0.0.0.0/0\"}]"
 }
 variable "worker-subnets_tags" {
   type = string
@@ -545,6 +580,46 @@ variable "ingress-subnets_tags" {
   description = "Tags that should be added to the instance"
   default = "[]"
 }
+variable "vsi-subnets_zone_offset" {
+  type = number
+  description = "The offset for the zone where the subnet should be created. The default offset is 0 which means the first subnet should be created in zone xxx-1"
+  default = 0
+}
+variable "vsi-subnets__count" {
+  type = number
+  description = "The number of subnets that should be provisioned"
+  default = 1
+}
+variable "vsi-subnets_label" {
+  type = string
+  description = "Label for the subnets created"
+  default = "worker-vsi"
+}
+variable "vsi-subnets_ipv4_cidr_blocks" {
+  type = string
+  description = "List of ipv4 cidr blocks for the subnets that will be created (e.g. ['10.10.10.0/24']). If you are providing cidr blocks then a value must be provided for each of the subnets. If you don't provide cidr blocks for each of the subnets then values will be generated using the {ipv4_address_count} value."
+  default = "[\"10.10.40.0/24\",\"10.20.40.0/24\",\"10.30.40.0/24\"]"
+}
+variable "vsi-subnets_ipv4_address_count" {
+  type = number
+  description = "The size of the ipv4 cidr block that should be allocated to the subnet. If {ipv4_cidr_blocks} are provided then this value is ignored."
+  default = 256
+}
+variable "vsi-subnets_provision" {
+  type = bool
+  description = "Flag indicating that the subnet should be provisioned. If 'false' then the subnet will be looked up."
+  default = true
+}
+variable "vsi-subnets_acl_rules" {
+  type = string
+  description = "List of rules to set on the subnet access control list"
+  default = "[{\"name\":\"allow-vpn-ingress\",\"action\":\"allow\",\"direction\":\"inbound\",\"source\":\"0.0.0.0/0\",\"destination\":\"10.0.0.0/8\"},{\"name\":\"allow-vpn-egress\",\"action\":\"allow\",\"direction\":\"inbound\",\"source\":\"10.0.0.0/8\",\"destination\":\"0.0.0.0/0\"}]"
+}
+variable "vsi-subnets_tags" {
+  type = string
+  description = "Tags that should be added to the instance"
+  default = "[]"
+}
 variable "ibm-vpc-vpn-gateway_label" {
   type = string
   description = "The label for the server instance"
@@ -564,6 +639,71 @@ variable "ibm-vpc-vpn-gateway_provision" {
   type = bool
   description = "Flag indicating that the resource should be provisioned. If false the resource will be looked up."
   default = true
+}
+variable "ibm-vpc-vsi_label" {
+  type = string
+  description = "The label for the server instance"
+  default = "server"
+}
+variable "ibm-vpc-vsi_image_name" {
+  type = string
+  description = "The name of the image to use for the virtual server"
+  default = "ibm-zos-2-4-s390x-dev-test-wazi-1"
+}
+variable "ibm-vpc-vsi_profile_name" {
+  type = string
+  description = "Instance profile to use for the bastion instance"
+  default = "mz2-2x16"
+}
+variable "ibm-vpc-vsi_allow_ssh_from" {
+  type = string
+  description = "An IP address, a CIDR block, or a single security group identifier to allow incoming SSH connection to the virtual server"
+  default = ""
+}
+variable "ibm-vpc-vsi_create_public_ip" {
+  type = bool
+  description = "Set whether to allocate a public IP address for the virtual server instance"
+  default = false
+}
+variable "ibm-vpc-vsi_init_script" {
+  type = string
+  description = "Script to run during the instance initialization. Defaults to an Ubuntu specific script when set to empty"
+  default = ""
+}
+variable "ibm-vpc-vsi_tags" {
+  type = string
+  description = "Tags that should be added to the instance"
+  default = "[]"
+}
+variable "ibm-vpc-vsi_kms_enabled" {
+  type = bool
+  description = "Flag indicating that the volumes should be encrypted using a KMS."
+  default = false
+}
+variable "ibm-vpc-vsi_auto_delete_volume" {
+  type = bool
+  description = "Flag indicating that any attached volumes should be deleted when the instance is deleted"
+  default = true
+}
+variable "ibm-vpc-vsi_security_group_rules" {
+  type = string
+  description = "List of security group rules to set on the bastion security group in addition to the SSH rules"
+  default = "[{\"name\":\"ingress-everything\",\"direction\":\"inbound\",\"remote\":\"0.0.0.0/0\"},{\"name\":\"egress-everything\",\"direction\":\"outbound\",\"remote\":\"0.0.0.0/0\"}]"
+}
+variable "ibm-vpc-vsi_allow_deprecated_image" {
+  type = bool
+  description = "Flag indicating that deprecated images should be allowed for use in the Virtual Server instance. If the value is `false` and the image is deprecated then the module will fail to provision"
+  default = true
+}
+variable "ibm-vpc-vsi_acl_rules" {
+  type = string
+  description = "List of rules to set on the subnet access control list"
+  default = "[]"
+}
+variable "ibm-vpc-vsi_target_network_range" {
+  type = string
+  description = "The ip address range that should be used for the network acl rules generated from the security groups"
+  default = "0.0.0.0/0"
 }
 variable "vpe-cos_sync" {
   type = string

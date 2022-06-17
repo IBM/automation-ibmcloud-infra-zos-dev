@@ -34,6 +34,18 @@
 ## cluster_flavor: The machine type that will be provisioned for classic infrastructure
 #cluster_flavor="bx2.4x16"
 
+## dev_ssh_vsi_public_key: The public key provided for the ssh key. If empty string is provided then a new key will be generated.
+#dev_ssh_vsi_public_key=""
+
+## dev_ssh_vsi_private_key: The private key provided for the ssh key. If empty string is provided then a new key will be generated.
+#dev_ssh_vsi_private_key=""
+
+## dev_ssh_vsi_public_key_file: The name of the file containing the public key provided for the ssh key. If empty string is provided then a new key will be generated.
+#dev_ssh_vsi_public_key_file=""
+
+## dev_ssh_vsi_private_key_file: The name of the file containing the private key provided for the ssh key. If empty string is provided then a new key will be generated.
+#dev_ssh_vsi_private_key_file=""
+
 ## mgmt_worker_subnet_count: The number of subnets that should be provisioned
 #mgmt_worker_subnet_count="3"
 
@@ -42,6 +54,9 @@
 
 ## ingress-subnets__count: The number of subnets that should be provisioned
 #ingress-subnets__count="3"
+
+## vsi-subnets__count: The number of subnets that should be provisioned
+#vsi-subnets__count="1"
 
 ## vpn-subnets__count: The number of subnets that should be provisioned
 #vpn-subnets__count="3"

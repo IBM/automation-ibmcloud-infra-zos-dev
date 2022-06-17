@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEMPLATE_FLAVOR=""
+TEMPLATE_FLAVOR="zdev"
 REF_ARCH=""
 
 Usage()
@@ -9,7 +9,7 @@ Usage()
    echo
    echo "Usage: setup-workspace.sh -t TEMPLATE_FLAVOR -a REF_ARCH"
    echo "  options:"
-   echo "  t     the template to use for the deployment (small or full)"
+   #echo "  t     the template to use for the deployment (small or full)"
    echo "  a     the reference architecture to deploy (vpc or ocp or all)"
    echo "  h     Print this help"
    echo
@@ -21,8 +21,8 @@ while getopts ":a:t:" option; do
       h) # display Help
          Usage
          exit 1;;
-      t) # Enter a name
-         TEMPLATE_FLAVOR=$OPTARG;;
+#      t) # Enter a name
+#         TEMPLATE_FLAVOR=$OPTARG;;
       a) # Enter a name
          REF_ARCH=$OPTARG;;
      \?) # Invalid option
@@ -32,7 +32,7 @@ while getopts ":a:t:" option; do
    esac
 done
 
-if [[ -z "${TEMPLATE_FLAVOR}" ]] || [[ ! "${TEMPLATE_FLAVOR}" =~ small|full ]] || [[ -z "${REF_ARCH}" ]] || [[ ! "${REF_ARCH}" =~ ocp|vpc|all ]]; then
+if [[ -z "${TEMPLATE_FLAVOR}" ]] || [[ ! "${TEMPLATE_FLAVOR}" =~ small|full|zdev ]] || [[ -z "${REF_ARCH}" ]] || [[ ! "${REF_ARCH}" =~ ocp|vpc|all ]]; then
   Usage
   exit 1
 fi
@@ -60,6 +60,11 @@ if command -v openssl &> /dev/null
 then
     printf "\n\nsuffix=\"$(openssl rand -hex 4)\"\n" >> "${WORKSPACE_DIR}"/terraform.tfvars
 fi
+
+
+# Help Scripts for applying and destroying
+cp "${SCRIPT_DIR}/apply-all.sh" "${WORKSPACE_DIR}/apply-all.sh"
+cp "${SCRIPT_DIR}/destroy-all.sh" "${WORKSPACE_DIR}/destroy-all.sh"
 
 ALL_ARCH="000|100|110|120|130|150|160"
 
@@ -100,9 +105,13 @@ do
   mkdir -p ${name}
   cd "${name}"
 
+  cp -R "${SCRIPT_DIR}/${name}/bom.yaml" .
   cp -R "${SCRIPT_DIR}/${name}/terraform/"* .
   ln -s "${WORKSPACE_DIR}"/terraform.tfvars ./terraform.tfvars
   ln -s "${WORKSPACE_DIR}"/ssh-* .
+  ln -s "${SCRIPT_DIR}/apply.sh" ./apply.sh
+  ln -s "${SCRIPT_DIR}/destroy.sh" ./destroy.sh
+
   cd - > /dev/null
 done
 

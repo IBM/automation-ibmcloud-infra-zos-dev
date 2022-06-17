@@ -6,34 +6,6 @@ module "at_resource_group" {
   resource_group_name = var.at_resource_group_name
   sync = var.at_resource_group_sync
 }
-module "cluster" {
-  source = "cloud-native-toolkit/ocp-vpc/ibm"
-  version = "1.15.4"
-
-  cos_id = module.cos.id
-  disable_public_endpoint = var.cluster_disable_public_endpoint
-  exists = var.cluster_exists
-  flavor = var.cluster_flavor
-  force_delete_storage = var.cluster_force_delete_storage
-  ibmcloud_api_key = var.ibmcloud_api_key
-  kms_enabled = var.cluster_kms_enabled
-  kms_id = module.kms-key.kms_id
-  kms_key_id = module.kms-key.id
-  kms_private_endpoint = var.cluster_kms_private_endpoint
-  login = var.cluster_login
-  name = var.cluster_name
-  name_prefix = var.mgmt_name_prefix
-  ocp_entitlement = var.cluster_ocp_entitlement
-  ocp_version = var.ocp_version
-  region = var.region
-  resource_group_name = module.resource_group.name
-  sync = module.resource_group.sync
-  tags = var.cluster_tags == null ? null : jsondecode(var.cluster_tags)
-  vpc_name = module.worker-subnets.vpc_name
-  vpc_subnet_count = module.worker-subnets.count
-  vpc_subnets = module.worker-subnets.subnets
-  worker_count = var.mgmt_worker_count
-}
 module "cos" {
   source = "cloud-native-toolkit/object-storage/ibm"
   version = "4.0.3"
@@ -53,6 +25,19 @@ module "cs_resource_group" {
   ibmcloud_api_key = var.ibmcloud_api_key
   resource_group_name = var.cs_resource_group_name
   sync = var.cs_resource_group_sync
+}
+module "dev_ssh_vsi" {
+  source = "github.com/cloud-native-toolkit/terraform-ibm-vpc-ssh?ref=v1.7.1"
+
+  label = var.dev_ssh_vsi_label
+  name = var.dev_ssh_vsi_name
+  name_prefix = var.mgmt_name_prefix
+  private_key = var.dev_ssh_vsi_private_key
+  private_key_file = var.dev_ssh_vsi_private_key_file
+  public_key = var.dev_ssh_vsi_public_key
+  public_key_file = var.dev_ssh_vsi_public_key_file
+  resource_group_name = module.resource_group.name
+  rsa_bits = var.dev_ssh_vsi_rsa_bits
 }
 module "flow_log_bucket" {
   source = "github.com/cloud-native-toolkit/terraform-ibm-object-storage-bucket?ref=v0.8.3"
@@ -123,19 +108,6 @@ module "ibm-flow-logs" {
   target_ids = module.ibm-vpc.ids
   target_names = module.ibm-vpc.names
 }
-module "ibm-logdna-bind" {
-  source = "cloud-native-toolkit/log-analysis-bind/ibm"
-  version = "1.3.4"
-
-  cluster_id = module.cluster.id
-  cluster_name = module.cluster.name
-  ibmcloud_api_key = var.ibmcloud_api_key
-  logdna_id = module.logdna.guid
-  private_endpoint = var.private_endpoint
-  region = var.region
-  resource_group_name = module.resource_group.name
-  sync = module.sysdig-bind.sync
-}
 module "ibm-transit-gateway" {
   source = "github.com/cloud-native-toolkit/terraform-ibm-transit-gateway?ref=v0.2.2"
 
@@ -184,6 +156,32 @@ module "ibm-vpc-vpn-gateway" {
   vpc_name = module.vpn-subnets.vpc_name
   vpc_subnet_count = module.vpn-subnets.count
   vpc_subnets = module.vpn-subnets.subnets
+}
+module "ibm-vpc-vsi" {
+  source = "github.com/cloud-native-toolkit/terraform-ibm-vpc-vsi?ref=v1.12.1"
+
+  acl_rules = var.ibm-vpc-vsi_acl_rules == null ? null : jsondecode(var.ibm-vpc-vsi_acl_rules)
+  allow_deprecated_image = var.ibm-vpc-vsi_allow_deprecated_image
+  allow_ssh_from = var.ibm-vpc-vsi_allow_ssh_from
+  auto_delete_volume = var.ibm-vpc-vsi_auto_delete_volume
+  base_security_group = module.ibm-vpc.base_security_group
+  create_public_ip = var.ibm-vpc-vsi_create_public_ip
+  ibmcloud_api_key = var.ibmcloud_api_key
+  image_name = var.ibm-vpc-vsi_image_name
+  init_script = var.ibm-vpc-vsi_init_script
+  kms_enabled = var.ibm-vpc-vsi_kms_enabled
+  kms_key_crn = module.kms-key.crn
+  label = var.ibm-vpc-vsi_label
+  profile_name = var.ibm-vpc-vsi_profile_name
+  region = var.region
+  resource_group_id = module.resource_group.id
+  security_group_rules = var.ibm-vpc-vsi_security_group_rules == null ? null : jsondecode(var.ibm-vpc-vsi_security_group_rules)
+  ssh_key_id = module.dev_ssh_vsi.id
+  tags = var.ibm-vpc-vsi_tags == null ? null : jsondecode(var.ibm-vpc-vsi_tags)
+  target_network_range = var.ibm-vpc-vsi_target_network_range
+  vpc_name = module.ibm-vpc.name
+  vpc_subnet_count = module.worker-subnets.count
+  vpc_subnets = module.worker-subnets.subnets
 }
 module "ingress-subnets" {
   source = "cloud-native-toolkit/vpc-subnets/ibm"
@@ -237,19 +235,6 @@ module "kms-key" {
   provision = var.kms-key_provision
   rotation_interval = var.kms-key_rotation_interval
 }
-module "logdna" {
-  source = "cloud-native-toolkit/log-analysis/ibm"
-  version = "4.1.2"
-
-  label = var.logdna_label
-  name = var.logdna_name
-  name_prefix = var.cs_name_prefix
-  plan = var.logdna_plan
-  provision = var.logdna_provision
-  region = var.region
-  resource_group_name = module.cs_resource_group.name
-  tags = var.logdna_tags == null ? null : jsondecode(var.logdna_tags)
-}
 module "resource_group" {
   source = "cloud-native-toolkit/resource-group/ibm"
   version = "3.2.15"
@@ -257,34 +242,6 @@ module "resource_group" {
   ibmcloud_api_key = var.ibmcloud_api_key
   resource_group_name = var.mgmt_resource_group_name
   sync = var.resource_group_sync
-}
-module "sysdig" {
-  source = "cloud-native-toolkit/cloud-monitoring/ibm"
-  version = "4.1.2"
-
-  label = var.sysdig_label
-  name = var.sysdig_name
-  name_prefix = var.cs_name_prefix
-  plan = var.sysdig_plan
-  provision = var.sysdig_provision
-  region = var.region
-  resource_group_name = module.cs_resource_group.name
-  tags = var.sysdig_tags == null ? null : jsondecode(var.sysdig_tags)
-}
-module "sysdig-bind" {
-  source = "cloud-native-toolkit/cloud-monitoring-bind/ibm"
-  version = "1.3.4"
-
-  access_key = module.sysdig.access_key
-  cluster_id = module.cluster.id
-  cluster_name = module.cluster.name
-  guid = module.sysdig.guid
-  ibmcloud_api_key = var.ibmcloud_api_key
-  namespace = var.sysdig-bind_namespace
-  private_endpoint = var.private_endpoint
-  region = var.region
-  resource_group_name = module.resource_group.name
-  sync = var.sysdig-bind_sync
 }
 module "vpe-cos" {
   source = "github.com/cloud-native-toolkit/terraform-ibm-vpe-gateway?ref=v1.6.1"
@@ -296,7 +253,7 @@ module "vpe-cos" {
   resource_group_name = module.resource_group.name
   resource_label = module.cos.label
   resource_service = module.cos.service
-  sync = var.vpe-cos_sync
+  sync = module.resource_group.sync
   vpc_id = module.vpe-subnets.vpc_id
   vpc_subnet_count = module.vpe-subnets.count
   vpc_subnets = module.vpe-subnets.subnets
@@ -339,7 +296,7 @@ module "worker-subnets" {
   source = "cloud-native-toolkit/vpc-subnets/ibm"
   version = "1.13.1"
 
-  _count = var.mgmt_worker_subnet_count
+  _count = var._count
   acl_rules = var.worker-subnets_acl_rules == null ? null : jsondecode(var.worker-subnets_acl_rules)
   gateways = module.ibm-vpc-gateways.gateways
   ipv4_address_count = var.worker-subnets_ipv4_address_count

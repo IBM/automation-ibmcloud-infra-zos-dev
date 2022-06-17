@@ -57,51 +57,6 @@ variable "ibm-activity-tracker_sync" {
   description = "Value used to order the provisioning of the instance"
   default = ""
 }
-variable "cs_name_prefix" {
-  type = string
-  description = "The prefix name for the service. If not provided it will default to the resource group name"
-  default = ""
-}
-variable "sysdig_plan" {
-  type = string
-  description = "The type of plan the service instance should run under (trial or graduated-tier)"
-  default = "graduated-tier"
-}
-variable "sysdig_tags" {
-  type = string
-  description = "Tags that should be applied to the service"
-  default = "[]"
-}
-variable "sysdig_provision" {
-  type = bool
-  description = "Flag indicating that logdna instance should be provisioned"
-  default = false
-}
-variable "sysdig_name" {
-  type = string
-  description = "The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}"
-  default = ""
-}
-variable "sysdig_label" {
-  type = string
-  description = "The label used to build the resource name if not provided."
-  default = "monitoring"
-}
-variable "sysdig-bind_namespace" {
-  type = string
-  description = "The namespace where the agent should be deployed"
-  default = "ibm-observe"
-}
-variable "sysdig-bind_sync" {
-  type = string
-  description = "Semaphore value to sync up modules"
-  default = ""
-}
-variable "private_endpoint" {
-  type = string
-  description = "Flag indicating that the agent should be created with private endpoints"
-  default = "true"
-}
 variable "ibm-flow-logs_auth_id" {
   type = string
   description = "The id of the service authorization that allows the flow log to write to the cos bucket"
@@ -181,6 +136,11 @@ variable "kms_name" {
   description = "The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}"
   default = ""
 }
+variable "private_endpoint" {
+  type = string
+  description = "Flag indicating that the service should be created with private endpoints"
+  default = "true"
+}
 variable "kms_number_of_crypto_units" {
   type = number
   description = "No of crypto units that has to be attached to the instance."
@@ -225,31 +185,6 @@ variable "kms-key_force_delete" {
   description = "Flag indicating that 'force' should be applied to key on delete"
   default = true
 }
-variable "logdna_plan" {
-  type = string
-  description = "The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)"
-  default = "7-day"
-}
-variable "logdna_tags" {
-  type = string
-  description = "Tags that should be applied to the service"
-  default = "[]"
-}
-variable "logdna_provision" {
-  type = bool
-  description = "Flag indicating that logdna instance should be provisioned"
-  default = false
-}
-variable "logdna_name" {
-  type = string
-  description = "The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}"
-  default = ""
-}
-variable "logdna_label" {
-  type = string
-  description = "The label used to build the resource name if not provided"
-  default = "logging"
-}
 variable "cos_resource_location" {
   type = string
   description = "Geographic location of the resource (e.g. us-south, us-east)"
@@ -259,6 +194,11 @@ variable "cos_tags" {
   type = string
   description = "Tags that should be applied to the service"
   default = "[]"
+}
+variable "cs_name_prefix" {
+  type = string
+  description = "The prefix name for the service. If not provided it will default to the resource group name"
+  default = ""
 }
 variable "cos_plan" {
   type = string
@@ -274,66 +214,6 @@ variable "cos_label" {
   type = string
   description = "The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service}"
   default = "cos"
-}
-variable "cluster_name" {
-  type = string
-  description = "The name of the cluster that will be created within the resource group"
-  default = ""
-}
-variable "mgmt_worker_count" {
-  type = number
-  description = "The number of worker nodes that should be provisioned for classic infrastructure"
-  default = 3
-}
-variable "cluster_flavor" {
-  type = string
-  description = "The machine type that will be provisioned for classic infrastructure"
-  default = "bx2.4x16"
-}
-variable "ocp_version" {
-  type = string
-  description = "The version of the OpenShift cluster that should be provisioned (format 4.x)"
-  default = "4.8"
-}
-variable "cluster_exists" {
-  type = bool
-  description = "Flag indicating if the cluster already exists (true or false)"
-  default = false
-}
-variable "cluster_disable_public_endpoint" {
-  type = bool
-  description = "Flag indicating that the public endpoint should be disabled"
-  default = true
-}
-variable "cluster_ocp_entitlement" {
-  type = string
-  description = "Value that is applied to the entitlements for OCP cluster provisioning"
-  default = "cloud_pak"
-}
-variable "cluster_force_delete_storage" {
-  type = bool
-  description = "Attribute to force the removal of persistent storage associtated with the cluster"
-  default = false
-}
-variable "cluster_tags" {
-  type = string
-  description = "Tags that should be added to the instance"
-  default = "[]"
-}
-variable "cluster_kms_enabled" {
-  type = bool
-  description = "Flag indicating that kms encryption should be enabled for this cluster"
-  default = true
-}
-variable "cluster_kms_private_endpoint" {
-  type = bool
-  description = "Flag indicating that the private endpoint should be used to connect the KMS system to the cluster."
-  default = true
-}
-variable "cluster_login" {
-  type = bool
-  description = "Flag indicating that after the cluster is provisioned, the module should log into the cluster"
-  default = false
 }
 variable "ibm-vpc_name" {
   type = string
@@ -425,15 +305,50 @@ variable "ibm-vpc-gateways_tags" {
   description = "Tags that should be added to the instance"
   default = "[]"
 }
+variable "dev_ssh_vsi_name" {
+  type = string
+  description = "(Optional) Name given to the ssh key instance. If not provided it will be generated using prefix_name"
+  default = ""
+}
+variable "dev_ssh_vsi_label" {
+  type = string
+  description = "(Optional) Label used for the instance. It will be added to the name_prefix to create the name if the name is not provided."
+  default = "zos-vsi"
+}
+variable "dev_ssh_vsi_public_key" {
+  type = string
+  description = "The public key provided for the ssh key. If empty string is provided then a new key will be generated."
+  default = ""
+}
+variable "dev_ssh_vsi_private_key" {
+  type = string
+  description = "The private key provided for the ssh key. If empty string is provided then a new key will be generated."
+  default = ""
+}
+variable "dev_ssh_vsi_public_key_file" {
+  type = string
+  description = "The name of the file containing the public key provided for the ssh key. If empty string is provided then a new key will be generated."
+  default = ""
+}
+variable "dev_ssh_vsi_private_key_file" {
+  type = string
+  description = "The name of the file containing the private key provided for the ssh key. If empty string is provided then a new key will be generated."
+  default = ""
+}
+variable "dev_ssh_vsi_rsa_bits" {
+  type = number
+  description = "The number of bits for the rsa key, if it will be generated"
+  default = 3072
+}
 variable "worker-subnets_zone_offset" {
   type = number
   description = "The offset for the zone where the subnet should be created. The default offset is 0 which means the first subnet should be created in zone xxx-1"
   default = 0
 }
-variable "mgmt_worker_subnet_count" {
+variable "_count" {
   type = number
   description = "The number of subnets that should be provisioned"
-  default = 3
+  default = 1
 }
 variable "worker-subnets_label" {
   type = string
@@ -458,7 +373,7 @@ variable "worker-subnets_provision" {
 variable "worker-subnets_acl_rules" {
   type = string
   description = "List of rules to set on the subnet access control list"
-  default = "[{\"name\":\"allow-vpn-ingress\",\"action\":\"allow\",\"direction\":\"inbound\",\"source\":\"0.0.0.0/0\",\"destination\":\"10.0.0.0/8\"},{\"name\":\"allow-vpn-egress\",\"action\":\"allow\",\"direction\":\"outbound\",\"source\":\"10.0.0.0/8\",\"destination\":\"0.0.0.0/0\"},{\"action\":\"allow\",\"destination\":\"10.0.0.0/8\",\"direction\":\"inbound\",\"source\":\"0.0.0.0/0\",\"tcp\":{\"port_max\":23,\"port_min\":22,\"source_port_max\":23,\"source_port_min\":22},\"udp\":{\"port_max\":23,\"port_min\":22,\"source_port_max\":23,\"source_port_min\":22}},{\"action\":\"allow\",\"destination\":\"0.0.0.0/0\",\"direction\":\"outbound\",\"source\":\"10.0.0.0/8\",\"tcp\":{\"port_max\":23,\"port_min\":22,\"source_port_max\":23,\"source_port_min\":22},\"udp\":{\"port_max\":23,\"port_min\":22,\"source_port_max\":23,\"source_port_min\":22}}]"
+  default = "[{\"name\":\"allow-vpn-ingress\",\"action\":\"allow\",\"direction\":\"inbound\",\"source\":\"0.0.0.0/0\",\"destination\":\"10.0.0.0/8\"},{\"name\":\"allow-vpn-egress\",\"action\":\"allow\",\"direction\":\"outbound\",\"source\":\"10.0.0.0/8\",\"destination\":\"0.0.0.0/0\"}]"
 }
 variable "worker-subnets_tags" {
   type = string
@@ -565,10 +480,70 @@ variable "ibm-vpc-vpn-gateway_provision" {
   description = "Flag indicating that the resource should be provisioned. If false the resource will be looked up."
   default = true
 }
-variable "vpe-cos_sync" {
+variable "ibm-vpc-vsi_label" {
   type = string
-  description = "Value used to synchronize dependencies between modules"
+  description = "The label for the server instance"
+  default = "server"
+}
+variable "ibm-vpc-vsi_image_name" {
+  type = string
+  description = "The name of the image to use for the virtual server"
+  default = "ibm-zos-2-4-s390x-dev-test-wazi-1"
+}
+variable "ibm-vpc-vsi_profile_name" {
+  type = string
+  description = "Instance profile to use for the bastion instance"
+  default = "mz2-2x16"
+}
+variable "ibm-vpc-vsi_allow_ssh_from" {
+  type = string
+  description = "An IP address, a CIDR block, or a single security group identifier to allow incoming SSH connection to the virtual server"
   default = ""
+}
+variable "ibm-vpc-vsi_create_public_ip" {
+  type = bool
+  description = "Set whether to allocate a public IP address for the virtual server instance"
+  default = false
+}
+variable "ibm-vpc-vsi_init_script" {
+  type = string
+  description = "Script to run during the instance initialization. Defaults to an Ubuntu specific script when set to empty"
+  default = ""
+}
+variable "ibm-vpc-vsi_tags" {
+  type = string
+  description = "Tags that should be added to the instance"
+  default = "[]"
+}
+variable "ibm-vpc-vsi_kms_enabled" {
+  type = bool
+  description = "Flag indicating that the volumes should be encrypted using a KMS."
+  default = false
+}
+variable "ibm-vpc-vsi_auto_delete_volume" {
+  type = bool
+  description = "Flag indicating that any attached volumes should be deleted when the instance is deleted"
+  default = true
+}
+variable "ibm-vpc-vsi_security_group_rules" {
+  type = string
+  description = "List of security group rules to set on the bastion security group in addition to the SSH rules"
+  default = "[{\"name\":\"ingress-everything\",\"direction\":\"inbound\",\"remote\":\"0.0.0.0/0\"},{\"name\":\"egress-everything\",\"direction\":\"outbound\",\"remote\":\"0.0.0.0/0\"}]"
+}
+variable "ibm-vpc-vsi_allow_deprecated_image" {
+  type = bool
+  description = "Flag indicating that deprecated images should be allowed for use in the Virtual Server instance. If the value is `false` and the image is deprecated then the module will fail to provision"
+  default = true
+}
+variable "ibm-vpc-vsi_acl_rules" {
+  type = string
+  description = "List of rules to set on the subnet access control list"
+  default = "[]"
+}
+variable "ibm-vpc-vsi_target_network_range" {
+  type = string
+  description = "The ip address range that should be used for the network acl rules generated from the security groups"
+  default = "0.0.0.0/0"
 }
 variable "ibm-transit-gateway_name" {
   type = string

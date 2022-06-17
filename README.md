@@ -384,5 +384,13 @@ You need to create a set of unique keys that will be configured for the various 
    ssh-keygen -t rsa -b 3072 -N "" -f ssh-mgmt-scc -q
    ssh-keygen -t rsa -b 3072 -N "" -f ssh-workload-scc -q
    ```
+   
+
+# Connecting to VPN
+
+
+# Connecting to ZOS Virtual Server
+
+
 
 ## Troubleshooting

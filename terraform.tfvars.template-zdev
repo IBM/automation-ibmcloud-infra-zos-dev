@@ -36,9 +36,6 @@ edge_resource_group_name="edge"
 ## mgmt_resource_group_name: The name of the management resource group
 mgmt_resource_group_name="management"
 
-## workload_resource_group_name: The name of the workload resource group
-workload_resource_group_name="workload"
-
 
 ## ***************
 ## Name Prefixes
@@ -54,10 +51,7 @@ cs_name_prefix="common"
 edge_name_prefix="edge"
 
 ## mgmt_name_prefix: The name of the vpc resource
-mgmt_name_prefix="management"
-
-## workload_name_prefix: The prefix name for the service. If not provided it will default to the resource group name
-workload_name_prefix="workload"
+mgmt_name_prefix="development"
 
 ## ***************
 ## Cluster Variables
@@ -89,3 +83,10 @@ edge_ssh_bastion_public_key_file="ssh-edge-bastion.pub"
 
 ## edge_ssh_bastion_private_key_file: The name of the file containing the private key provided for the ssh key. If empty string is provided then a new key will be generated.
 edge_ssh_bastion_private_key_file="ssh-edge-bastion"
+
+
+## edge_ssh_bastion_public_key_file: The name of the file containing the public key provided for the ssh key. If empty string is provided then a new key will be generated.
+dev_ssh_vsi_public_key_file="ssh-zos-vsi.pub"
+
+## edge_ssh_bastion_private_key_file: The name of the file containing the private key provided for the ssh key. If empty string is provided then a new key will be generated.
+dev_ssh_vsi_private_key_file="ssh-zos-vsi"

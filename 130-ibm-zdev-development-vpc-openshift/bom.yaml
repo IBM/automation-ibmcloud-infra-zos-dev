@@ -167,6 +167,12 @@ spec:
     - name: ibm-vpc-gateways
       alias: ibm-vpc-gateways
       version: v1.9.0
+    - name: ibm-vpc-ssh
+      alias: dev_ssh_vsi
+      version: v1.7.1
+      variables:
+        - name: label
+          value: zos-vsi
     - name: ibm-vpc-subnets
       alias: worker-subnets
       version: v1.13.1
@@ -194,34 +200,6 @@ spec:
               direction: inbound
               source: 10.0.0.0/8
               destination: 0.0.0.0/0
-            - action: allow
-              destination: 10.0.0.0/8
-              direction: inbound
-              source: 0.0.0.0/0
-              tcp:
-                port_max: 23
-                port_min: 22
-                source_port_max: 23
-                source_port_min: 22
-              udp:
-                port_max: 23
-                port_min: 22
-                source_port_max: 23
-                source_port_min: 22
-            - action: allow
-              destination: 0.0.0.0/0
-              direction: outbound
-              source: 10.0.0.0/8
-              tcp:
-                port_max: 23
-                port_min: 22
-                source_port_max: 23
-                source_port_min: 22
-              udp:
-                port_max: 23
-                port_min: 22
-                source_port_max: 23
-                source_port_min: 22
       dependencies:
         - name: gateways
           ref: ibm-vpc-gateways
@@ -251,12 +229,58 @@ spec:
             - 10.10.30.0/24
             - 10.20.30.0/24
             - 10.30.30.0/24
+    - name: ibm-vpc-subnets
+      alias: vsi-subnets
+      version: v1.13.1
+      variables:
+        - name: _count
+          value: 1
+        - name: label
+          value: worker-vsi
+        - name: ipv4_cidr_blocks
+          value:
+            - 10.10.40.0/24
+            - 10.20.40.0/24
+            - 10.30.40.0/24
+        - name: acl_rules
+          value:
+            - name: allow-vpn-ingress
+              action: allow
+              direction: inbound
+              source: 0.0.0.0/0
+              destination: 10.0.0.0/8
+            - name: allow-vpn-egress
+              action: allow
+              direction: inbound
+              source: 10.0.0.0/8
+              destination: 0.0.0.0/0
     - name: ibm-vpc-vpn-gateway
       alias: ibm-vpc-vpn-gateway
       version: v1.1.4
       dependencies:
         - name: subnets
           ref: vpn-subnets
+    - name: ibm-vpc-vsi
+      alias: ibm-vpc-vsi
+      version: v1.12.1
+      variables:
+        - name: image_name
+          value: ibm-zos-2-4-s390x-dev-test-wazi-1
+        - name: profile_name
+          value: mz2-2x16
+        - name: security_group_rules
+          value:
+            - name: ingress-everything
+              direction: inbound
+              remote: 0.0.0.0/0
+            - name: egress-everything
+              direction: outbound
+              remote: 0.0.0.0/0
+      dependencies:
+        - name: subnets
+          ref: vsi-subnets
+        - name: vpcssh
+          ref: dev_ssh_vsi
     - name: ibm-vpe-gateway
       alias: vpe-cos
       version: v1.6.1
@@ -329,6 +353,30 @@ spec:
       type: string
       description: The machine type that will be provisioned for classic infrastructure
       defaultValue: bx2.4x16
+    - name: dev_ssh_vsi_public_key
+      type: string
+      description: >-
+        The public key provided for the ssh key. If empty string is provided
+        then a new key will be generated.
+      defaultValue: ''
+    - name: dev_ssh_vsi_private_key
+      type: string
+      description: >-
+        The private key provided for the ssh key. If empty string is provided
+        then a new key will be generated.
+      defaultValue: ''
+    - name: dev_ssh_vsi_public_key_file
+      type: string
+      description: >-
+        The name of the file containing the public key provided for the ssh key.
+        If empty string is provided then a new key will be generated.
+      defaultValue: ''
+    - name: dev_ssh_vsi_private_key_file
+      type: string
+      description: >-
+        The name of the file containing the private key provided for the ssh
+        key. If empty string is provided then a new key will be generated.
+      defaultValue: ''
     - name: mgmt_worker_subnet_count
       type: number
       description: The number of subnets that should be provisioned
@@ -341,6 +389,10 @@ spec:
       type: number
       description: The number of subnets that should be provisioned
       defaultValue: 3
+    - name: vsi-subnets__count
+      type: number
+      description: The number of subnets that should be provisioned
+      defaultValue: 1
     - name: vpn-subnets__count
       type: number
       description: The number of subnets that should be provisioned

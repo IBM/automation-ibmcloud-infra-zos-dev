@@ -54,6 +54,19 @@ module "cs_resource_group" {
   resource_group_name = var.cs_resource_group_name
   sync = var.cs_resource_group_sync
 }
+module "dev_ssh_vsi" {
+  source = "github.com/cloud-native-toolkit/terraform-ibm-vpc-ssh?ref=v1.7.1"
+
+  label = var.dev_ssh_vsi_label
+  name = var.dev_ssh_vsi_name
+  name_prefix = var.mgmt_name_prefix
+  private_key = var.dev_ssh_vsi_private_key
+  private_key_file = var.dev_ssh_vsi_private_key_file
+  public_key = var.dev_ssh_vsi_public_key
+  public_key_file = var.dev_ssh_vsi_public_key_file
+  resource_group_name = module.resource_group.name
+  rsa_bits = var.dev_ssh_vsi_rsa_bits
+}
 module "flow_log_bucket" {
   source = "github.com/cloud-native-toolkit/terraform-ibm-object-storage-bucket?ref=v0.8.3"
 
@@ -184,6 +197,32 @@ module "ibm-vpc-vpn-gateway" {
   vpc_name = module.vpn-subnets.vpc_name
   vpc_subnet_count = module.vpn-subnets.count
   vpc_subnets = module.vpn-subnets.subnets
+}
+module "ibm-vpc-vsi" {
+  source = "github.com/cloud-native-toolkit/terraform-ibm-vpc-vsi?ref=v1.12.1"
+
+  acl_rules = var.ibm-vpc-vsi_acl_rules == null ? null : jsondecode(var.ibm-vpc-vsi_acl_rules)
+  allow_deprecated_image = var.ibm-vpc-vsi_allow_deprecated_image
+  allow_ssh_from = var.ibm-vpc-vsi_allow_ssh_from
+  auto_delete_volume = var.ibm-vpc-vsi_auto_delete_volume
+  base_security_group = module.ibm-vpc.base_security_group
+  create_public_ip = var.ibm-vpc-vsi_create_public_ip
+  ibmcloud_api_key = var.ibmcloud_api_key
+  image_name = var.ibm-vpc-vsi_image_name
+  init_script = var.ibm-vpc-vsi_init_script
+  kms_enabled = var.ibm-vpc-vsi_kms_enabled
+  kms_key_crn = module.kms-key.crn
+  label = var.ibm-vpc-vsi_label
+  profile_name = var.ibm-vpc-vsi_profile_name
+  region = var.region
+  resource_group_id = module.resource_group.id
+  security_group_rules = var.ibm-vpc-vsi_security_group_rules == null ? null : jsondecode(var.ibm-vpc-vsi_security_group_rules)
+  ssh_key_id = module.dev_ssh_vsi.id
+  tags = var.ibm-vpc-vsi_tags == null ? null : jsondecode(var.ibm-vpc-vsi_tags)
+  target_network_range = var.ibm-vpc-vsi_target_network_range
+  vpc_name = module.ibm-vpc.name
+  vpc_subnet_count = module.vsi-subnets.count
+  vpc_subnets = module.vsi-subnets.subnets
 }
 module "ingress-subnets" {
   source = "cloud-native-toolkit/vpc-subnets/ibm"
@@ -334,6 +373,23 @@ module "vpn-subnets" {
   tags = var.vpn-subnets_tags == null ? null : jsondecode(var.vpn-subnets_tags)
   vpc_name = module.ibm-vpc.name
   zone_offset = var.vpn-subnets_zone_offset
+}
+module "vsi-subnets" {
+  source = "cloud-native-toolkit/vpc-subnets/ibm"
+  version = "1.13.1"
+
+  _count = var.vsi-subnets__count
+  acl_rules = var.vsi-subnets_acl_rules == null ? null : jsondecode(var.vsi-subnets_acl_rules)
+  gateways = module.ibm-vpc-gateways.gateways
+  ipv4_address_count = var.vsi-subnets_ipv4_address_count
+  ipv4_cidr_blocks = var.vsi-subnets_ipv4_cidr_blocks == null ? null : jsondecode(var.vsi-subnets_ipv4_cidr_blocks)
+  label = var.vsi-subnets_label
+  provision = var.vsi-subnets_provision
+  region = var.region
+  resource_group_name = module.resource_group.name
+  tags = var.vsi-subnets_tags == null ? null : jsondecode(var.vsi-subnets_tags)
+  vpc_name = module.ibm-vpc.name
+  zone_offset = var.vsi-subnets_zone_offset
 }
 module "worker-subnets" {
   source = "cloud-native-toolkit/vpc-subnets/ibm"
