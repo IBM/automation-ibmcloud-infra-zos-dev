@@ -215,7 +215,6 @@ To connect with a 3270 terminal emulator, you must first reset the password for 
 1. Connect to the virtual server using `ssh`, using the instructions above.  
 2. Run the following command: `tsocmd 'alu ibmuser password(<mypassword>) noexpire'`.  Substitute `<mypassword>` with your actual password.
 3. This will change the password for the `ibmuser` account.
-  then you can go to that green screen and type tso ibmuser. It’ll ask for a password, so enter tsouser… one or two more [Enter]’s I think and it’ll say READY… then you can type ispf[Enter] and you’ll get to ISPF, which is the main “admin” interface
 
 ### Z Terminal Emulation
 
