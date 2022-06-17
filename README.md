@@ -219,6 +219,9 @@ You can also connect to the Z VSI instance using the [`tnz`](https://github.com/
 
 ![3270 terminal emulator](./z-terminal.png)
 
+## Resources
+
+- [Introduction to the New Mainframe: z/OS Basics](https://www.redbooks.ibm.com/abstracts/sg246366.html)
 
 
 ## How to Generate this repository from the source Bill of Materials.
