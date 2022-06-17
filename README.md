@@ -207,15 +207,27 @@ To connect to the IBM Z Virtual Server:
    SYSTEM   bin      dev      etc      global   lib      opt      rsusr    samples  tmp      u        usr      var
    IBMUSER : /u/ibmuser : >
    ```
+   
+#### Reset `ibmuser` password
+
+To connect with a 3270 terminal emulator, you must first reset the password for the `ibmuser` account using the following steps:
+
+1. Connect to the virtual server using `ssh`, using the instructions above.  
+2. Run the following command: `tsocmd 'alu ibmuser password(<mypassword>) noexpire'`.  Substitute `<mypassword>` with your actual password.
+3. This will change the password for the `ibmuser` account.
+  then you can go to that green screen and type tso ibmuser. It’ll ask for a password, so enter tsouser… one or two more [Enter]’s I think and it’ll say READY… then you can type ispf[Enter] and you’ll get to ISPF, which is the main “admin” interface
 
 ### Z Terminal Emulation
 
 You can also connect to the Z VSI instance using the [`tnz`](https://github.com/ibm/tnz) terminal emulator as a 3270 terminal interface.   
 
-9. Follow the installation instructions located at https://github.com/ibm/tnz#installing
-10. Add `zti` to your PATH using `export PATH=/home/devops/.local/bin:$PATH`
-11. Start the terminal emulator using the `zti` command.
-12. Once the 3270 terminal emulator is running, connect to the VSI using `GOTO <IP Address>`, replacing `<IP ADDRESS>` with your VSI's IP address.  For example: `GOTO 10.10.0.4`.
+⚠️ Before you can use the terminal, you must reset the password for the `ibmuser` account using the instructions above.
+
+1. Follow the installation instructions located at https://github.com/ibm/tnz#installing
+2. Add `zti` to your PATH using `export PATH=/home/devops/.local/bin:$PATH`
+3. Start the terminal emulator using the `zti` command.
+4. Once the 3270 terminal emulator is running, connect to the VSI using `GOTO <IP Address>`, replacing `<IP ADDRESS>` with your VSI's IP address.  For example: `GOTO 10.10.0.4`.
+5. Log in using `tso ibmuser` and the password that you set in the previous step.
 
 ![3270 terminal emulator](./z-terminal.png)
 
