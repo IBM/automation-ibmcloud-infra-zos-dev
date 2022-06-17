@@ -22,19 +22,19 @@ kms_service="keyprotect"
 ## ***************
 
 ## at_resource_group_name: The name of the activity tracker resource group
-at_resource_group_name="default"
+at_resource_group_name="zos-dev"
 
 ## cs_resource_group_name: The name of the shared services resource group
-cs_resource_group_name="common"
+cs_resource_group_name="zos-dev"
 
 ## kms_resource_group_name: The name of the kms resource group
-kms_resource_group_name="kms"
+kms_resource_group_name="zos-dev"
 
 ## edge_resource_group_name: The name of the management resource group
-edge_resource_group_name="edge"
+edge_resource_group_name="zos-dev"
 
 ## mgmt_resource_group_name: The name of the management resource group
-mgmt_resource_group_name="management"
+mgmt_resource_group_name="zos-dev"
 
 
 ## ***************
@@ -53,6 +53,20 @@ edge_name_prefix="edge"
 ## mgmt_name_prefix: The name of the vpc resource
 mgmt_name_prefix="development"
 
+
+
+## ***************
+## IBM Z, LinuxONE Virtual Server
+## ***************
+
+# Instance profile to use for the VSI instance (values: `mz2-2x16`, `mz2-4x32`, `mz2-8x64, `mz2-16x128`)
+ibm-vpc-vsi_profile_name="mz2-2x16"
+
+# The name of the image to use for the virtual server
+ibm-vpc-vsi_image_name="ibm-zos-2-4-s390x-dev-test-wazi-1"
+
+
+
 ## ***************
 ## Cluster Variables
 ## ***************
@@ -64,6 +78,9 @@ mgmt_worker_subnet_count="1"
 
 workload_worker_count="2"
 workload_worker_subnet_count="1"
+
+cluster-config_banner_text="z/OS Development"
+cluster-config_banner_background_color="#228C22"
 
 ## ***************
 ## Misc Variables
@@ -78,6 +95,7 @@ git_url = "https://github.com/cloud-native-toolkit"
 ## ***************
 
 
+
 ## edge_ssh_bastion_public_key_file: The name of the file containing the public key provided for the ssh key. If empty string is provided then a new key will be generated.
 edge_ssh_bastion_public_key_file="ssh-edge-bastion.pub"
 
@@ -90,16 +108,3 @@ dev_ssh_vsi_public_key_file="ssh-zos-vsi.pub"
 
 ## edge_ssh_bastion_private_key_file: The name of the file containing the private key provided for the ssh key. If empty string is provided then a new key will be generated.
 dev_ssh_vsi_private_key_file="ssh-zos-vsi"
-
-
-
-
-## ***************
-## IBM Z, LinuxONE Virtual Server
-## ***************
-
-# Instance profile to use for the VSI instance (values: `mz2-2x16`, `mz2-4x32`, `mz2-8x64, `mz2-16x128`)
-ibm-vpc-vsi_profile_name="mz2-2x16"
-
-# The name of the image to use for the virtual server
-ibm-vpc-vsi_image_name="ibm-zos-2-4-s390x-dev-test-wazi-1"
