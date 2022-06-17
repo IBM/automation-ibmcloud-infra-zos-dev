@@ -90,3 +90,16 @@ dev_ssh_vsi_public_key_file="ssh-zos-vsi.pub"
 
 ## edge_ssh_bastion_private_key_file: The name of the file containing the private key provided for the ssh key. If empty string is provided then a new key will be generated.
 dev_ssh_vsi_private_key_file="ssh-zos-vsi"
+
+
+
+
+## ***************
+## IBM Z, LinuxONE Virtual Server
+## ***************
+
+# Instance profile to use for the VSI instance (values: `mz2-2x16`, `mz2-4x32`, `mz2-8x64, `mz2-16x128`)
+ibm-vpc-vsi_profile_name="mz2-2x16"
+
+# The name of the image to use for the virtual server
+ibm-vpc-vsi_image_name="ibm-zos-2-4-s390x-dev-test-wazi-1"
