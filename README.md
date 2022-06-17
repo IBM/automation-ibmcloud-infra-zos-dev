@@ -51,7 +51,7 @@ The following diagram gives a visual representation of the what your IBM Cloud a
 
 ## Reference Architecture
 
-![Reference Architecture](./images/ibm-cloud-architecture.png)
+![Reference Architecture](./ibm-cloud-architecture.png)
 
 Automation is provided in following Terraform packages that will need to be run in order. The bundles have been created this way to give the SRE team the most flexibility possible when building infrastructure for a project.
 
