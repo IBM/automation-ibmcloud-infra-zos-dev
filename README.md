@@ -119,13 +119,18 @@ For proof of technology environments we recommend using the `auto-init` feature.
 
 ## Terraform Apply
 
+There are two methods of deployment: automatic or manual:
+
 ### Set up credentials
 
 1. Copy `credentials.template` to `credentials.properties`.
 2. Provide your IBM Cloud API key as the value for the `ibmcloud.api.key` variable in `credentials.properties` (**Note:** `*.properties` has been added to `.gitignore` to ensure that the file containing the apikey cannot be checked into Git.)
 
+### Automatically apply the entire solution
 
-### Apply each architecture in the solution
+User the `./apply-all.sh` script to deploy all components of this solution automatically.  If you chose this option, skip ahead to the **Connecting to VPN** section.
+
+### Manually apply each architecture in the solution
 
 1. From the root of the cloned repository directory, run `./launch.sh`. This will start a docker container that contains the required libraries to run the terraform scripts.
 
@@ -142,9 +147,8 @@ For proof of technology environments we recommend using the `auto-init` feature.
    - `150`
    - Connect to the VPN (see instructions below)
    - `160`
-   - `165`
 
-> **⚠️ Warning**: You will receive errors when executing `160` and `165` if you do not connect to the VPN. The error message will be similar to:
+> **⚠️ Warning**: You will receive errors when executing `160` if you do not connect to the VPN. The error message will be similar to:
 >
 > ```
 > Error: Error downloading the cluster config [mgmt-cluster]: Get "https://c109-e.private.us-east.containers.cloud.ibm.com:30613/.well-known/oauth-authorization-server": dial tcp 166.9.24.91:30613: i/o timeout
@@ -164,11 +168,47 @@ For proof of technology environments we recommend using the `auto-init` feature.
 
 > We are working on an air gapped install of developer tools from within the private VPC network for Management Cluster. 
 
-## Configure VPN
 
-The following steps will help you setup the VPN server.
 
-1. Import the generated ovpn file from the `110-edge-vpc` step into your OpenVPN client and start the VPN connection. You should now have connectivity into the private VPC network and access to the edge VPC. This file will be located in `./workspace/110-edge-vpc`.
+# Connecting to VPN
+
+The `110-ibm-zdev-network-vpc` layer creates a VPN that you can use to connect to the private VPC network.  During execution of this layer, a client-side VPN profile will also be created.  You can use this with the [OpenVPN](https://openvpn.net/vpn-server-resources/connecting-to-access-server-with-macos) client to connect your computer to the VPN service.
+
+To connect to vpn:
+
+1. While inside the container (`launch.sh`), `cd` into the `/workspaces/current/110-ibm-zdev-network-vpc` folder.
+2. Copy the vpn profile to the `/terraform` directory. The default file name is `edge-vpn-vpn.ovpn`, however this can change depending upon the input variables you specified for `terraform` execution.  The The vpn profile can be easily identified because it will always have a `.ovpn` extension.
+3. Exit the container by running the `exit` command.
+4. In the `automation-ibmcloud-infra-zos-dev` folder (root of this project), find the vpn profile.
+5. From your local operating system, use the vpn profile to connect the OpenVPN client to the VPN server.
+
+
+# Connecting to ZOS Virtual Server
+
+You can connect to the ZOS Virtual Server instance using the ssh key that was generated when the VSI was provisioned.
+
+To connect to the ZOS Virtual Server:
+
+1. Navigate to https://cloud.ibm.com/vpc-ext/compute/vs and find the Z VSI instance that was created.  It will have a name similar to `development-vpc-server00`, but may change depending on the name prefix that was specified in the `terraform.tfvars` file.  Copy the IP address of the VSI.
+2. Connect the OpenVPN client
+3. Open a command line terminal and navigate to this project's root folder (`automation-ibmcloud-infra-zos-dev`).
+4. Use the `./launch.sh` script to launch the automation tools container.
+5. Navigate to the layer that created the VSI instance.
+   - If you chose the `vpc` architecture, navigate to the `120-ibm-zdev-development-vpc` folder.
+   - If you chose the `ocp` architecture, navigate to the `130-ibm-zdev-development-vpc-openshift` folder.
+6. Use `ssh` to connect to the VSI instance using the SSH key that was generated for this project.
+
+   ```
+   ssh -i ./ssh-zos-vsi ibmuser@10.10.10.4
+   ```
+
+   You must use the `ibmuser` username, but be sure to replace the `10.10.10.4` with your VSI's IP address.
+7. Once you are connected, you will ser terminal output, and can execute the `ls /` command to see the VSI operating system file structure.
+
+   ```
+   
+   ```
+
 
 ## Post Install of SCC Collectors
 
@@ -385,12 +425,6 @@ You need to create a set of unique keys that will be configured for the various 
    ssh-keygen -t rsa -b 3072 -N "" -f ssh-workload-scc -q
    ```
    
-
-# Connecting to VPN
-
-
-# Connecting to ZOS Virtual Server
-
 
 
 ## Troubleshooting
