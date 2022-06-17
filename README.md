@@ -170,7 +170,7 @@ User the `./apply-all.sh` script to deploy all components of this solution autom
 
 
 
-# Connecting to VPN
+## Connecting to VPN
 
 The `110-ibm-zdev-network-vpc` layer creates a VPN that you can use to connect to the private VPC network.  During execution of this layer, a client-side VPN profile will also be created.  You can use this with the [OpenVPN](https://openvpn.net/vpn-server-resources/connecting-to-access-server-with-macos) client to connect your computer to the VPN service.
 
@@ -183,7 +183,7 @@ To connect to vpn:
 5. From your local operating system, use the vpn profile to connect the OpenVPN client to the VPN server.
 
 
-# Connecting to ZOS Virtual Server
+## Connecting to ZOS Virtual Server
 
 You can connect to the ZOS Virtual Server instance using the ssh key that was generated when the VSI was provisioned.
 
@@ -206,7 +206,10 @@ To connect to the ZOS Virtual Server:
 7. Once you are connected, you will ser terminal output, and can execute the `ls /` command to see the VSI operating system file structure.
 
    ```
-   
+   $ ssh -i ./ssh-zos-vsi ibmuser@10.10.40.4
+   IBMUSER : /u/ibmuser : > ls /
+   SYSTEM   bin      dev      etc      global   lib      opt      rsusr    samples  tmp      u        usr      var
+   IBMUSER : /u/ibmuser : >
    ```
 
 
