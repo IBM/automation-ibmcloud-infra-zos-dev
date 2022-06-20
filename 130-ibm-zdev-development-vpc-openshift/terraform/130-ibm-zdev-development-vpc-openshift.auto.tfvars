@@ -47,13 +47,13 @@
 #dev_ssh_vsi_private_key_file=""
 
 ## mgmt_worker_subnet_count: The number of subnets that should be provisioned
-#mgmt_worker_subnet_count="3"
+#mgmt_worker_subnet_count="1"
 
 ## vpe-subnets__count: The number of subnets that should be provisioned
-#vpe-subnets__count="3"
+#vpe-subnets__count="1"
 
 ## ingress-subnets__count: The number of subnets that should be provisioned
-#ingress-subnets__count="3"
+#ingress-subnets__count="1"
 
 ## vsi-subnets__count: The number of subnets that should be provisioned
 #vsi-subnets__count="1"

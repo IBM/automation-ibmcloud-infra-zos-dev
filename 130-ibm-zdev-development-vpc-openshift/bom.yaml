@@ -180,7 +180,7 @@ spec:
         - name: _count
           alias: mgmt_worker_subnet_count
           scope: global
-          value: 3
+          value: 1
         - name: label
           value: worker
         - name: ipv4_cidr_blocks
@@ -208,7 +208,7 @@ spec:
       version: v1.13.1
       variables:
         - name: _count
-          value: 3
+          value: 1
         - name: label
           value: vpe
         - name: ipv4_cidr_blocks
@@ -221,7 +221,7 @@ spec:
       version: v1.13.1
       variables:
         - name: _count
-          value: 3
+          value: 1
         - name: label
           value: ingress
         - name: ipv4_cidr_blocks
@@ -380,15 +380,15 @@ spec:
     - name: mgmt_worker_subnet_count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 3
+      defaultValue: 1
     - name: vpe-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 3
+      defaultValue: 1
     - name: ingress-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 3
+      defaultValue: 1
     - name: vsi-subnets__count
       type: number
       description: The number of subnets that should be provisioned

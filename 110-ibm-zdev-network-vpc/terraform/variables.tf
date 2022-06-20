@@ -283,7 +283,7 @@ variable "ibm-vpc_provision" {
 variable "ibm-vpc_address_prefix_count" {
   type = number
   description = "The number of ipv4_cidr_blocks"
-  default = 3
+  default = 1
 }
 variable "ibm-vpc_address_prefixes" {
   type = string
@@ -403,7 +403,7 @@ variable "ingress-subnets_zone_offset" {
 variable "ingress-subnets__count" {
   type = number
   description = "The number of subnets that should be provisioned"
-  default = 3
+  default = 1
 }
 variable "ingress-subnets_label" {
   type = string
@@ -443,7 +443,7 @@ variable "bastion-subnets_zone_offset" {
 variable "bastion-subnets__count" {
   type = number
   description = "The number of subnets that should be provisioned"
-  default = 3
+  default = 1
 }
 variable "bastion-subnets_label" {
   type = string
@@ -483,7 +483,7 @@ variable "egress-subnets_zone_offset" {
 variable "egress-subnets__count" {
   type = number
   description = "The number of subnets that should be provisioned"
-  default = 3
+  default = 1
 }
 variable "egress-subnets_label" {
   type = string

@@ -41,11 +41,11 @@
 #edge_ssh_bastion_private_key_file=""
 
 ## ingress-subnets__count: The number of subnets that should be provisioned
-#ingress-subnets__count="3"
+#ingress-subnets__count="1"
 
 ## bastion-subnets__count: The number of subnets that should be provisioned
-#bastion-subnets__count="3"
+#bastion-subnets__count="1"
 
 ## egress-subnets__count: The number of subnets that should be provisioned
-#egress-subnets__count="3"
+#egress-subnets__count="1"
 

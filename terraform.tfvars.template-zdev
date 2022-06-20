@@ -73,14 +73,11 @@ ibm-vpc-vsi_image_name="ibm-zos-2-4-s390x-dev-test-wazi-1"
 
 #cluster_flavor=""
 
-mgmt_worker_count="2"
+mgmt_worker_count="3"
 mgmt_worker_subnet_count="1"
 
-workload_worker_count="2"
-workload_worker_subnet_count="1"
-
 cluster-config_banner_text="z/OS Development"
-cluster-config_banner_background_color="#228C22"
+cluster-config_banner_background_color="green"
 
 ## ***************
 ## Misc Variables

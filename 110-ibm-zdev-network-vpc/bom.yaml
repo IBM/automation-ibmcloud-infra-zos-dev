@@ -126,7 +126,7 @@ spec:
       version: v1.16.0
       variables:
         - name: address_prefix_count
-          value: 3
+          value: 1
         - name: address_prefixes
           value:
             - 10.1.0.0/18
@@ -155,7 +155,7 @@ spec:
       version: v1.13.1
       variables:
         - name: _count
-          value: 3
+          value: 1
         - name: label
           value: ingress
         - name: ipv4_cidr_blocks
@@ -183,7 +183,7 @@ spec:
       version: v1.13.1
       variables:
         - name: _count
-          value: 3
+          value: 1
         - name: label
           value: bastion
         - name: ipv4_cidr_blocks
@@ -196,7 +196,7 @@ spec:
       version: v1.13.1
       variables:
         - name: _count
-          value: 3
+          value: 1
         - name: label
           value: egress
         - name: ipv4_cidr_blocks
@@ -212,7 +212,7 @@ spec:
           ref: ingress-subnets
     - name: ibm-vpn-server
       alias: ibm-vpn-server
-      version: v0.1.1
+      version: v0.1.2
       dependencies:
         - name: subnets
           ref: ingress-subnets
@@ -305,12 +305,12 @@ spec:
     - name: ingress-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 3
+      defaultValue: 1
     - name: bastion-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 3
+      defaultValue: 1
     - name: egress-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 3
+      defaultValue: 1

@@ -44,10 +44,10 @@
 #_count="1"
 
 ## vpe-subnets__count: The number of subnets that should be provisioned
-#vpe-subnets__count="3"
+#vpe-subnets__count="1"
 
 ## ingress-subnets__count: The number of subnets that should be provisioned
-#ingress-subnets__count="3"
+#ingress-subnets__count="1"
 
 ## vpn-subnets__count: The number of subnets that should be provisioned
 #vpn-subnets__count="3"

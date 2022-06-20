@@ -468,7 +468,7 @@ variable "worker-subnets_zone_offset" {
 variable "mgmt_worker_subnet_count" {
   type = number
   description = "The number of subnets that should be provisioned"
-  default = 3
+  default = 1
 }
 variable "worker-subnets_label" {
   type = string
@@ -508,7 +508,7 @@ variable "vpe-subnets_zone_offset" {
 variable "vpe-subnets__count" {
   type = number
   description = "The number of subnets that should be provisioned"
-  default = 3
+  default = 1
 }
 variable "vpe-subnets_label" {
   type = string
@@ -548,7 +548,7 @@ variable "ingress-subnets_zone_offset" {
 variable "ingress-subnets__count" {
   type = number
   description = "The number of subnets that should be provisioned"
-  default = 3
+  default = 1
 }
 variable "ingress-subnets_label" {
   type = string
