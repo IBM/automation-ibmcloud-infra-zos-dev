@@ -230,6 +230,13 @@ You can also connect to the Z VSI instance using the [`tnz`](https://github.com/
 
 ![3270 terminal emulator](./z-terminal.png)
 
+### Third party 3270 Terminal Emulator
+
+You can also use a third party 3270 terminal emulator such as [Mocha TN3270 Lite](https://apps.apple.com/us/app/mocha-tn3270-lite/id871706308) to connect to your Z/OS Virtual Server instance.  To connect, you must specify your server IP address, port `992`, and make sure to select `SSL/TLS` for the connection settings.
+
+
+![3270 terminal emulator](./mocha_TN3270_Lite.png)
+
 ## Resources
 
 - [Introduction to the New Mainframe: z/OS Basics](https://www.redbooks.ibm.com/abstracts/sg246366.html)
