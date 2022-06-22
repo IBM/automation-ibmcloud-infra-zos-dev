@@ -7,8 +7,8 @@ metadata:
     platform: ibm
     code: 110
   annotations:
-    displayName: Network VPC
-    description: Network VPC with VPN and Bastion servers
+    displayName: z/OS Dev Network VPC
+    description: z/OS Dev Network VPC with VPN and Bastion servers
 spec:
   modules:
     - name: ibm-resource-group

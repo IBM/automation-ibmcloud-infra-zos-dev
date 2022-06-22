@@ -7,8 +7,8 @@ metadata:
     platform: ibm
     code: 100
   annotations:
-    displayName: Shared services
-    description: Managed services that are shared across the development networks
+    displayName: z/OS Dev Shared services
+    description: z/OS Dev Managed services that are shared across the development networks
 spec:
   modules:
     - name: ibm-resource-group

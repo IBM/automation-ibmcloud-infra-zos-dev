@@ -7,8 +7,8 @@ metadata:
     platform: ibm
     code: '160'
   annotations:
-    displayName: OpenShift Developer Tools and Wazzi Dev Tools
-    description: Open-Source collection of assets for application development on OpenShift
+    displayName: z/OS Dev OpenShift Developer Tools and Wazzi Dev Tools
+    description: z/OS Dev Open-Source collection of assets for application development on OpenShift
     vpn/required: 'true'
 spec:
   modules:
