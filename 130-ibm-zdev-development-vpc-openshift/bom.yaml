@@ -7,8 +7,8 @@ metadata:
     platform: ibm
     code: 130
   annotations:
-    displayName: Development VPC OpenShift
-    description: Devleopment VPC and Red Hat OpenShift servers
+    displayName: z/OS Dev VPC OpenShift
+    description: z/OS Dev VPC and Red Hat OpenShift servers
 spec:
   modules:
     - name: ibm-resource-group
