@@ -7,8 +7,8 @@ metadata:
     platform: ibm
     code: 120
   annotations:
-    displayName: z/OS Dev VPC
-    description: z/OS Dev VPC with no OpenShift Environment
+    displayName: Devevlopment VPC
+    description: Devevlopment VPC with no OpenShift Environment
 spec:
   modules:
     - name: ibm-resource-group
@@ -128,7 +128,7 @@ spec:
           value: zos-vsi
     - name: ibm-vpc-subnets
       alias: worker-subnets
-      version: v1.13.1
+      version: v1.13.2
       variables:
         - name: _count
           scope: global
@@ -157,7 +157,7 @@ spec:
           ref: ibm-vpc-gateways
     - name: ibm-vpc-subnets
       alias: vpe-subnets
-      version: v1.13.1
+      version: v1.13.2
       variables:
         - name: _count
           value: 1
@@ -170,7 +170,7 @@ spec:
             - 10.30.20.0/24
     - name: ibm-vpc-subnets
       alias: ingress-subnets
-      version: v1.13.1
+      version: v1.13.2
       variables:
         - name: _count
           value: 1
@@ -230,7 +230,7 @@ spec:
           ref: cs_resource_group
     - name: ibm-vpc-subnets
       alias: vpn-subnets
-      version: v1.13.1
+      version: v1.13.2
   variables:
     - name: ibmcloud_api_key
       type: string

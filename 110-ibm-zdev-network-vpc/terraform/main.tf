@@ -8,7 +8,7 @@ module "at_resource_group" {
 }
 module "bastion-subnets" {
   source = "cloud-native-toolkit/vpc-subnets/ibm"
-  version = "1.13.1"
+  version = "1.13.2"
 
   _count = var.bastion-subnets__count
   acl_rules = var.bastion-subnets_acl_rules == null ? null : jsondecode(var.bastion-subnets_acl_rules)
@@ -58,7 +58,7 @@ module "edge_ssh_bastion" {
 }
 module "egress-subnets" {
   source = "cloud-native-toolkit/vpc-subnets/ibm"
-  version = "1.13.1"
+  version = "1.13.2"
 
   _count = var.egress-subnets__count
   acl_rules = var.egress-subnets_acl_rules == null ? null : jsondecode(var.egress-subnets_acl_rules)
@@ -229,7 +229,7 @@ module "ibm-vpn-server" {
 }
 module "ingress-subnets" {
   source = "cloud-native-toolkit/vpc-subnets/ibm"
-  version = "1.13.1"
+  version = "1.13.2"
 
   _count = var.ingress-subnets__count
   acl_rules = var.ingress-subnets_acl_rules == null ? null : jsondecode(var.ingress-subnets_acl_rules)

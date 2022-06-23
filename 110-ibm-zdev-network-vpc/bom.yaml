@@ -7,8 +7,8 @@ metadata:
     platform: ibm
     code: 110
   annotations:
-    displayName: z/OS Dev Network VPC
-    description: z/OS Dev Network VPC with VPN and Bastion servers
+    displayName: Network VPC
+    description: Network VPC with VPN and Bastion servers
 spec:
   modules:
     - name: ibm-resource-group
@@ -152,7 +152,7 @@ spec:
           value: bastion
     - name: ibm-vpc-subnets
       alias: ingress-subnets
-      version: v1.13.1
+      version: v1.13.2
       variables:
         - name: _count
           value: 1
@@ -180,7 +180,7 @@ spec:
           ref: ibm-vpc-gateways
     - name: ibm-vpc-subnets
       alias: bastion-subnets
-      version: v1.13.1
+      version: v1.13.2
       variables:
         - name: _count
           value: 1
@@ -193,7 +193,7 @@ spec:
             - 10.3.20.0/24
     - name: ibm-vpc-subnets
       alias: egress-subnets
-      version: v1.13.1
+      version: v1.13.2
       variables:
         - name: _count
           value: 1

@@ -6,11 +6,20 @@
 #fi
 
 CI="$1"
+PARALLELISM=10
 
 find . -type d -maxdepth 1 | grep -vE "[.]/[.].*" | grep -vE "^[.]$" | grep -v workspace | sort | \
   while read dir;
 do
   name=$(echo "$dir" | sed -E "s~[.]/(.*)~\1~g")
+
+  TYPE=$(grep "deployment-type/gitops" ./${name}/bom.yaml | sed -E "s~[^:]+: [\"'](.*)[\"']~\1~g")
+
+  if [[ "${TYPE}" == "true" ]]; then
+    PARALLELISM=3
+    echo "***** Setting parallelism for gitops type deployment for step ${name} to ${PARALLELISM} *****"
+    continue
+  fi
 
   OPTIONAL=$(grep "apply-all/optional" ./${name}/bom.yaml | sed -E "s~[^:]+: [\"'](.*)[\"']~\1~g")
 
@@ -50,7 +59,7 @@ do
 
   cd "${name}" && \
     terraform init && \
-    terraform apply -auto-approve && \
+    terraform apply -parallelism=$PARALLELISM -auto-approve && \
     cd - 1> /dev/null || \
     exit 1
 done

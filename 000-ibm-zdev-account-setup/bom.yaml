@@ -7,9 +7,9 @@ metadata:
     platform: ibm
     code: 0
   annotations:
-    displayName: z/OS Dev Account setup
+    displayName: Account setup
     description: >-
-      z/OS Dev Sets up an IBM Cloud account for Wazzi as a Service on IBM Cloud reference
+      Sets up an IBM Cloud account for Wazzi as a Service on IBM Cloud reference
       architecture settings
 spec:
   modules:

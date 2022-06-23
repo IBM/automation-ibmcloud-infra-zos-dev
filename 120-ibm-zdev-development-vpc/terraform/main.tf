@@ -185,7 +185,7 @@ module "ibm-vpc-vsi" {
 }
 module "ingress-subnets" {
   source = "cloud-native-toolkit/vpc-subnets/ibm"
-  version = "1.13.1"
+  version = "1.13.2"
 
   _count = var.ingress-subnets__count
   acl_rules = var.ingress-subnets_acl_rules == null ? null : jsondecode(var.ingress-subnets_acl_rules)
@@ -260,7 +260,7 @@ module "vpe-cos" {
 }
 module "vpe-subnets" {
   source = "cloud-native-toolkit/vpc-subnets/ibm"
-  version = "1.13.1"
+  version = "1.13.2"
 
   _count = var.vpe-subnets__count
   acl_rules = var.vpe-subnets_acl_rules == null ? null : jsondecode(var.vpe-subnets_acl_rules)
@@ -277,7 +277,7 @@ module "vpe-subnets" {
 }
 module "vpn-subnets" {
   source = "cloud-native-toolkit/vpc-subnets/ibm"
-  version = "1.13.1"
+  version = "1.13.2"
 
   _count = var.vpn-subnets__count
   acl_rules = var.vpn-subnets_acl_rules == null ? null : jsondecode(var.vpn-subnets_acl_rules)
@@ -294,7 +294,7 @@ module "vpn-subnets" {
 }
 module "worker-subnets" {
   source = "cloud-native-toolkit/vpc-subnets/ibm"
-  version = "1.13.1"
+  version = "1.13.2"
 
   _count = var._count
   acl_rules = var.worker-subnets_acl_rules == null ? null : jsondecode(var.worker-subnets_acl_rules)
