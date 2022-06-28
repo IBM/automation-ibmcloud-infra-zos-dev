@@ -18,7 +18,6 @@ do
   if [[ "${TYPE}" == "true" ]]; then
     PARALLELISM=3
     echo "***** Setting parallelism for gitops type deployment for step ${name} to ${PARALLELISM} *****"
-    continue
   fi
 
   OPTIONAL=$(grep "apply-all/optional" ./${name}/bom.yaml | sed -E "s~[^:]+: [\"'](.*)[\"']~\1~g")
