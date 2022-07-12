@@ -16,7 +16,7 @@ This `README.md` describes the SRE steps required to provision an environment th
 
 > The Security and Compliance scan currently has a set of known [exceptions](#exceptions) see below.
 
-This suite of automation can be used for a Proof of Technology environment, or used as a foundation for production workloads with a fully working end-to-end cloud-native environment. The base environment provides a collection of shared services, an edge network, a management network, and a workload network. This automation contains includes OpenShift Developer Tools from the [Cloud-Native Toolkit project](https://cloudnativetoolkit.dev/)
+This suite of automation can be used for a Proof of Technology environment, or used as a foundation for production workloads with a fully working end-to-end cloud-native environment. The base environment provides a collection of shared services, an edge network, a management network, and a workload network. This automation includes OpenShift Developer Tools from the [Cloud-Native Toolkit project](https://cloudnativetoolkit.dev/)
 
 
 **Shared services**
@@ -67,7 +67,7 @@ Clone this repository to access the automation to provision this reference archi
 |--------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------| -------- |
 | 000    | [000 - IBM z/OS Dev Account Setup](./000-ibm-zdev-account-setup)                            | Set up account and provision a set of account-wide services. This is intended to only be run one time in an account                                     | 5 Mins   |
 | 100    | [100 - IBM z/OS Dev Shared Services](./100-ibm-zdev-shared-services)                        | Provision a set of common cloud managed services that can be shared with **Network** and **Development** VPCs                                           | 5 Mins   |
-| 110    | [110 - IBM z/OS Dev Network VPC](./110-ibm-zdev-edge-vpc)                                   | Provision an **Network VPC** with Client to Site VPN & Bastion                                                                                          | 10 Mins  |
+| 110    | [110 - IBM z/OS Dev Network VPC](./110-ibm-zdev-network-vpc)                                   | Provision an **Network VPC** with Client to Site VPN & Bastion                                                                                          | 10 Mins  |
 | 120    | [120 - IBM z/OS Dev Development VPC no OpenShift](./120-ibm-zdev-development-vpc) | Provision a **Development VPC** with IBM Z Virtual Server and connect to Transit Gateway                                                                | 45 mins  |
 | 130    | [130 - IBM z/OS Dev Development OpenShift Cluster](./130-ibm-zdev-development-vpc-openshift) | Provision a **Development VPC** with IBM Z Virtual Server, Red Hat OpenShift Cluster and connect to Transit Gateway                                     | 45 mins  |
 | 160    | [160 - IBM z/OS Dev Developer Tools Cluster](./160-ibm-zdev-openshift-dev-tools)            | Provision a set of common CNCF developer tools into Red Hat OpenShift to provide a DevSecOps SDLC that support industry common best practices for CI/CD | 20 mins  |
@@ -198,7 +198,7 @@ To connect to the IBM Z Virtual Server:
    ssh -i ./ssh-zos-vsi ibmuser@<IP ADDRESS>
    ```
 
-   You must use the `ibmuser` username, but be sure to replace the `<IP ADDRESS>` with your VSI's IP address.
+   You must use the `ibmuser` username, but be sure to replace the `<IP ADDRESS>` with your VSI's Private /Reserved IP address.
 7. Once you are connected, you will see terminal output, and can execute the `ls /` command to see the VSI operating system file structure.
 
    ```
