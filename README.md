@@ -1,12 +1,8 @@
-# IBM Cloud z/OS Development Reference Architecture - Terraform Automation
+# IBM Cloud z/OS Development Reference Architecture - Infrastructure Automation
 
-### Change Log
+Created with the ***TechZone Accelerator Toolkit***
 
-- **06/2021** - Initial release
-
-**⚠️ You must be allow-listed to use this content and provision IBM Z, LinuxONE Virtual Servers.**
-
-> This collection of IBM Cloud terraform automation bundles has been crafted from a set of [Terraform modules](https://modules.cloudnativetoolkit.dev/) created by the IBM Ecosystem Lab team part of the [IBM Ecosystem organization](https://www.ibm.com/partnerworld/public?mhsrc=ibmsearch_a&mhq=partnerworld). Please contact **Matthew Perrins** __mjperrin@us.ibm.com__, **Sean Sundberg** __seansund@us.ibm.com__, or **Andrew Trice** __amtrice@us.ibm.com__ for more details or raise an issue on the repository for bugs or feature requests.
+> This collection of AWS Cloud terraform automation bundles has been crafted from a set of [Terraform modules](https://modules.cloudnativetoolkit.dev/) created by Ecosystem Engineering
 
 The automation supports the provisioning of an IBM Cloud z/OS Development Environment using isolated VPC networks and OpenShift with a set of developer tools formulated an SDLC for native z/OS development with CICS and DB2.
 
