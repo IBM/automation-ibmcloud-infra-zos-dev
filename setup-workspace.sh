@@ -66,15 +66,15 @@ fi
 cp "${SCRIPT_DIR}/apply-all.sh" "${WORKSPACE_DIR}/apply-all.sh"
 cp "${SCRIPT_DIR}/destroy-all.sh" "${WORKSPACE_DIR}/destroy-all.sh"
 
-ALL_ARCH="000|100|110|120|130|150|160"
+ALL_ARCH="000|100|110|120|160"
 
 echo "Setting up workspace from '${TEMPLATE_FLAVOR}' template"
 echo "*****"
 
 WORKSPACE_DIR=$(cd "${WORKSPACE_DIR}"; pwd -P)
 
-VPC_ARCH="000|100|110|120"
-OCP_ARCH="000|100|110|130|160"
+VPC_ARCH="000|100|110"
+OCP_ARCH="000|100|120|160"
 
 echo "Setting up automation  ${WORKSPACE_DIR}"
 

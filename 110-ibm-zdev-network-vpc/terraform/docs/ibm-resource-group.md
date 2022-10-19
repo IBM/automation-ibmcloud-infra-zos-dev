@@ -1,6 +1,8 @@
 # IBM Cloud Resource Group module
 
-Terraform module to create a resource groups in an IBM Cloud account.
+Terraform module to create a resource groups in an IBM Cloud account.  
+
+Migrated from https://github.com/cloud-native-toolkit/terraform-ibm-resource-group
 
 **Note:** This module follows the Terraform conventions regarding how provider configuration is defined within the Terraform template and passed into the module - https://www.terraform.io/docs/language/modules/develop/providers.html. The default provider configuration flows through to the module. If different configuration is required for a module, it can be explicitly passed in the `providers` block of the module - https://www.terraform.io/docs/language/modules/develop/providers.html#passing-providers-explicitly.
 
@@ -17,6 +19,8 @@ The module depends on the following software components:
 - IBM Cloud provider >= 1.17.0
 
 ## Example usage
+
+[Refer the testcase for more details](test/stages/stage1-resource-groups.tf)
 
 ```hcl-terraform
 terraform {
