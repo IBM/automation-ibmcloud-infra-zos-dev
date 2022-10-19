@@ -11,47 +11,30 @@ metadata:
     description: Network VPC with VPN and Bastion servers
 spec:
   modules:
-    - name: ibm-resource-group
-      alias: kms_resource_group
-      version: v3.2.15
-    - name: ibm-resource-group
-      alias: at_resource_group
-      version: v3.2.15
-    - name: ibm-resource-group
-      alias: resource_group
-      version: v3.2.15
-      variables: &ref_0
-        - name: resource_group_name
-          alias: edge_resource_group_name
-          scope: global
-    - name: ibm-resource-group
-      alias: cs_resource_group
-      version: v3.2.15
-      variables: *ref_0
     - name: ibm-access-group
       alias: ibm-access-group
-      version: v3.1.6
+      version: v3.1.8
     - name: ibm-activity-tracker
       alias: ibm-activity-tracker
-      version: v2.4.15
+      version: v2.4.18
       dependencies:
         - name: resource_group
           ref: at_resource_group
     - name: ibm-cloud-monitoring
       alias: sysdig
-      version: v4.1.2
+      version: v4.1.3
       variables:
         - name: provision
           value: false
         - name: name_prefix
-          alias: cs_name_prefix
+          alias: zos_name_prefix
           scope: global
       dependencies:
         - name: resource_group
-          ref: cs_resource_group
+          ref: zos_resource_group
     - name: ibm-flow-logs
       alias: ibm-flow-logs
-      version: v1.0.1
+      version: v1.0.3
       dependencies:
         - name: target
           ref: ibm-vpc
@@ -59,7 +42,7 @@ spec:
           ref: flow_log_bucket
     - name: ibm-iam-service-authorization
       alias: flow-log-auth
-      version: v1.2.11
+      version: v1.2.14
       variables:
         - name: source_service_name
           value: is
@@ -75,7 +58,7 @@ spec:
           ref: cos
     - name: ibm-kms
       alias: kms
-      version: v0.3.4
+      version: v0.3.6
       variables:
         - name: provision
           value: false
@@ -90,40 +73,68 @@ spec:
           ref: kms_resource_group
     - name: ibm-kms-key
       alias: kms-key
-      version: v1.5.2
+      version: v1.5.3
       variables:
         - name: provision
           value: true
       dependencies:
         - name: kms
           ref: kms
-    - name: ibm-cert-manager
-      alias: ibm-cert-manager
-      version: v1.1.0
+    - name: ibm-object-storage-bucket
+      alias: flow_log_bucket
+      version: v0.8.4
       variables:
+        - name: label
+          value: flow-logs
+        - name: allowed_ip
+          value:
+            - 0.0.0.0/0
+    - name: ibm-resource-group
+      alias: kms_resource_group
+      version: v3.3.5
+    - name: ibm-resource-group
+      alias: at_resource_group
+      version: v3.3.5
+    - name: ibm-resource-group
+      alias: resource_group
+      version: v3.3.5
+      variables: &ref_0
         - name: provision
           value: false
-        - name: name_prefix
-          alias: cs_name_prefix
+        - name: resource_group_name
+          alias: zos_resource_group_name
           scope: global
-      dependencies:
-        - name: resource_group
-          ref: cs_resource_group
+    - name: ibm-resource-group
+      alias: zos_resource_group
+      version: v3.3.5
+      variables: *ref_0
     - name: ibm-object-storage
       alias: cos
-      version: v4.0.3
+      version: v4.1.0
       variables:
         - name: provision
           value: false
         - name: name_prefix
-          alias: cs_name_prefix
+          alias: zos_name_prefix
           scope: global
       dependencies:
         - name: resource_group
-          ref: cs_resource_group
+          ref: zos_resource_group
+    - name: ibm-secrets-manager
+      alias: ibm-secrets-manager
+      version: v1.0.2
+      variables:
+        - name: provision
+          value: false
+        - name: name_prefix
+          alias: zos_name_prefix
+          scope: global
+      dependencies:
+        - name: resource_group
+          ref: zos_resource_group
     - name: ibm-vpc
       alias: ibm-vpc
-      version: v1.16.0
+      version: v1.17.0
       variables:
         - name: address_prefix_count
           value: 1
@@ -132,27 +143,18 @@ spec:
             - 10.1.0.0/18
             - 10.2.0.0/18
             - 10.3.0.0/18
-    - name: ibm-object-storage-bucket
-      alias: flow_log_bucket
-      version: v0.8.3
-      variables:
-        - name: label
-          value: flow-logs
-        - name: allowed_ip
-          value:
-            - 0.0.0.0/0
     - name: ibm-vpc-gateways
       alias: ibm-vpc-gateways
-      version: v1.9.0
+      version: v1.10.0
     - name: ibm-vpc-ssh
-      alias: edge_ssh_bastion
-      version: v1.7.1
+      alias: dev_ssh_vsi
+      version: v1.7.3
       variables:
         - name: label
-          value: bastion
+          value: zos-vsi
     - name: ibm-vpc-subnets
       alias: ingress-subnets
-      version: v1.13.2
+      version: v1.14.0
       variables:
         - name: _count
           value: 1
@@ -179,8 +181,8 @@ spec:
         - name: gateways
           ref: ibm-vpc-gateways
     - name: ibm-vpc-subnets
-      alias: bastion-subnets
-      version: v1.13.2
+      alias: worker-subnets
+      version: v1.14.0
       variables:
         - name: _count
           value: 1
@@ -193,7 +195,7 @@ spec:
             - 10.3.20.0/24
     - name: ibm-vpc-subnets
       alias: egress-subnets
-      version: v1.13.2
+      version: v1.14.0
       variables:
         - name: _count
           value: 1
@@ -204,67 +206,72 @@ spec:
             - 10.1.30.0/24
             - 10.2.30.0/24
             - 10.3.30.0/24
+    - name: ibm-vpc-subnets
+      alias: vpe-subnets
+      version: v1.14.0
+      variables:
+        - name: _count
+          value: 1
+        - name: label
+          value: vpe
+        - name: ipv4_cidr_blocks
+          value:
+            - 10.1.40.0/24
+            - 10.2.40.0/24
+            - 10.3.40.0/24
     - name: ibm-vpc-vpn-gateway
       alias: ibm-vpc-vpn-gateway
-      version: v1.1.4
+      version: v1.1.6
       dependencies:
         - name: subnets
           ref: ingress-subnets
-    - name: ibm-vpn-server
-      alias: ibm-vpn-server
-      version: v0.1.2
-      dependencies:
-        - name: subnets
-          ref: ingress-subnets
-        - name: ibm-cert-manager
-          ref: cert-manager
-    - name: vsi-bastion
-      alias: vsi-bastion
-      version: v1.10.0
-      variables:
-        - name: image_name
-          scope: module
-        - name: kms_enabled
-          value: true
-      dependencies:
-        - name: subnets
-          ref: bastion-subnets
-        - name: vpcssh
-          ref: edge_ssh_bastion
-    - name: ibm-transit-gateway
-      alias: ibm-transit-gateway
-      version: v0.2.2
+    - name: ibm-vpc-vsi
+      alias: ibm-vpc-vsi
+      version: v1.12.3
       variables:
         - name: name_prefix
-          alias: cs_name_prefix
+          alias: zos_name_prefix
           scope: global
+        - name: image_name
+          value: ibm-zos-2-4-s390x-dev-test-wazi-1
+        - name: profile_name
+          value: mz2-2x16
+        - name: security_group_rules
+          value:
+            - name: ingress-everything
+              direction: inbound
+              remote: 0.0.0.0/0
+            - name: egress-everything
+              direction: outbound
+              remote: 0.0.0.0/0
       dependencies:
-        - name: resource-group
-          ref: cs_resource_group
+        - name: subnets
+          ref: worker-subnets
+        - name: vpcssh
+          ref: dev_ssh_vsi
+    - name: ibm-vpe-gateway
+      alias: vpe-cos
+      version: v1.6.2
+      dependencies:
+        - name: resource
+          ref: cos
+        - name: subnets
+          ref: vpe-subnets
+    - name: ibm-vpn-server
+      alias: ibm-vpn-server
+      version: v0.2.1
+      dependencies:
+        - name: subnets
+          ref: ingress-subnets
+        - name: ibm-secrets-manager
+          ref: secrets-manager
   variables:
     - name: ibmcloud_api_key
       type: string
-      description: The IBM Cloud api key
-    - name: kms_resource_group_name
-      type: string
-      description: The name of the resource group
+      description: The api key used to access IBM Cloud
+      sensitive: true
     - name: region
       type: string
-    - name: at_resource_group_name
-      type: string
-      description: The name of the resource group
-    - name: edge_resource_group_name
-      type: string
-      description: The name of the resource group
-    - name: cs_resource_group_name
-      type: string
-      description: The name of the resource group
-    - name: cs_name_prefix
-      type: string
-      description: >-
-        The prefix name for the service. If not provided it will default to the
-        resource group name
-      defaultValue: ''
     - name: kms_region
       type: string
       description: Geographic location of the resource (e.g. us-south, us-east)
@@ -272,45 +279,32 @@ spec:
       type: string
       description: The name of the KMS provider that should be used (keyprotect or hpcs)
       defaultValue: keyprotect
-    - name: edge_name_prefix
+    - name: kms_resource_group_name
       type: string
-      description: >-
-        The name_prefix used to build the name if one is not provided. If used
-        the name will be `{name_prefix}-{label}`
-      defaultValue: base
-    - name: edge_ssh_bastion_public_key
+      description: The name of the resource group
+    - name: at_resource_group_name
       type: string
-      description: >-
-        The public key provided for the ssh key. If empty string is provided
-        then a new key will be generated.
-      defaultValue: ''
-    - name: edge_ssh_bastion_private_key
+      description: The name of the resource group
+    - name: zos_resource_group_name
       type: string
-      description: >-
-        The private key provided for the ssh key. If empty string is provided
-        then a new key will be generated.
-      defaultValue: ''
-    - name: edge_ssh_bastion_public_key_file
-      type: string
-      description: >-
-        The name of the file containing the public key provided for the ssh key.
-        If empty string is provided then a new key will be generated.
-      defaultValue: ''
-    - name: edge_ssh_bastion_private_key_file
-      type: string
-      description: >-
-        The name of the file containing the private key provided for the ssh
-        key. If empty string is provided then a new key will be generated.
-      defaultValue: ''
+      description: The name of the resource group
+    - name: common_tags
+      type: list(string)
+      description: Common tags that should be added to the instance
+      defaultValue: []
     - name: ingress-subnets__count
       type: number
       description: The number of subnets that should be provisioned
       defaultValue: 1
-    - name: bastion-subnets__count
+    - name: worker-subnets__count
       type: number
       description: The number of subnets that should be provisioned
       defaultValue: 1
     - name: egress-subnets__count
+      type: number
+      description: The number of subnets that should be provisioned
+      defaultValue: 1
+    - name: vpe-subnets__count
       type: number
       description: The number of subnets that should be provisioned
       defaultValue: 1

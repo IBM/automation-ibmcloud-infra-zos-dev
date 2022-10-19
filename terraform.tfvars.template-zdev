@@ -24,17 +24,11 @@ kms_service="keyprotect"
 ## at_resource_group_name: The name of the activity tracker resource group
 at_resource_group_name="zos-dev"
 
-## cs_resource_group_name: The name of the shared services resource group
-cs_resource_group_name="zos-dev"
+## zos_resource_group_name: The name of the shared services resource group
+zos_resource_group_name="zos-dev"
 
 ## kms_resource_group_name: The name of the kms resource group
 kms_resource_group_name="zos-dev"
-
-## edge_resource_group_name: The name of the management resource group
-edge_resource_group_name="zos-dev"
-
-## mgmt_resource_group_name: The name of the management resource group
-mgmt_resource_group_name="zos-dev"
 
 
 ## ***************
@@ -44,14 +38,8 @@ mgmt_resource_group_name="zos-dev"
 ## kms_name_prefix: The prefix name for the service. If not provided it will default to the resource group name
 kms_name_prefix="common"
 
-## cs_name_prefix: The prefix name for the service. If not provided it will default to the resource group name
-cs_name_prefix="common"
-
-## edge_name_prefix: The name of the vpc resource
-edge_name_prefix="edge"
-
-## mgmt_name_prefix: The name of the vpc resource
-mgmt_name_prefix="development"
+## zos_name_prefix: The prefix name for the service. If not provided it will default to the resource group name
+zos_name_prefix="zos"
 
 
 
@@ -63,7 +51,7 @@ mgmt_name_prefix="development"
 ibm-vpc-vsi_profile_name="mz2-2x16"
 
 # The name of the image to use for the virtual server
-ibm-vpc-vsi_image_name="ibm-zos-2-4-s390x-dev-test-wazi-1"
+ibm-vpc-vsi_image_name="ibm-zos-2-4-s390x-dev-test-wazi-4"
 
 
 
@@ -73,8 +61,8 @@ ibm-vpc-vsi_image_name="ibm-zos-2-4-s390x-dev-test-wazi-1"
 
 #cluster_flavor=""
 
-mgmt_worker_count="3"
-mgmt_worker_subnet_count="1"
+zos_worker_count="3"
+zos_worker_subnet_count="1"
 
 cluster-config_banner_text="z/OS Development"
 cluster-config_banner_background_color="green"
@@ -93,15 +81,15 @@ git_url = "https://github.com/cloud-native-toolkit"
 
 
 
-## edge_ssh_bastion_public_key_file: The name of the file containing the public key provided for the ssh key. If empty string is provided then a new key will be generated.
-edge_ssh_bastion_public_key_file="ssh-edge-bastion.pub"
+## zos_ssh_bastion_public_key_file: The name of the file containing the public key provided for the ssh key. If empty string is provided then a new key will be generated.
+zos_ssh_bastion_public_key_file="ssh-zos-bastion.pub"
 
-## edge_ssh_bastion_private_key_file: The name of the file containing the private key provided for the ssh key. If empty string is provided then a new key will be generated.
-edge_ssh_bastion_private_key_file="ssh-edge-bastion"
+## zos_ssh_bastion_private_key_file: The name of the file containing the private key provided for the ssh key. If empty string is provided then a new key will be generated.
+zos_ssh_bastion_private_key_file="ssh-zos-bastion"
 
 
-## edge_ssh_bastion_public_key_file: The name of the file containing the public key provided for the ssh key. If empty string is provided then a new key will be generated.
+## zos_ssh_bastion_public_key_file: The name of the file containing the public key provided for the ssh key. If empty string is provided then a new key will be generated.
 dev_ssh_vsi_public_key_file="ssh-zos-vsi.pub"
 
-## edge_ssh_bastion_private_key_file: The name of the file containing the private key provided for the ssh key. If empty string is provided then a new key will be generated.
+## zos_ssh_bastion_private_key_file: The name of the file containing the private key provided for the ssh key. If empty string is provided then a new key will be generated.
 dev_ssh_vsi_private_key_file="ssh-zos-vsi"
