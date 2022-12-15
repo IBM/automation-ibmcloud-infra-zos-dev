@@ -71,7 +71,7 @@ cluster-config_banner_background_color="green"
 ## Misc Variables
 ## ***************
 
-registry_namespace = ""cd 160   
+registry_namespace = ""
 gitops_repo_repo = "wazi-dev-cluster"
 
 ## ***************

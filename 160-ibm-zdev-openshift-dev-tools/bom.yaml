@@ -134,10 +134,6 @@ spec:
       dependencies:
         - id: namespace
           ref: gitea_namespace
-        - name: ca_cert
-          value: ''
-        - name: ca_cert_file
-          value: ''
       variables:
         - name: ca_cert
           value: ''
