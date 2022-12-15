@@ -1,0 +1,27 @@
+variables:
+  - name: ibmcloud_api_key
+    type: string
+    description: The api key used to access IBM Cloud
+    sensitive: true
+  - name: region
+    type: string
+  - name: kms_region
+    type: string
+    description: Geographic location of the resource (e.g. us-south, us-east)
+  - name: kms_service
+    type: string
+    description: The name of the KMS provider that should be used (keyprotect or hpcs)
+    value: keyprotect
+  - name: at_resource_group_name
+    type: string
+    description: The name of the resource group
+  - name: zos_resource_group_name
+    type: string
+    description: The name of the resource group
+  - name: kms_resource_group_name
+    type: string
+    description: The name of the resource group
+  - name: common_tags
+    type: list(string)
+    description: Common tags that should be added to the instance
+    value: []

@@ -1,50 +1,84 @@
-# IBM Object Storage terraform module
+# IBM Object Storage module
 
-Module to work with an IBM Cloud Object Storage instance. If the `provision` flag is true then an new instance of IBM Cloud Object Storage is provisioned. Otherwise, the module will find an existing instance with the provided name and create a credential. The name and id of the Object Storage instance as well as the name and id of the credential instance are exported from the module for use by other modules.
+Module to work with an IBM Cloud Object Storage instance. If the `provision` flag is true then an new instance
+of IBM Cloud Object Storage is provisioned. Otherwise, the module will find an existing instance with the
+provided name and create a credential. The name and id of the Object Storage instance as well as the name and id
+of the credential instance are exported from the module for use by other modules.
 
-**Note:** This module follows the Terraform conventions regarding how provider configuration is defined within the Terraform template and passed into the module - https://www.terraform.io/docs/language/modules/develop/providers.html. The default provider configuration flows through to the module. If different configuration is required for a module, it can be explicitly passed in the `providers` block of the module - https://www.terraform.io/docs/language/modules/develop/providers.html#passing-providers-explicitly.
+
 
 ## Software dependencies
 
 The module depends on the following software components:
 
-### Command-line tools
+### Terraform version
 
-- terraform - v0.15
+- \>= v0.15
 
 ### Terraform providers
 
-- IBM Cloud provider >= 1.18
 
-## Module dependencies
+- ibm (ibm-cloud/ibm)
 
-- Resource group - github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group
+### Module dependencies
+
+
+- resource_group - [github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group) (>= 2.1.0)
 
 ## Example usage
 
-```hcl-terraform
-terraform {
-  required_providers {
-    ibm = {
-      source = "ibm-cloud/ibm"
-    }
-  }
-  required_version = ">= 0.15"
-}
-
-provider "ibm" {
-  ibmcloud_api_key = var.ibmcloud_api_key
-  region = var.region
-}
-
+```hcl
 module "cos" {
-  source = "github.com/cloud-native-toolkit/terraform-ibm-object-storage.git"
+  source = "cloud-native-toolkit/object-storage/ibm"
 
-  resource_group_name = var.resource_group_name
-  name_prefix         = var.name_prefix
-  provision           = var.cos_provision
-  resource_location   = var.cos_resource_location
-  common_tags         = ["common", "test"]
-  tags                = ["test"]
+
+  common_tags = var.common_tags == null ? null : jsondecode(var.common_tags)
+  ibmcloud_api_key = var.ibmcloud_api_key
+  label = var.cos_label
+  name_prefix = var.zos_name_prefix
+  plan = var.cos_plan
+  provision = var.cos_provision
+  resource_group_name = module.zos_resource_group.name
+  resource_location = var.cos_resource_location
+  tags = var.cos_tags == null ? null : jsondecode(var.cos_tags)
 }
+
 ```
+
+## Module details
+
+### Inputs
+
+| Name | Description | Required | Default | Source |
+|------|-------------|---------|----------|--------|
+| resource_group_name | Resource group where the cluster has been provisioned. | true |  | resource_group.name |
+| resource_location | Geographic location of the resource (e.g. us-south, us-east) | false | global |  |
+| tags | Tags that should be applied to the service | false |  |  |
+| name_prefix | The prefix name for the service. If not provided it will default to the resource group name | true |  |  |
+| plan | The type of plan the service instance should run under (lite or standard) | false | standard |  |
+| provision | Flag indicating that cos instance should be provisioned | false | true |  |
+| name | The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service} | true |  |  |
+| label | The name that should be used for the service, particularly when connecting to an existing service. If not provided then the name will be defaulted to {name prefix}-{service} | false | cos |  |
+| ibmcloud_api_key | The ibmcloud api key used to test that instance is ready | true |  |  |
+| common_tags | Common tags that should be added to the instance | false |  |  |
+
+### Outputs
+
+| Name | Description |
+|------|-------------|
+| id | The Object Storage instance id |
+| name | The Object Storage instance name |
+| crn | The crn of the Object Storage instance |
+| location | The Object Storage instance location |
+| key_name | The name of the credential provisioned for the Object Storage instance |
+| key_id | The name of the credential provisioned for the Object Storage instance |
+| service | The name of the key provisioned for the Object Storage instance |
+| label | The label used for the Object Storage instance |
+| type | The type of the resource |
+
+## Resources
+
+- [Documentation](https://operate.cloudnativetoolkit.dev)
+- [Module catalog](https://modules.cloudnativetoolkit.dev)
+
+> License: Apache License 2.0 | Generated by iascable (3.0.1)

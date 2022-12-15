@@ -1,48 +1,93 @@
-# Client 2 Site VPN
+# VPC VPN Server module
 
-This is a terraform module that will provision a client-to-site VPN on IBM Cloud.  _Note: This is a beta offering that is not supported by the IBM cloud Terraform provider yet, so it is implemented using a `local-exec` provisioner with a bash script to handle resource creation and configuration.
+Module to provision a client to site VPN server instance in an IBM Cloud account
 
-This module will: 
-
-- Download necessary CLI dependencies (`jq`)
-- Create a group in a secrets manager instance
-- Create a server and a client certificate and import them into the secrets manager group
-- Update the ACL for the VPC subnet to allow for VPN ingress & egress
-- Create a security group and security group rules for the VPN server instance
-- Provision a VPN server
-- Download a VPN Client profile and inject the client certificate so it is ready for use with an OpenVPN client
 
 ## Software dependencies
 
-Dependencies:
-- [CLIs](https://github.com/cloud-native-toolkit/terraform-util-clis)
-- [Resource Group](https://github.com/cloud-native-toolkit/terraform-ibm-resource-group)
-- [Certificate Manager](https://github.com/cloud-native-toolkit/terraform-ibm-cert-manager)
-- [VPC Subnet](https://github.com/cloud-native-toolkit/terraform-ibm-vpc-subnets)
+The module depends on the following software components:
 
-### Command-line tools
+### Terraform version
 
-- `terraform` - v1.2.8
-- `jq`
-- `ibmcloud`
+- \>= v0.15
 
 ### Terraform providers
 
-None
+
+- ibm (ibm-cloud/ibm)
+
+### Module dependencies
+
+
+- resource_group - [github.com/cloud-native-toolkit/terraform-ibm-resource-group](https://github.com/cloud-native-toolkit/terraform-ibm-resource-group) (>= 3.0.1)
+- subnets - [github.com/cloud-native-toolkit/terraform-ibm-vpc-subnets](https://github.com/cloud-native-toolkit/terraform-ibm-vpc-subnets) (>= 1.9.0)
+- secrets-manager - [github.com/cloud-native-toolkit/terraform-ibm-secrets-manager](https://github.com/cloud-native-toolkit/terraform-ibm-secrets-manager) (>= 1.0.2)
 
 ## Example usage
 
-```hcl-terraform
-module "vpn_module" {
+```hcl
+module "ibm-vpn-server" {
   source = "github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpn-server"
 
-  resource_group_name   = module.resource_group.name
-  region                = var.region
-  ibmcloud_api_key      = var.ibmcloud_api_key
-  resource_label        = "client2site"
-  secrets_manager_name  = module.secrets-manager.name
-  vpc_id                = module.subnets.vpc_id
-  subnet_ids            = module.subnets.ids
+  auth_method = var.ibm-vpn-server_auth_method
+  client_dns = var.ibm-vpn-server_client_dns == null ? null : jsondecode(var.ibm-vpn-server_client_dns)
+  dns_cidr = var.ibm-vpn-server_dns_cidr
+  enable_split_tunnel = var.ibm-vpn-server_enable_split_tunnel
+  ibmcloud_api_key = var.ibmcloud_api_key
+  name_prefix = var.ibm-vpn-server_name_prefix
+  region = var.region
+  resource_group_name = module.resource_group.name
+  resource_label = var.ibm-vpn-server_resource_label
+  secrets_manager_guid = module.ibm-secrets-manager.guid
+  services_cidr = var.ibm-vpn-server_services_cidr
+  subnet_ids = module.ingress-subnets.ids
+  vpc_cidr = var.ibm-vpn-server_vpc_cidr
+  vpc_id = module.ingress-subnets.vpc_id
+  vpn_client_timeout = var.ibm-vpn-server_vpn_client_timeout
+  vpn_server_port = var.ibm-vpn-server_vpn_server_port
+  vpn_server_proto = var.ibm-vpn-server_vpn_server_proto
+  vpnclient_ip = var.ibm-vpn-server_vpnclient_ip
 }
+
 ```
 
+## Module details
+
+### Inputs
+
+| Name | Description | Required | Default | Source |
+|------|-------------|---------|----------|--------|
+| ibmcloud_api_key | The IBM Cloud api key | true |  |  |
+| region | The IBM Cloud region where the resources will be provisioned. | true |  |  |
+| resource_label | The label for the resource to which the vpe will be connected. Used as a tag and as part of the vpe name. | false | vpn |  |
+| resource_group_name | The name of the IBM Cloud resource group where the resources will be provisioned. | true |  | resource_group.name |
+| secrets_manager_guid | The secrets manager instance guid. | true |  | secrets-manager.guid |
+| vpc_id | The id of the vpc instance. | true |  | subnets.vpc_id |
+| subnet_ids | The array of ids (strings) for the subnet that the VPN will be connected to. | true |  | subnets.ids |
+| name_prefix | The name of the vpn resource | true |  |  |
+| vpnclient_ip | VPN Client IP Range | false | 172.16.0.0/16 |  |
+| vpc_cidr | CIDR for the private VPC the VPN is connected to. | false | 10.0.0.0/8 |  |
+| dns_cidr | CIDR for the DNS servers in the private VPC the VPN is connected to. | false | 161.26.0.0/16 |  |
+| services_cidr | CIDR for the services in the private VPC the VPN is connected to. | false | 166.8.0.0/14 |  |
+| client_dns | Comma-separated DNS IPs for VPN Client Use ['161.26.0.10','161.26.0.11'] for public endpoints, or ['161.26.0.7','161.26.0.8'] for private endpoints | false | 161.26.0.7161.26.0.8 |  |
+| auth_method | VPN Client Auth Method. One of: certificate, username, certificate,username, username,certificate | false | certificate |  |
+| vpn_server_proto | VPN Server Protocol. One of: udp or tcp | false | udp |  |
+| vpn_server_port | VPN Server Port number | false | 443 |  |
+| vpn_client_timeout | VPN Server Client Time out | false | 600 |  |
+| enable_split_tunnel | VPN server Tunnel Type | false | true |  |
+
+### Outputs
+
+| Name | Description |
+|------|-------------|
+| name | The name of the VPN server instance |
+| server_certificate | The CRN of the server certificate saved to the certificate manager instance |
+| client_certificate | The CRN of the client certificate saved to the certificate manager instance |
+| vpn_profile | The filename of the VPN client configuration file |
+
+## Resources
+
+- [Documentation](https://operate.cloudnativetoolkit.dev)
+- [Module catalog](https://modules.cloudnativetoolkit.dev)
+
+> License: Apache License 2.0 | Generated by iascable (3.0.1)

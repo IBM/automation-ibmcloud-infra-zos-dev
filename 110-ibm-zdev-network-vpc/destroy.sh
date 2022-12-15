@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+#! /bin/bash
 
-SCRIPT_DIR=$(cd $(dirname $0); pwd -P)
-
-cd "${SCRIPT_DIR}/terraform"
-terraform init
-terraform destroy -auto-approve
+if [[ -f "${PWD}/terragrunt.hcl" ]]; then
+  terragrunt destroy -auto-approve
+else
+  terraform destroy -auto-approve
+fi

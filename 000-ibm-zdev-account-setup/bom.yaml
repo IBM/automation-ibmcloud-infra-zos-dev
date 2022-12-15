@@ -11,6 +11,8 @@ metadata:
     description: >-
       Sets up an IBM Cloud account for Wazzi as a Service on IBM Cloud reference
       architecture settings
+    dependencies.cloudnativetoolkit.dev/provides: ''
+    dependencies.cloudnativetoolkit.dev/needs: ''
 spec:
   modules:
     - name: ibm-onboard-fs-account

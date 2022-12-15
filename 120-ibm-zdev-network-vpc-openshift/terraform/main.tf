@@ -235,7 +235,7 @@ module "ibm-vpc-vsi" {
   vpc_subnets = module.vsi-subnets.subnets
 }
 module "ibm-vpn-server" {
-  source = "github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpn-server?ref=v0.2.1"
+  source = "github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpn-server?ref=v0.2.2"
 
   auth_method = var.ibm-vpn-server_auth_method
   client_dns = var.ibm-vpn-server_client_dns == null ? null : jsondecode(var.ibm-vpn-server_client_dns)
@@ -296,7 +296,7 @@ module "kms_resource_group" {
   sync = var.kms_resource_group_sync
 }
 module "kms-key" {
-  source = "github.com/terraform-ibm-modules/terraform-ibm-toolkit-kms-key?ref=v1.5.3"
+  source = "github.com/terraform-ibm-modules/terraform-ibm-toolkit-kms-key?ref=v1.5.4"
 
   dual_auth_delete = var.kms-key_dual_auth_delete
   force_delete = var.kms-key_force_delete
@@ -307,6 +307,7 @@ module "kms-key" {
   name = var.kms-key_name
   name_prefix = var.zos_name_prefix
   provision = var.kms-key_provision
+  provision_key_rotation_policy = var.kms-key_provision_key_rotation_policy
   rotation_interval = var.kms-key_rotation_interval
 }
 module "resource_group" {

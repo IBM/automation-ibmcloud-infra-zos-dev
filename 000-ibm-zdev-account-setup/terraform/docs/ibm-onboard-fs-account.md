@@ -1,121 +1,63 @@
-# IBM Onboard FS account
+# IBM Onboard FS Cloud Account module
 
-Module to automate the configuration of an IBM Cloud account with required FS settings. There are a number of settings required. There are a number of settings that need to be made on the account for FS compliance but currently only a subset of the settings can be automated. The list of settings and manual setup steps are provided below:
+Module to set account-level values that enable FS computing
 
-
-
-## Settings
-
-### Account settings
-
-https://cloud.ibm.com/account/settings
-
-- Financial Services Validated (**Manual**)
-- Virtual routing and forwarding (**Manual**)
-- Service endpoints (**Manual**)
-
-### IAM settings
-
-https://cloud.ibm.com/iam/settings
-
-- Multi-factor authentication (**Automated**)
-- Restrict user list visibility (**Manual**)
-- Restrict API key creation* (**Automated**)
-- Restrict service ID creation* (**Automated**)
-
-**Note**: When "Restrict API key creation" and "Restrict service ID creation" are enabled, the corresponding "User API key creator" and "Service ID creator" IAM policies will need to be assigned to users via an access group.
-
-## Manual setup steps
-
-### Financial Services Validated
-
-1. Open the Account Settings page - https://cloud.ibm.com/account/settings
-2. Click the **On** button for the "Financial Services Validated" section
-
-### Virtual routing and forwarding
-
-1. Open the Account Settings page - https://cloud.ibm.com/account/settings
-2. Click the **Create case** button under "Virtual routing and forwarding"
-3. Submit the case. (No other information is required in the case)
-
-### Service endpoints
-
-1. Open the Account Settings page - https://cloud.ibm.com/account/settings
-2. Once "Virtual routing and forwarding" has been enabled, the option to enable "Service endpoints" is available.
-3. Click the **On** button to turn service endpoints on.
-
-### Restrict user list visibility
-
-1. Open the IAM settings - https://cloud.ibm.com/iam/settings
-2. Click the toggle next to "Restrict user list visibility"
 
 ## Software dependencies
 
 The module depends on the following software components:
 
-### Command-line tools
+### Terraform version
 
-- terraform - v13
-- ibmcloud cli
+- \>= v0.15
 
 ### Terraform providers
 
-- IBM Cloud provider >= 1.18
 
-## Module dependencies
+- ibm (ibm-cloud/ibm)
 
-- None
+### Module dependencies
+
+
+None
 
 ## Example usage
 
-[Refer test cases for more details](test/stages/stage-onboard-fs-cloud.tf)
+```hcl
+module "ibm-onboard-fs-account" {
+  source = "github.com/terraform-ibm-modules/terraform-ibm-toolkit-onboard-fs-account"
 
-```hcl-terraform
-terraform {
-   required_providers {
-      ibm = {
-         source = "ibm-cloud/ibm"
-      }
-   }
-   required_version = ">= 0.13"
+  action = var.ibm-onboard-fs-account_action
+  ibmcloud_api_key = var.ibmcloud_api_key
+  mfa = var.ibm-onboard-fs-account_mfa
+  region = var.region
+  restrict_create_platform_apikey = var.ibm-onboard-fs-account_restrict_create_platform_apikey
+  restrict_create_service_id = var.ibm-onboard-fs-account_restrict_create_service_id
 }
 
-provider "ibm" {
-   region = var.region
-   ibmcloud_api_key = var.ibmcloud_api_key
-}
-
-module "ibm_iam_account_settings" {
-   source = "github.com/ibm-garage-cloud/terraform-ibm-account-access-group"
-   
-   region              = var.region
-   ibmcloud_api_key    = var.ibmcloud_api_key
-   mfa = var.mfa
-   restrict_create_service_id = var.restrict_create_service_id
-   restrict_create_platform_apikey = var.restrict_create_platform_apikey
-}
 ```
 
-Defines the MFA trait for the account. Valid values:
+## Module details
 
-    NONE - No MFA trait set
-    TOTP - For all non-federated IBMId users
-    TOTP4ALL - For all users
-    LEVEL1 - Email-based MFA for all users
-    LEVEL2 - TOTP-based MFA for all users
-    LEVEL3 - U2F MFA for all users
+### Inputs
 
+| Name | Description | Required | Default | Source |
+|------|-------------|---------|----------|--------|
+| ibmcloud_api_key | The api key for IBM Cloud access | true |  |  |
+| region | The IBM Cloud region. | true |  |  |
+| action | USAGE: ibmcloud cr platform-metrics enable | disable | true |  |  |
+| mfa | Defines the MFA trait for an account. Valid values are NONE No MFA trait set. TOTP For all non-federated IBM ID users TOTP4ALL For all users. LEVEL1 The Email based MFA for all users. LEVEL2 TOTP based MFA for all users. LEVEL3 U2F MFA for all users. | true |  |  |
+| restrict_create_service_id | Defines whether creating a service ID is access controlled. Valid values are RESTRICTED to apply access control. NOT_RESTRICTED to remove access control. NOT_SET to unset a previous set value. | true |  |  |
+| restrict_create_platform_apikey | Defines whether creating a API Key is access controlled. Valid values are RESTRICTED to apply access control. NOT_RESTRICTED to remove access control. NOT_SET to unset a previous set value. | true |  |  |
 
-
-Defines whether or not creating platform API and Service Id is access controlled. Valid values:
-
-    RESTRICTED - to apply access control
-    NOT_RESTRICTED - to remove access control
-    NOT_SET - to 'unset' a previous set value
+### Outputs
 
 
-container registry plateform-matrics
-   --enable   Enable the setting for your account.
-   --disable  Disable the setting for your account.
-   --status   Display whether the setting is enabled for your account.
+None
 
+## Resources
+
+- [Documentation](https://operate.cloudnativetoolkit.dev)
+- [Module catalog](https://modules.cloudnativetoolkit.dev)
+
+> License: Apache License 2.0 | Generated by iascable (3.0.1)
