@@ -59,7 +59,7 @@ ibm-vpc-vsi_image_name="ibm-zos-2-4-s390x-dev-test-wazi-5"
 ## Cluster Variables
 ## ***************
 
-#cluster_flavor=""
+cluster_flavor="bx2.16x64"
 
 zos_worker_count="3"
 zos_worker_subnet_count="1"

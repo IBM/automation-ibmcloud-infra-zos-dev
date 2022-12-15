@@ -41,5 +41,5 @@
 #worker_count="3"
 
 ## cluster_flavor: The machine type that will be provisioned for classic infrastructure
-#cluster_flavor="bx2.16x64"
+#cluster_flavor="bx2.4x16"
 

@@ -104,7 +104,7 @@ already be in .gitignore.
 | egress-subnets__count | The number of subnets that should be provisioned |  | 1 |
 | vsi-subnets__count | The number of subnets that should be provisioned |  | 1 |
 | worker_count | The number of worker nodes that should be provisioned for classic infrastructure |  | 3 |
-| cluster_flavor | The machine type that will be provisioned for classic infrastructure |  | bx2.16x64 |
+| cluster_flavor | The machine type that will be provisioned for classic infrastructure |  | bx2.4x16 |
 
 ## Troubleshooting
 

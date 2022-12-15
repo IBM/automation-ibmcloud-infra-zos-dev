@@ -254,7 +254,9 @@ spec:
           value: true
         - name: worker_count
         - name: ocp_version
-          value: 4.1
+          value: '4.10'
+        - name: cluster_flavor
+          value: bx2.16x64
       dependencies:
         - name: subnets
           ref: worker-subnets
@@ -365,4 +367,4 @@ spec:
     - name: cluster_flavor
       type: string
       description: The machine type that will be provisioned for classic infrastructure
-      value: bx2.16x64
+      value: bx2.4x16

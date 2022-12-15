@@ -60,4 +60,4 @@ variables:
   - name: cluster_flavor
     type: string
     description: The machine type that will be provisioned for classic infrastructure
-    value: bx2.15x64
+    value: bx2.4x16
