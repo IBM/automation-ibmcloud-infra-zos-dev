@@ -57,26 +57,29 @@ already be in .gitignore.
 
 | Name | Description | Version |
 |------|-------------|---------|
+| [gitops-repo](https://github.com/cloud-native-toolkit/terraform-tools-gitops) | Module to provision and set up a GitOps repository | v1.23.3 |
+| [argocd-bootstrap](https://github.com/cloud-native-toolkit/terraform-tools-argocd-bootstrap) | Module to provision ArgoCD and bootstrap an application using the GitOps repo | v1.12.0 |
 | [gitops-artifactory](https://github.com/cloud-native-toolkit/terraform-gitops-artifactory) |  | v1.3.0 |
 | [gitops-cluster-config](https://github.com/cloud-native-toolkit/terraform-gitops-cluster-config) | Module to populate a gitops repository with base configuration of the Red Hat OpenShift cluster (notification banner, help menus, etc) | v1.1.1 |
 | [gitops-dashboard](https://github.com/cloud-native-toolkit/terraform-gitops-dashboard) | Module to configure the provisioning of the Developer Dashboard in a GitOps repo | v1.7.0 |
 | [gitops-namespace](https://github.com/cloud-native-toolkit/terraform-gitops-namespace) | Module to configure the provisioning of a namespace in a GitOps repo | v1.12.2 |
 | [gitops-pact-broker](https://github.com/cloud-native-toolkit/terraform-gitops-pact-broker) | Module to populate gitops repo to deploy Pact Broker | v1.2.0 |
-| [gitops-repo](https://github.com/cloud-native-toolkit/terraform-tools-gitops) | Module to provision and set up a GitOps repository | v1.23.3 |
 | [gitops-sonarqube](https://github.com/cloud-native-toolkit/terraform-gitops-sonarqube) | Module to populate gitops repo to deploy SonarQube | v1.3.0 |
 | [gitops-tekton-resources](https://github.com/cloud-native-toolkit/terraform-gitops-tekton-resources) | Module to populate a gitops repo with Tekton resources (tasks and pipelines). | v2.1.0 |
 | [gitops-wazi-ds](https://github.com/cloud-native-toolkit/terraform-gitops-wazi-dev-spaces) | Module to populate a gitops repo with the resources to provision wazi-dev-spaces | v1.0.0 |
 | [ibm-resource-group](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group) | Creates a resource groups in the account | v3.3.5 |
 | [ibm-ocp-vpc](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-ocp-vpc) | Provisions an IBM Cloud OCP cluster | v1.16.3 |
 | [namespace](https://github.com/cloud-native-toolkit/terraform-k8s-namespace) | Creates a namespace in the cluster | v3.2.4 |
+| [namespace](https://github.com/cloud-native-toolkit/terraform-k8s-namespace) | Creates a namespace in the cluster | v3.2.4 |
+| [gitea](https://github.com/cloud-native-toolkit/terraform-tools-gitea) | Module to install Gitea into a cluster via an operator | v0.5.1 |
 | [ibm-image-registry](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-image-registry) | Module to set up a namespace in the IBM Container Registry and configure the cluster | v2.1.4 |
 | [openshift-cicd](https://github.com/cloud-native-toolkit/terraform-tools-openshift-cicd) | Module to provision Tekton and ArgoCD into an OpenShift cluster together | v1.11.1 |
 | [util-clis](https://github.com/cloud-native-toolkit/terraform-util-clis) | Module to install clis into local bin directory | v1.18.2 |
+| [olm](https://github.com/cloud-native-toolkit/terraform-k8s-olm) | Installs Operator Lifecycle Manager in the cluster | v1.3.5 |
+| [sealed-secret-cert](https://github.com/cloud-native-toolkit/terraform-util-sealed-secret-cert) | Module to collect or generate the certificate and private key used for the sealed secret component | v1.0.1 |
 | [gitops-buildah-unprivileged](https://github.com/cloud-native-toolkit/terraform-gitops-buildah-unprivileged) | Module to populate a gitops repo to set up a Red Hat OpenShift cluster to allow buildah to run unprivileged. | v1.1.1 |
 | [gitops-wazi-ds-op](https://github.com/cloud-native-toolkit/terraform-gitops-wazi-ds-operator) | Module to populate a gitops repo with the resources to provision wazi-dev-spaces-operator | v1.0.0 |
-| [olm](https://github.com/cloud-native-toolkit/terraform-k8s-olm) | Installs Operator Lifecycle Manager in the cluster | v1.3.5 |
 | [namespace](https://github.com/cloud-native-toolkit/terraform-k8s-namespace) | Creates a namespace in the cluster | v3.2.4 |
-| [sealed-secret-cert](https://github.com/cloud-native-toolkit/terraform-util-sealed-secret-cert) | Module to collect or generate the certificate and private key used for the sealed secret component | v1.0.1 |
 
 ### Variables
 

@@ -1,79 +1,3 @@
-output "gitops-artifactory_name" {
-  description = "The name of the module"
-  value = module.gitops-artifactory.name
-}
-output "gitops-artifactory_branch" {
-  description = "The branch where the module config has been placed"
-  value = module.gitops-artifactory.branch
-}
-output "gitops-artifactory_namespace" {
-  description = "The namespace where the module will be deployed"
-  value = module.gitops-artifactory.namespace
-}
-output "gitops-artifactory_server_name" {
-  description = "The server where the module will be deployed"
-  value = module.gitops-artifactory.server_name
-}
-output "gitops-artifactory_layer" {
-  description = "The layer where the module is deployed"
-  value = module.gitops-artifactory.layer
-}
-output "gitops-artifactory_type" {
-  description = "The type of module where the module is deployed"
-  value = module.gitops-artifactory.type
-}
-output "gitops-dashboard_name" {
-  description = "The name of the module"
-  value = module.gitops-dashboard.name
-}
-output "gitops-dashboard_branch" {
-  description = "The branch where the module config has been placed"
-  value = module.gitops-dashboard.branch
-}
-output "gitops-dashboard_namespace" {
-  description = "The namespace where the module will be deployed"
-  value = module.gitops-dashboard.namespace
-}
-output "gitops-dashboard_server_name" {
-  description = "The server where the module will be deployed"
-  value = module.gitops-dashboard.server_name
-}
-output "gitops-dashboard_layer" {
-  description = "The layer where the module is deployed"
-  value = module.gitops-dashboard.layer
-}
-output "gitops-dashboard_type" {
-  description = "The type of module where the module is deployed"
-  value = module.gitops-dashboard.type
-}
-output "tools_namespace_name" {
-  description = "Namespace name"
-  value = module.tools_namespace.name
-}
-output "gitops-pact-broker_name" {
-  description = "The name of the module"
-  value = module.gitops-pact-broker.name
-}
-output "gitops-pact-broker_branch" {
-  description = "The branch where the module config has been placed"
-  value = module.gitops-pact-broker.branch
-}
-output "gitops-pact-broker_namespace" {
-  description = "The namespace where the module will be deployed"
-  value = module.gitops-pact-broker.namespace
-}
-output "gitops-pact-broker_server_name" {
-  description = "The server where the module will be deployed"
-  value = module.gitops-pact-broker.server_name
-}
-output "gitops-pact-broker_layer" {
-  description = "The layer where the module is deployed"
-  value = module.gitops-pact-broker.layer
-}
-output "gitops-pact-broker_type" {
-  description = "The type of module where the module is deployed"
-  value = module.gitops-pact-broker.type
-}
 output "gitops_repo_config_host" {
   description = "The host name of the bootstrap git repo"
   value = module.gitops_repo.config_host
@@ -164,6 +88,94 @@ output "gitops_repo_server_name" {
 output "gitops_repo_sealed_secrets_cert" {
   description = "The certificate used to encrypt sealed secrets"
   value = module.gitops_repo.sealed_secrets_cert
+}
+output "argocd-bootstrap_argocd_namespace" {
+  description = "The namespace where the ArgoCD instance has been provisioned"
+  value = module.argocd-bootstrap.argocd_namespace
+}
+output "argocd-bootstrap_argocd_service_account" {
+  description = "The namespace where the ArgoCD instance has been provisioned"
+  value = module.argocd-bootstrap.argocd_service_account
+}
+output "argocd-bootstrap_sealed_secrets_cert" {
+  description = "the value of argocd-bootstrap_sealed_secrets_cert"
+  value = module.argocd-bootstrap.sealed_secrets_cert
+}
+output "gitops-artifactory_name" {
+  description = "The name of the module"
+  value = module.gitops-artifactory.name
+}
+output "gitops-artifactory_branch" {
+  description = "The branch where the module config has been placed"
+  value = module.gitops-artifactory.branch
+}
+output "gitops-artifactory_namespace" {
+  description = "The namespace where the module will be deployed"
+  value = module.gitops-artifactory.namespace
+}
+output "gitops-artifactory_server_name" {
+  description = "The server where the module will be deployed"
+  value = module.gitops-artifactory.server_name
+}
+output "gitops-artifactory_layer" {
+  description = "The layer where the module is deployed"
+  value = module.gitops-artifactory.layer
+}
+output "gitops-artifactory_type" {
+  description = "The type of module where the module is deployed"
+  value = module.gitops-artifactory.type
+}
+output "gitops-dashboard_name" {
+  description = "The name of the module"
+  value = module.gitops-dashboard.name
+}
+output "gitops-dashboard_branch" {
+  description = "The branch where the module config has been placed"
+  value = module.gitops-dashboard.branch
+}
+output "gitops-dashboard_namespace" {
+  description = "The namespace where the module will be deployed"
+  value = module.gitops-dashboard.namespace
+}
+output "gitops-dashboard_server_name" {
+  description = "The server where the module will be deployed"
+  value = module.gitops-dashboard.server_name
+}
+output "gitops-dashboard_layer" {
+  description = "The layer where the module is deployed"
+  value = module.gitops-dashboard.layer
+}
+output "gitops-dashboard_type" {
+  description = "The type of module where the module is deployed"
+  value = module.gitops-dashboard.type
+}
+output "tools_namespace_name" {
+  description = "Namespace name"
+  value = module.tools_namespace.name
+}
+output "gitops-pact-broker_name" {
+  description = "The name of the module"
+  value = module.gitops-pact-broker.name
+}
+output "gitops-pact-broker_branch" {
+  description = "The branch where the module config has been placed"
+  value = module.gitops-pact-broker.branch
+}
+output "gitops-pact-broker_namespace" {
+  description = "The namespace where the module will be deployed"
+  value = module.gitops-pact-broker.namespace
+}
+output "gitops-pact-broker_server_name" {
+  description = "The server where the module will be deployed"
+  value = module.gitops-pact-broker.server_name
+}
+output "gitops-pact-broker_layer" {
+  description = "The layer where the module is deployed"
+  value = module.gitops-pact-broker.layer
+}
+output "gitops-pact-broker_type" {
+  description = "The type of module where the module is deployed"
+  value = module.gitops-pact-broker.type
 }
 output "gitops-sonarqube_name" {
   description = "The name of the module"
@@ -324,6 +336,48 @@ output "openshift-gitops_name" {
   description = "Namespace name"
   value = module.openshift-gitops.name
 }
+output "gitea_namespace_name" {
+  description = "Namespace name"
+  value = module.gitea_namespace.name
+}
+output "gitea_namespace" {
+  description = "The namespace where the Gitea instance has been provisioned"
+  value = module.gitea.namespace
+}
+output "gitea_username" {
+  description = "The username of the Gitea admin user"
+  value = module.gitea.username
+}
+output "gitea_password" {
+  description = "The password of the Gitea admin user"
+  value = module.gitea.password
+  sensitive = true
+}
+output "gitea_token" {
+  description = "The api token of the Gitea admin user"
+  value = module.gitea.token
+  sensitive = true
+}
+output "gitea_host" {
+  description = "The host name of the gitea server"
+  value = module.gitea.host
+}
+output "gitea_org" {
+  description = "The host name of the gitea server"
+  value = module.gitea.org
+}
+output "gitea_ingress_host" {
+  description = "The host name of the gitea server"
+  value = module.gitea.ingress_host
+}
+output "gitea_ingress_url" {
+  description = "The url of the gitea server"
+  value = module.gitea.ingress_url
+}
+output "gitea_ca_cert" {
+  description = "Base64 encoded CA certificate for cluster endpoints"
+  value = module.gitea.ca_cert
+}
 output "openshift-cicd_argocd_namespace" {
   description = "The namespace where the ArgoCD instance has been provisioned"
   value = module.openshift-cicd.argocd_namespace
@@ -371,6 +425,27 @@ output "openshift-cicd_tekton_namespace" {
 output "util-clis_bin_dir" {
   description = "Directory where the clis were downloaded"
   value = module.util-clis.bin_dir
+}
+output "olm_olm_namespace" {
+  description = "Namespace where OLM is running. The value will be different between OCP 4.3 and IKS/OCP 3.11"
+  value = module.olm.olm_namespace
+}
+output "olm_target_namespace" {
+  description = "Namespace where operatoes will be installed"
+  value = module.olm.target_namespace
+}
+output "olm_operator_namespace" {
+  description = "Name space where catalog is running - and subscriptions need to be made"
+  value = module.olm.operator_namespace
+}
+output "sealed-secret-cert_private_key" {
+  description = "the value of sealed-secret-cert_private_key"
+  value = module.sealed-secret-cert.private_key
+  sensitive = true
+}
+output "sealed-secret-cert_cert" {
+  description = "the value of sealed-secret-cert_cert"
+  value = module.sealed-secret-cert.cert
 }
 output "gitops-buildah-unprivileged_name" {
   description = "The name of the module"
@@ -420,28 +495,7 @@ output "gitops-wazi-ds-op_type" {
   description = "The type of module where the module is deployed"
   value = module.gitops-wazi-ds-op.type
 }
-output "olm_olm_namespace" {
-  description = "Namespace where OLM is running. The value will be different between OCP 4.3 and IKS/OCP 3.11"
-  value = module.olm.olm_namespace
-}
-output "olm_target_namespace" {
-  description = "Namespace where operatoes will be installed"
-  value = module.olm.target_namespace
-}
-output "olm_operator_namespace" {
-  description = "Name space where catalog is running - and subscriptions need to be made"
-  value = module.olm.operator_namespace
-}
 output "sealed-secret_name" {
   description = "Namespace name"
   value = module.sealed-secret.name
-}
-output "sealed-secret-cert_private_key" {
-  description = "the value of sealed-secret-cert_private_key"
-  value = module.sealed-secret-cert.private_key
-  sensitive = true
-}
-output "sealed-secret-cert_cert" {
-  description = "the value of sealed-secret-cert_cert"
-  value = module.sealed-secret-cert.cert
 }

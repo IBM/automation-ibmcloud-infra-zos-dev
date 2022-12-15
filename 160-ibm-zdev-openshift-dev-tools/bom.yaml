@@ -11,22 +11,40 @@ metadata:
     description: Open-Source collection of assets for application development on OpenShift
     vpn/required: 'true'
     deployment-type/gitops: 'true'
-    dependencies.cloudnativetoolkit.dev/provides: cluster
-    dependencies.cloudnativetoolkit.dev/needs: gitops
+    dependencies.cloudnativetoolkit.dev/provides: gitops,cluster
+    dependencies.cloudnativetoolkit.dev/needs: ''
 spec:
   modules:
+    - name: gitops-repo
+      alias: gitops_repo
+      version: v1.23.3
+    - name: argocd-bootstrap
+      alias: argocd-bootstrap
+      version: v1.12.0
+      variables:
+        - name: create_webhook
+          value: true
     - name: gitops-artifactory
       alias: gitops-artifactory
       version: v1.3.0
+      dependencies:
+        - id: namespace
+          ref: tools_namespace
     - name: gitops-cluster-config
       alias: gitops-cluster-config
       version: v1.1.1
       variables:
         - name: banner_text
           value: Z/OS Development
+      dependencies:
+        - id: namespace
+          ref: tools_namespace
     - name: gitops-dashboard
       alias: gitops-dashboard
       version: v1.7.0
+      dependencies:
+        - id: namespace
+          ref: tools_namespace
     - name: gitops-namespace
       alias: tools_namespace
       version: v1.12.2
@@ -37,18 +55,27 @@ spec:
     - name: gitops-pact-broker
       alias: gitops-pact-broker
       version: v1.2.0
-    - name: gitops-repo
-      alias: gitops_repo
-      version: v1.23.3
+      dependencies:
+        - id: namespace
+          ref: tools_namespace
     - name: gitops-sonarqube
       alias: gitops-sonarqube
       version: v1.3.0
+      dependencies:
+        - id: namespace
+          ref: tools_namespace
     - name: gitops-tekton-resources
       alias: gitops-tekton-resources
       version: v2.1.0
+      dependencies:
+        - id: namespace
+          ref: tools_namespace
     - name: gitops-wazi-ds
       alias: gitops-wazi-ds
       version: v1.0.0
+      dependencies:
+        - id: namespace
+          ref: tools_namespace
     - name: ibm-resource-group
       alias: resource_group
       version: v3.3.5
@@ -95,6 +122,27 @@ spec:
       variables:
         - name: name
           value: openshift-gitops
+    - name: namespace
+      alias: gitea_namespace
+      version: v3.2.4
+      variables:
+        - name: name
+          value: gitea
+    - name: gitea
+      alias: gitea
+      version: v0.5.1
+      dependencies:
+        - id: namespace
+          ref: gitea_namespace
+        - name: ca_cert
+          value: ''
+        - name: ca_cert_file
+          value: ''
+      variables:
+        - name: ca_cert
+          value: ''
+        - name: ca_cert_file
+          value: ''
     - name: ibm-image-registry
       alias: registry
       version: v2.1.4
@@ -102,22 +150,28 @@ spec:
         - name: registry_namespace
           required: true
           scope: global
+      dependencies:
+        - id: namespace
+          ref: openshift-gitops
     - name: openshift-cicd
       alias: openshift-cicd
       version: v1.11.1
+      dependencies:
+        - id: namespace
+          ref: openshift-gitops
     - name: util-clis
       version: v1.18.2
+    - name: olm
+      version: v1.3.5
+    - name: sealed-secret-cert
+      version: v1.0.1
     - name: gitops-buildah-unprivileged
       version: v1.1.1
     - name: gitops-wazi-ds-op
       version: v1.0.0
-    - name: olm
-      version: v1.3.5
     - name: namespace
       alias: sealed-secret
       version: v3.2.4
-    - name: sealed-secret-cert
-      version: v1.0.1
   variables:
     - name: gitops_repo_host
       type: string

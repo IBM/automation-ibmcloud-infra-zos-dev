@@ -31,10 +31,10 @@ module "gitops_repo" {
 
   branch = var.gitops_repo_branch
   debug = var.debug
-  gitea_host = var.gitops_repo_gitea_host
-  gitea_org = var.gitops_repo_gitea_org
-  gitea_token = var.gitops_repo_gitea_token
-  gitea_username = var.gitops_repo_gitea_username
+  gitea_host = module.gitea.host
+  gitea_org = module.gitea.org
+  gitea_token = module.gitea.token
+  gitea_username = module.gitea.username
   gitops_namespace = var.gitops_repo_gitops_namespace
   host = var.gitops_repo_host
   org = var.gitops_repo_org

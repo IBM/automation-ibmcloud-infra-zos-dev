@@ -5,11 +5,11 @@ provider "gitops" {
 
 
   bin_dir = module.util-clis.bin_dir
-  default_host = var.gitops_default_host
-  default_org = var.gitops_default_org
-  default_username = var.gitops_default_username
-  default_token = var.gitops_default_token
-  default_ca_cert = var.gitops_default_ca_cert
+  default_host = module.gitea.host
+  default_org = module.gitea.org
+  default_username = module.gitea.username
+  default_token = module.gitea.token
+  default_ca_cert = module.gitea.ca_cert
   host = var.gitops_host
   org = var.gitops_org
   project = var.gitops_project

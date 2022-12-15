@@ -1,3 +1,20 @@
+module "argocd-bootstrap" {
+  source = "github.com/cloud-native-toolkit/terraform-tools-argocd-bootstrap?ref=v1.12.0"
+
+  bootstrap_path = module.gitops_repo.bootstrap_path
+  bootstrap_prefix = var.argocd-bootstrap_bootstrap_prefix
+  cluster_config_file = module.cluster.config_file_path
+  cluster_type = module.cluster.platform.type_code
+  create_webhook = var.argocd-bootstrap_create_webhook
+  git_token = module.gitops_repo.config_token
+  git_username = module.gitops_repo.config_username
+  gitops_repo_url = module.gitops_repo.config_repo_url
+  ingress_subdomain = module.cluster.platform.ingress
+  olm_namespace = module.olm.olm_namespace
+  operator_namespace = module.olm.target_namespace
+  sealed_secret_cert = module.sealed-secret-cert.cert
+  sealed_secret_private_key = module.sealed-secret-cert.private_key
+}
 module "cluster" {
   source = "github.com/terraform-ibm-modules/terraform-ibm-toolkit-ocp-vpc?ref=v1.16.3"
 
@@ -26,15 +43,36 @@ module "cluster" {
   vpc_subnets = var.cluster_vpc_subnets == null ? null : jsondecode(var.cluster_vpc_subnets)
   worker_count = var.worker_count
 }
+module "gitea" {
+  source = "github.com/cloud-native-toolkit/terraform-tools-gitea?ref=v0.5.1"
+
+  ca_cert = var.gitea_ca_cert
+  ca_cert_file = var.gitea_ca_cert_file
+  cluster_config_file = module.cluster.config_file_path
+  cluster_type = module.cluster.platform.type_code
+  instance_name = var.gitea_instance_name
+  instance_namespace = module.gitea_namespace.name
+  olm_namespace = module.olm.olm_namespace
+  operator_namespace = module.olm.target_namespace
+  password = var.gitea_password
+  username = var.gitea_username
+}
+module "gitea_namespace" {
+  source = "github.com/cloud-native-toolkit/terraform-k8s-namespace?ref=v3.2.4"
+
+  cluster_config_file_path = module.cluster.config_file_path
+  create_operator_group = var.gitea_namespace_create_operator_group
+  name = var.gitea_namespace_name
+}
 module "gitops_repo" {
   source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.23.3"
 
   branch = var.gitops_repo_branch
   debug = var.debug
-  gitea_host = var.gitops_repo_gitea_host
-  gitea_org = var.gitops_repo_gitea_org
-  gitea_token = var.gitops_repo_gitea_token
-  gitea_username = var.gitops_repo_gitea_username
+  gitea_host = module.gitea.host
+  gitea_org = module.gitea.org
+  gitea_token = module.gitea.token
+  gitea_username = module.gitea.username
   gitops_namespace = var.gitops_repo_gitops_namespace
   host = var.gitops_repo_host
   org = var.gitops_repo_org

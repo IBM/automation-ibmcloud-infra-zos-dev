@@ -1,52 +1,66 @@
-variable "gitops-artifactory_cluster_ingress_hostname" {
+variable "gitops_repo_host" {
   type = string
-  description = "Ingress hostname of the IKS cluster."
+  description = "The host for the git repository. The git host used can be a GitHub, GitHub Enterprise, Gitlab, Bitbucket, Gitea or Azure DevOps server. If the host is null assumes in-cluster Gitea instance will be used."
   default = ""
 }
-variable "gitops-artifactory_cluster_type" {
+variable "gitops_repo_type" {
   type = string
-  description = "The cluster type (openshift or ocp3 or ocp4 or kubernetes)"
-  default = "ocp4"
-}
-variable "gitops-artifactory_tls_secret_name" {
-  type = string
-  description = "The name of the secret containing the tls certificate values"
+  description = "[Deprecated] The type of the hosted git repository."
   default = ""
 }
-variable "gitops-artifactory_storage_class" {
+variable "gitops_repo_org" {
   type = string
-  description = "The storage class to use for the persistent volume claim"
+  description = "The org/group where the git repository exists/will be provisioned. If the value is left blank then the username org will be used."
   default = ""
 }
-variable "gitops-artifactory_persistence" {
+variable "gitops_repo_project" {
+  type = string
+  description = "The project that will be used for the git repo. (Primarily used for Azure DevOps repos)"
+  default = ""
+}
+variable "gitops_repo_username" {
+  type = string
+  description = "The username of the user with access to the repository"
+  default = ""
+}
+variable "gitops_repo_token" {
+  type = string
+  description = "The personal access token used to access the repository"
+  default = ""
+}
+variable "gitops_repo_repo" {
+  type = string
+  description = "The short name of the repository (i.e. the part after the org/group name)"
+}
+variable "gitops_repo_branch" {
+  type = string
+  description = "The name of the branch that will be used. If the repo already exists (provision=false) then it is assumed this branch already exists as well"
+  default = "main"
+}
+variable "gitops_repo_public" {
   type = bool
-  description = "Flag to indicate if persistence should be enabled"
-  default = true
+  description = "Flag indicating that the repo should be public or private"
+  default = false
 }
-variable "gitops_default_host" {
+variable "gitops_repo_gitops_namespace" {
   type = string
-  description = "the value of gitops_default_host"
-  default = ""
+  description = "The namespace where ArgoCD is running in the cluster"
+  default = "openshift-gitops"
 }
-variable "gitops_default_org" {
+variable "gitops_repo_server_name" {
   type = string
-  description = "the value of gitops_default_org"
-  default = ""
+  description = "The name of the cluster that will be configured via gitops. This is used to separate the config by cluster"
+  default = "default"
 }
-variable "gitops_default_username" {
-  type = string
-  description = "the value of gitops_default_username"
-  default = ""
+variable "gitops_repo_strict" {
+  type = bool
+  description = "Flag indicating that an error should be thrown if the repo already exists"
+  default = false
 }
-variable "gitops_default_token" {
-  type = string
-  description = "the value of gitops_default_token"
-  default = ""
-}
-variable "gitops_default_ca_cert" {
-  type = string
-  description = "the value of gitops_default_ca_cert"
-  default = ""
+variable "debug" {
+  type = bool
+  description = "Flag indicating that debug loggging should be enabled"
+  default = false
 }
 variable "gitops_host" {
   type = string
@@ -97,6 +111,41 @@ variable "gitops_ca_cert_file" {
   type = string
   description = "The file containing the ca certificate used to sign the self-signed certificate used by the git server, if applicable."
   default = ""
+}
+variable "argocd-bootstrap_bootstrap_prefix" {
+  type = string
+  description = "The prefix used in ArgoCD to bootstrap the application"
+  default = ""
+}
+variable "argocd-bootstrap_create_webhook" {
+  type = bool
+  description = "Flag indicating that a webhook should be created in the gitops repo to notify argocd of changes"
+  default = true
+}
+variable "gitops-artifactory_cluster_ingress_hostname" {
+  type = string
+  description = "Ingress hostname of the IKS cluster."
+  default = ""
+}
+variable "gitops-artifactory_cluster_type" {
+  type = string
+  description = "The cluster type (openshift or ocp3 or ocp4 or kubernetes)"
+  default = "ocp4"
+}
+variable "gitops-artifactory_tls_secret_name" {
+  type = string
+  description = "The name of the secret containing the tls certificate values"
+  default = ""
+}
+variable "gitops-artifactory_storage_class" {
+  type = string
+  description = "The storage class to use for the persistent volume claim"
+  default = ""
+}
+variable "gitops-artifactory_persistence" {
+  type = bool
+  description = "Flag to indicate if persistence should be enabled"
+  default = true
 }
 variable "gitops-cluster-config_banner_background_color" {
   type = string
@@ -167,90 +216,6 @@ variable "gitops-pact-broker_tls_secret_name" {
   type = string
   description = "The name of the secret containing the tls certificate values"
   default = ""
-}
-variable "gitops_repo_host" {
-  type = string
-  description = "The host for the git repository. The git host used can be a GitHub, GitHub Enterprise, Gitlab, Bitbucket, Gitea or Azure DevOps server. If the host is null assumes in-cluster Gitea instance will be used."
-  default = ""
-}
-variable "gitops_repo_type" {
-  type = string
-  description = "[Deprecated] The type of the hosted git repository."
-  default = ""
-}
-variable "gitops_repo_org" {
-  type = string
-  description = "The org/group where the git repository exists/will be provisioned. If the value is left blank then the username org will be used."
-  default = ""
-}
-variable "gitops_repo_project" {
-  type = string
-  description = "The project that will be used for the git repo. (Primarily used for Azure DevOps repos)"
-  default = ""
-}
-variable "gitops_repo_username" {
-  type = string
-  description = "The username of the user with access to the repository"
-  default = ""
-}
-variable "gitops_repo_token" {
-  type = string
-  description = "The personal access token used to access the repository"
-  default = ""
-}
-variable "gitops_repo_gitea_host" {
-  type = string
-  description = "The host for the default gitea repository."
-  default = ""
-}
-variable "gitops_repo_gitea_org" {
-  type = string
-  description = "The org/group for the default gitea repository. If not provided, the value will default to the username org"
-  default = ""
-}
-variable "gitops_repo_gitea_username" {
-  type = string
-  description = "The username of the default gitea repository"
-  default = ""
-}
-variable "gitops_repo_gitea_token" {
-  type = string
-  description = "The personal access token used to access the repository"
-  default = ""
-}
-variable "gitops_repo_repo" {
-  type = string
-  description = "The short name of the repository (i.e. the part after the org/group name)"
-}
-variable "gitops_repo_branch" {
-  type = string
-  description = "The name of the branch that will be used. If the repo already exists (provision=false) then it is assumed this branch already exists as well"
-  default = "main"
-}
-variable "gitops_repo_public" {
-  type = bool
-  description = "Flag indicating that the repo should be public or private"
-  default = false
-}
-variable "gitops_repo_gitops_namespace" {
-  type = string
-  description = "The namespace where ArgoCD is running in the cluster"
-  default = "openshift-gitops"
-}
-variable "gitops_repo_server_name" {
-  type = string
-  description = "The name of the cluster that will be configured via gitops. This is used to separate the config by cluster"
-  default = "default"
-}
-variable "gitops_repo_strict" {
-  type = bool
-  description = "Flag indicating that an error should be thrown if the repo already exists"
-  default = false
-}
-variable "debug" {
-  type = bool
-  description = "Flag indicating that debug loggging should be enabled"
-  default = false
 }
 variable "gitops-sonarqube_cluster_ingress_hostname" {
   type = string
@@ -433,6 +398,36 @@ variable "openshift-gitops_create_operator_group" {
   description = "Flag indicating that an operator group should be created in the namespace"
   default = true
 }
+variable "gitea_namespace_name" {
+  type = string
+  description = "The namespace that should be created"
+  default = "gitea"
+}
+variable "gitea_namespace_create_operator_group" {
+  type = bool
+  description = "Flag indicating that an operator group should be created in the namespace"
+  default = true
+}
+variable "gitea_instance_name" {
+  type = string
+  description = "The name for the instance"
+  default = "gitea"
+}
+variable "gitea_username" {
+  type = string
+  description = "The username for the instance"
+  default = "gitea-admin"
+}
+variable "gitea_password" {
+  type = string
+  description = "The password for the instance"
+  default = ""
+}
+variable "gitea_ca_cert_file" {
+  type = string
+  description = "The path to the file that contains the ca certificate"
+  default = ""
+}
 variable "registry_namespace" {
   type = string
   description = "The namespace that will be created in the IBM Cloud image registry. If not provided the value will default to the resource group"
@@ -457,16 +452,6 @@ variable "util-clis_clis" {
   description = "The list of clis that should be made available in the bin directory. Supported values are yq, jq, igc, helm, argocd, rosa, gh, glab, and kubeseal. (If not provided the list will default to yq, jq, and igc)"
   default = "[\"yq\",\"jq\",\"igc\"]"
 }
-variable "sealed-secret_name" {
-  type = string
-  description = "The namespace that should be created"
-  default = "sealed-secrets"
-}
-variable "sealed-secret_create_operator_group" {
-  type = bool
-  description = "Flag indicating that an operator group should be created in the namespace"
-  default = true
-}
 variable "sealed-secret-cert_cert" {
   type = string
   description = "The public key that will be used to encrypt sealed secrets. If not provided, a new one will be generated"
@@ -486,4 +471,14 @@ variable "sealed-secret-cert_private_key_file" {
   type = string
   description = "The file containin the private key that will be used to encrypt the sealed secrets. If not provided a new private key will be generated"
   default = ""
+}
+variable "sealed-secret_name" {
+  type = string
+  description = "The namespace that should be created"
+  default = "sealed-secrets"
+}
+variable "sealed-secret_create_operator_group" {
+  type = bool
+  description = "Flag indicating that an operator group should be created in the namespace"
+  default = true
 }

@@ -71,9 +71,8 @@ cluster-config_banner_background_color="green"
 ## Misc Variables
 ## ***************
 
-registry_namespace = ""
-git_type = "github"
-git_url = "https://github.com/cloud-native-toolkit"
+registry_namespace = ""cd 160   
+gitops_repo_repo = "wazi-dev-cluster"
 
 ## ***************
 ## SSH Keys
