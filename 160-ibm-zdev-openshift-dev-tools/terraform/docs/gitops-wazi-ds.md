@@ -32,6 +32,8 @@ module "gitops-wazi-ds" {
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
+  license_accept = var.gitops-wazi-ds_license_accept
+  license_type = var.gitops-wazi-ds_license_type
   namespace = module.wazi_namespace.name
   server_name = module.gitops_repo.server_name
 }
@@ -46,9 +48,11 @@ module "gitops-wazi-ds" {
 |------|-------------|---------|----------|--------|
 | gitops_config | Config information regarding the gitops repo structure | true |  | gitops.gitops_config |
 | git_credentials | The credentials for the gitops repo(s) | true |  | gitops.git_credentials |
-| namespace | The namespace where the application should be deployed | true |  | namespace.name |
+| namespace | The namespace where the application should be deployed | false | wazi-devspaces | namespace.name |
 | kubeseal_cert | The certificate/public key used to encrypt the sealed secrets | true |  | gitops.sealed_secrets_cert |
 | server_name | The name of the server | false | default | gitops.server_name |
+| license_accept | License acceptance | false | true |  |
+| license_type | <idzee/wazi> Choose between idzee/wazi installations of devspaces on your project | false | wazi |  |
 
 ### Outputs
 

@@ -24,24 +24,12 @@ spec:
       variables:
         - name: create_webhook
           value: true
-    - name: gitops-artifactory
-      alias: gitops-artifactory
-      version: v1.3.0
-      dependencies:
-        - id: namespace
-          ref: tools_namespace
     - name: gitops-cluster-config
       alias: gitops-cluster-config
       version: v1.1.1
       variables:
         - name: banner_text
           value: Z/OS Development
-      dependencies:
-        - id: namespace
-          ref: tools_namespace
-    - name: gitops-dashboard
-      alias: gitops-dashboard
-      version: v1.7.0
       dependencies:
         - id: namespace
           ref: tools_namespace
@@ -58,18 +46,6 @@ spec:
       variables:
         - name: name
           value: wazi-devspaces
-    - name: gitops-pact-broker
-      alias: gitops-pact-broker
-      version: v1.2.0
-      dependencies:
-        - id: namespace
-          ref: tools_namespace
-    - name: gitops-sonarqube
-      alias: gitops-sonarqube
-      version: v1.3.0
-      dependencies:
-        - id: namespace
-          ref: tools_namespace
     - name: gitops-tekton-resources
       alias: gitops-tekton-resources
       version: v2.1.0
@@ -78,6 +54,12 @@ spec:
           ref: tools_namespace
     - name: gitops-wazi-ds
       alias: gitops-wazi-ds
+      version: v1.0.1
+      dependencies:
+        - id: namespace
+          ref: wazi_namespace
+    - name: gitops-wazi-ds-op
+      alias: gitops-wazi-ds-op
       version: v1.0.0
       dependencies:
         - id: namespace
@@ -155,12 +137,6 @@ spec:
       dependencies:
         - id: namespace
           ref: openshift-gitops
-    - name: openshift-cicd
-      alias: openshift-cicd
-      version: v1.11.1
-      dependencies:
-        - id: namespace
-          ref: openshift-gitops
     - name: util-clis
       version: v1.18.2
     - name: olm
@@ -169,11 +145,6 @@ spec:
       version: v1.0.1
     - name: gitops-buildah-unprivileged
       version: v1.1.1
-    - name: gitops-wazi-ds-op
-      version: v1.0.0
-    - name: namespace
-      alias: sealed-secret
-      version: v3.2.4
   variables:
     - name: gitops_repo_host
       type: string
@@ -243,7 +214,3 @@ spec:
         The namespace that will be created in the IBM Cloud image registry. If
         not provided the value will default to the resource group
       value: ''
-    - name: sealed-secret_name
-      type: string
-      description: The namespace that should be created
-      value: sealed-secrets

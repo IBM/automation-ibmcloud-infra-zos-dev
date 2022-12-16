@@ -86,19 +86,6 @@ module "gitops_repo" {
   type = var.gitops_repo_type
   username = var.gitops_repo_username
 }
-module "gitops-artifactory" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-artifactory?ref=v1.3.0"
-
-  cluster_ingress_hostname = var.gitops-artifactory_cluster_ingress_hostname
-  cluster_type = var.gitops-artifactory_cluster_type
-  git_credentials = module.gitops_repo.git_credentials
-  gitops_config = module.gitops_repo.gitops_config
-  namespace = module.tools_namespace.name
-  persistence = var.gitops-artifactory_persistence
-  server_name = module.gitops_repo.server_name
-  storage_class = var.gitops-artifactory_storage_class
-  tls_secret_name = var.gitops-artifactory_tls_secret_name
-}
 module "gitops-buildah-unprivileged" {
   source = "github.com/cloud-native-toolkit/terraform-gitops-buildah-unprivileged?ref=v1.1.1"
 
@@ -118,47 +105,6 @@ module "gitops-cluster-config" {
   namespace = module.tools_namespace.name
   server_name = module.gitops_repo.server_name
 }
-module "gitops-dashboard" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-dashboard?ref=v1.7.0"
-
-  cluster_ingress_hostname = var.gitops-dashboard_cluster_ingress_hostname
-  cluster_type = var.gitops-dashboard_cluster_type
-  git_credentials = module.gitops_repo.git_credentials
-  gitops_config = module.gitops_repo.gitops_config
-  image_tag = var.gitops-dashboard_image_tag
-  namespace = module.tools_namespace.name
-  server_name = module.gitops_repo.server_name
-  tls_secret_name = var.gitops-dashboard_tls_secret_name
-}
-module "gitops-pact-broker" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-pact-broker?ref=v1.2.0"
-
-  cluster_ingress_hostname = var.gitops-pact-broker_cluster_ingress_hostname
-  cluster_type = var.gitops-pact-broker_cluster_type
-  git_credentials = module.gitops_repo.git_credentials
-  gitops_config = module.gitops_repo.gitops_config
-  namespace = module.tools_namespace.name
-  server_name = module.gitops_repo.server_name
-  tls_secret_name = var.gitops-pact-broker_tls_secret_name
-}
-module "gitops-sonarqube" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-sonarqube?ref=v1.3.0"
-
-  cluster_ingress_hostname = var.gitops-sonarqube_cluster_ingress_hostname
-  cluster_type = var.gitops-sonarqube_cluster_type
-  cluster_version = var.gitops-sonarqube_cluster_version
-  git_credentials = module.gitops_repo.git_credentials
-  gitops_config = module.gitops_repo.gitops_config
-  hostname = var.gitops-sonarqube_hostname
-  kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  namespace = module.tools_namespace.name
-  persistence = var.gitops-sonarqube_persistence
-  plugins = var.gitops-sonarqube_plugins == null ? null : jsondecode(var.gitops-sonarqube_plugins)
-  server_name = module.gitops_repo.server_name
-  service_account_name = var.gitops-sonarqube_service_account_name
-  storage_class = var.gitops-sonarqube_storage_class
-  tls_secret_name = var.gitops-sonarqube_tls_secret_name
-}
 module "gitops-tekton-resources" {
   source = "github.com/cloud-native-toolkit/terraform-gitops-tekton-resources?ref=v2.1.0"
 
@@ -174,6 +120,8 @@ module "gitops-wazi-ds" {
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
+  license_accept = var.gitops-wazi-ds_license_accept
+  license_type = var.gitops-wazi-ds_license_type
   namespace = module.wazi_namespace.name
   server_name = module.gitops_repo.server_name
 }
@@ -183,7 +131,7 @@ module "gitops-wazi-ds-op" {
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  namespace = module.tools_namespace.name
+  namespace = module.wazi_namespace.name
   server_name = module.gitops_repo.server_name
 }
 module "olm" {
@@ -192,19 +140,6 @@ module "olm" {
   cluster_config_file = module.cluster.config_file_path
   cluster_type = module.cluster.platform.type_code
   cluster_version = module.cluster.platform.version
-}
-module "openshift-cicd" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-openshift-cicd?ref=v1.11.1"
-
-  cluster_config_file = module.cluster.config_file_path
-  cluster_type = module.cluster.platform.type_code
-  gitops_namespace = module.openshift-gitops.name
-  ingress_subdomain = module.cluster.platform.ingress
-  olm_namespace = module.olm.olm_namespace
-  operator_namespace = module.olm.target_namespace
-  sealed_secret_cert = module.sealed-secret-cert.cert
-  sealed_secret_namespace = module.sealed-secret.name
-  sealed_secret_private_key = module.sealed-secret-cert.private_key
 }
 module "openshift-gitops" {
   source = "github.com/cloud-native-toolkit/terraform-k8s-namespace?ref=v3.2.4"
@@ -233,13 +168,6 @@ module "resource_group" {
   purge_volumes = var.purge_volumes
   resource_group_name = var.zos_resource_group_name
   sync = var.resource_group_sync
-}
-module "sealed-secret" {
-  source = "github.com/cloud-native-toolkit/terraform-k8s-namespace?ref=v3.2.4"
-
-  cluster_config_file_path = module.cluster.config_file_path
-  create_operator_group = var.sealed-secret_create_operator_group
-  name = var.sealed-secret_name
 }
 module "sealed-secret-cert" {
   source = "github.com/cloud-native-toolkit/terraform-util-sealed-secret-cert?ref=v1.0.1"

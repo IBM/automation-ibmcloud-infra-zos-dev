@@ -34,6 +34,3 @@
 ## registry_namespace: The namespace that will be created in the IBM Cloud image registry. If not provided the value will default to the resource group
 #registry_namespace=""
 
-## sealed-secret_name: The namespace that should be created
-#sealed-secret_name="sealed-secrets"
-

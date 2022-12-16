@@ -122,31 +122,6 @@ variable "argocd-bootstrap_create_webhook" {
   description = "Flag indicating that a webhook should be created in the gitops repo to notify argocd of changes"
   default = true
 }
-variable "gitops-artifactory_cluster_ingress_hostname" {
-  type = string
-  description = "Ingress hostname of the IKS cluster."
-  default = ""
-}
-variable "gitops-artifactory_cluster_type" {
-  type = string
-  description = "The cluster type (openshift or ocp3 or ocp4 or kubernetes)"
-  default = "ocp4"
-}
-variable "gitops-artifactory_tls_secret_name" {
-  type = string
-  description = "The name of the secret containing the tls certificate values"
-  default = ""
-}
-variable "gitops-artifactory_storage_class" {
-  type = string
-  description = "The storage class to use for the persistent volume claim"
-  default = ""
-}
-variable "gitops-artifactory_persistence" {
-  type = bool
-  description = "Flag to indicate if persistence should be enabled"
-  default = true
-}
 variable "gitops-cluster-config_banner_background_color" {
   type = string
   description = "The background color of the top banner. This value can be a named color (e.g. purple, red) or an RGB value (#FF0000)."
@@ -161,26 +136,6 @@ variable "gitops-cluster-config_banner_text" {
   type = string
   description = "The text that will appear in the top banner in the cluster"
   default = "Z/OS Development"
-}
-variable "gitops-dashboard_cluster_type" {
-  type = string
-  description = "The cluster type (openshift or ocp3 or ocp4 or kubernetes)"
-  default = "openshift"
-}
-variable "gitops-dashboard_cluster_ingress_hostname" {
-  type = string
-  description = "Ingress hostname of the IKS cluster."
-  default = ""
-}
-variable "gitops-dashboard_tls_secret_name" {
-  type = string
-  description = "The name of the secret containing the tls certificate values"
-  default = ""
-}
-variable "gitops-dashboard_image_tag" {
-  type = string
-  description = "The image version tag to use"
-  default = "v1.4.4"
 }
 variable "tools_namespace_name" {
   type = string
@@ -222,70 +177,20 @@ variable "wazi_namespace_argocd_namespace" {
   description = "The namespace where argocd has been deployed"
   default = "openshift-gitops"
 }
-variable "gitops-pact-broker_cluster_type" {
-  type = string
-  description = "The cluster type (openshift or ocp3 or ocp4 or kubernetes)"
-  default = "ocp4"
-}
-variable "gitops-pact-broker_cluster_ingress_hostname" {
-  type = string
-  description = "Ingress hostname of the IKS cluster."
-  default = ""
-}
-variable "gitops-pact-broker_tls_secret_name" {
-  type = string
-  description = "The name of the secret containing the tls certificate values"
-  default = ""
-}
-variable "gitops-sonarqube_cluster_ingress_hostname" {
-  type = string
-  description = "Ingress hostname of the IKS cluster."
-  default = ""
-}
-variable "gitops-sonarqube_cluster_type" {
-  type = string
-  description = "The cluster type (openshift or ocp3 or ocp4 or kubernetes)"
-  default = "ocp4"
-}
-variable "gitops-sonarqube_tls_secret_name" {
-  type = string
-  description = "The name of the secret containing the tls certificate values"
-  default = ""
-}
-variable "gitops-sonarqube_storage_class" {
-  type = string
-  description = "The storage class to use for the persistent volume claim"
-  default = ""
-}
-variable "gitops-sonarqube_service_account_name" {
-  type = string
-  description = "The name of the service account that should be used for the deployment"
-  default = "sonarqube-sonarqube"
-}
-variable "gitops-sonarqube_plugins" {
-  type = string
-  description = "The list of plugins that will be installed on SonarQube"
-  default = "[\"https://github.com/checkstyle/sonar-checkstyle/releases/download/4.33/checkstyle-sonar-plugin-4.33.jar\",\"https://github.com/AmadeusITGroup/sonar-stash/releases/download/1.6.0/sonar-stash-plugin-1.6.0.jar\"]"
-}
-variable "gitops-sonarqube_hostname" {
-  type = string
-  description = "The hostname that will be used for the ingress/route"
-  default = "sonarqube"
-}
-variable "gitops-sonarqube_persistence" {
-  type = bool
-  description = "Flag indicating that persistence should be enabled for the pods"
-  default = false
-}
-variable "gitops-sonarqube_cluster_version" {
-  type = string
-  description = "The cluster version"
-  default = ""
-}
 variable "gitops-tekton-resources_task_release" {
   type = string
   description = "The release version of the tekton tasks"
   default = "v3.0.3"
+}
+variable "gitops-wazi-ds_license_accept" {
+  type = bool
+  description = "License acceptance"
+  default = true
+}
+variable "gitops-wazi-ds_license_type" {
+  type = string
+  description = "<idzee/wazi> Choose between idzee/wazi installations of devspaces on your project"
+  default = "wazi"
 }
 variable "ibmcloud_api_key" {
   type = string
@@ -496,14 +401,4 @@ variable "sealed-secret-cert_private_key_file" {
   type = string
   description = "The file containin the private key that will be used to encrypt the sealed secrets. If not provided a new private key will be generated"
   default = ""
-}
-variable "sealed-secret_name" {
-  type = string
-  description = "The namespace that should be created"
-  default = "sealed-secrets"
-}
-variable "sealed-secret_create_operator_group" {
-  type = bool
-  description = "Flag indicating that an operator group should be created in the namespace"
-  default = true
 }

@@ -101,54 +101,6 @@ output "argocd-bootstrap_sealed_secrets_cert" {
   description = "the value of argocd-bootstrap_sealed_secrets_cert"
   value = module.argocd-bootstrap.sealed_secrets_cert
 }
-output "gitops-artifactory_name" {
-  description = "The name of the module"
-  value = module.gitops-artifactory.name
-}
-output "gitops-artifactory_branch" {
-  description = "The branch where the module config has been placed"
-  value = module.gitops-artifactory.branch
-}
-output "gitops-artifactory_namespace" {
-  description = "The namespace where the module will be deployed"
-  value = module.gitops-artifactory.namespace
-}
-output "gitops-artifactory_server_name" {
-  description = "The server where the module will be deployed"
-  value = module.gitops-artifactory.server_name
-}
-output "gitops-artifactory_layer" {
-  description = "The layer where the module is deployed"
-  value = module.gitops-artifactory.layer
-}
-output "gitops-artifactory_type" {
-  description = "The type of module where the module is deployed"
-  value = module.gitops-artifactory.type
-}
-output "gitops-dashboard_name" {
-  description = "The name of the module"
-  value = module.gitops-dashboard.name
-}
-output "gitops-dashboard_branch" {
-  description = "The branch where the module config has been placed"
-  value = module.gitops-dashboard.branch
-}
-output "gitops-dashboard_namespace" {
-  description = "The namespace where the module will be deployed"
-  value = module.gitops-dashboard.namespace
-}
-output "gitops-dashboard_server_name" {
-  description = "The server where the module will be deployed"
-  value = module.gitops-dashboard.server_name
-}
-output "gitops-dashboard_layer" {
-  description = "The layer where the module is deployed"
-  value = module.gitops-dashboard.layer
-}
-output "gitops-dashboard_type" {
-  description = "The type of module where the module is deployed"
-  value = module.gitops-dashboard.type
-}
 output "tools_namespace_name" {
   description = "Namespace name"
   value = module.tools_namespace.name
@@ -156,58 +108,6 @@ output "tools_namespace_name" {
 output "wazi_namespace_name" {
   description = "Namespace name"
   value = module.wazi_namespace.name
-}
-output "gitops-pact-broker_name" {
-  description = "The name of the module"
-  value = module.gitops-pact-broker.name
-}
-output "gitops-pact-broker_branch" {
-  description = "The branch where the module config has been placed"
-  value = module.gitops-pact-broker.branch
-}
-output "gitops-pact-broker_namespace" {
-  description = "The namespace where the module will be deployed"
-  value = module.gitops-pact-broker.namespace
-}
-output "gitops-pact-broker_server_name" {
-  description = "The server where the module will be deployed"
-  value = module.gitops-pact-broker.server_name
-}
-output "gitops-pact-broker_layer" {
-  description = "The layer where the module is deployed"
-  value = module.gitops-pact-broker.layer
-}
-output "gitops-pact-broker_type" {
-  description = "The type of module where the module is deployed"
-  value = module.gitops-pact-broker.type
-}
-output "gitops-sonarqube_name" {
-  description = "The name of the module"
-  value = module.gitops-sonarqube.name
-}
-output "gitops-sonarqube_branch" {
-  description = "The branch where the module config has been placed"
-  value = module.gitops-sonarqube.branch
-}
-output "gitops-sonarqube_namespace" {
-  description = "The namespace where the module will be deployed"
-  value = module.gitops-sonarqube.namespace
-}
-output "gitops-sonarqube_server_name" {
-  description = "The server where the module will be deployed"
-  value = module.gitops-sonarqube.server_name
-}
-output "gitops-sonarqube_layer" {
-  description = "The layer where the module is deployed"
-  value = module.gitops-sonarqube.layer
-}
-output "gitops-sonarqube_type" {
-  description = "The type of module where the module is deployed"
-  value = module.gitops-sonarqube.type
-}
-output "gitops-sonarqube_postgresql" {
-  description = "Properties for an existing postgresql database"
-  value = module.gitops-sonarqube.postgresql
 }
 output "gitops-tekton-resources_name" {
   description = "The name of the module"
@@ -256,6 +156,30 @@ output "gitops-wazi-ds_layer" {
 output "gitops-wazi-ds_type" {
   description = "The type of module where the module is deployed"
   value = module.gitops-wazi-ds.type
+}
+output "gitops-wazi-ds-op_name" {
+  description = "The name of the module"
+  value = module.gitops-wazi-ds-op.name
+}
+output "gitops-wazi-ds-op_branch" {
+  description = "The branch where the module config has been placed"
+  value = module.gitops-wazi-ds-op.branch
+}
+output "gitops-wazi-ds-op_namespace" {
+  description = "The namespace where the module will be deployed"
+  value = module.gitops-wazi-ds-op.namespace
+}
+output "gitops-wazi-ds-op_server_name" {
+  description = "The server where the module will be deployed"
+  value = module.gitops-wazi-ds-op.server_name
+}
+output "gitops-wazi-ds-op_layer" {
+  description = "The layer where the module is deployed"
+  value = module.gitops-wazi-ds-op.layer
+}
+output "gitops-wazi-ds-op_type" {
+  description = "The type of module where the module is deployed"
+  value = module.gitops-wazi-ds-op.type
 }
 output "resource_group_name" {
   description = "The name of the resource group"
@@ -382,50 +306,6 @@ output "gitea_ca_cert" {
   description = "Base64 encoded CA certificate for cluster endpoints"
   value = module.gitea.ca_cert
 }
-output "openshift-cicd_argocd_namespace" {
-  description = "The namespace where the ArgoCD instance has been provisioned"
-  value = module.openshift-cicd.argocd_namespace
-}
-output "openshift-cicd_argocd_service_account" {
-  description = "The namespace where the ArgoCD instance has been provisioned"
-  value = module.openshift-cicd.argocd_service_account
-}
-output "openshift-cicd_argocd_host" {
-  description = "The ingress host for the Argo CD instance"
-  value = module.openshift-cicd.argocd_host
-  sensitive = true
-}
-output "openshift-cicd_argocd_url" {
-  description = "The ingress url for the Argo CD instance"
-  value = module.openshift-cicd.argocd_url
-  sensitive = true
-}
-output "openshift-cicd_argocd_username" {
-  description = "The username of the default ArgoCD admin user"
-  value = module.openshift-cicd.argocd_username
-}
-output "openshift-cicd_argocd_password" {
-  description = "The password of the default ArgoCD admin user"
-  value = module.openshift-cicd.argocd_password
-  sensitive = true
-}
-output "openshift-cicd_sealed_secrets_private_key" {
-  description = "the value of openshift-cicd_sealed_secrets_private_key"
-  value = module.openshift-cicd.sealed_secrets_private_key
-  sensitive = true
-}
-output "openshift-cicd_sealed_secrets_cert" {
-  description = "the value of openshift-cicd_sealed_secrets_cert"
-  value = module.openshift-cicd.sealed_secrets_cert
-}
-output "openshift-cicd_sealed_secrets_namespace" {
-  description = "the value of openshift-cicd_sealed_secrets_namespace"
-  value = module.openshift-cicd.sealed_secrets_namespace
-}
-output "openshift-cicd_tekton_namespace" {
-  description = "the value of openshift-cicd_tekton_namespace"
-  value = module.openshift-cicd.tekton_namespace
-}
 output "util-clis_bin_dir" {
   description = "Directory where the clis were downloaded"
   value = module.util-clis.bin_dir
@@ -474,32 +354,4 @@ output "gitops-buildah-unprivileged_layer" {
 output "gitops-buildah-unprivileged_type" {
   description = "The type of module where the module is deployed"
   value = module.gitops-buildah-unprivileged.type
-}
-output "gitops-wazi-ds-op_name" {
-  description = "The name of the module"
-  value = module.gitops-wazi-ds-op.name
-}
-output "gitops-wazi-ds-op_branch" {
-  description = "The branch where the module config has been placed"
-  value = module.gitops-wazi-ds-op.branch
-}
-output "gitops-wazi-ds-op_namespace" {
-  description = "The namespace where the module will be deployed"
-  value = module.gitops-wazi-ds-op.namespace
-}
-output "gitops-wazi-ds-op_server_name" {
-  description = "The server where the module will be deployed"
-  value = module.gitops-wazi-ds-op.server_name
-}
-output "gitops-wazi-ds-op_layer" {
-  description = "The layer where the module is deployed"
-  value = module.gitops-wazi-ds-op.layer
-}
-output "gitops-wazi-ds-op_type" {
-  description = "The type of module where the module is deployed"
-  value = module.gitops-wazi-ds-op.type
-}
-output "sealed-secret_name" {
-  description = "Namespace name"
-  value = module.sealed-secret.name
 }
