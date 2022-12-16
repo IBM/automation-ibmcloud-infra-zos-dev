@@ -1,56 +1,87 @@
-# IBM VPC Subnets
+# IBM VPC Subnets module
 
-Terraform module to provision subnets for an existing VPC. The number of subnets created depends on the value provided for `_count`. The created subnets will be named after the vpc with a suffix based on the value provided for `label`. Optionally, if values are provided for `gateways` then the subnets will be created with a public gateway.
+Module to provision a collection of subnets for an existing VPC
+
 
 ## Software dependencies
 
 The module depends on the following software components:
 
-### Command-line tools
+### Terraform version
 
-- terraform - v13
-- kubectl
+- \>= v0.15
 
 ### Terraform providers
 
-- IBM Cloud provider >= 1.22.0
 
-## Module dependencies
+- ibm (ibm-cloud/ibm)
 
-This module makes use of the output from other modules:
+### Module dependencies
 
-- Resource Group - github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group
-- VPC - github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpc
-- Gateway - github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpc-gateways
+
+- resource-group - [github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group) (>= 1.0.0)
+- vpc - [github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpc](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpc) (>= 1.0.0)
+- gateways - [github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpc-gateways](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpc-gateways) (>= 0.0.0)
 
 ## Example usage
 
-[Refer test cases for more details](test/stages/stage2-subnets.tf)
-
-```hcl-terraform
-terraform {
-  required_providers {
-    ibm = {
-      source = "ibm-cloud/ibm"
-    }
-  }
-  required_version = ">= 0.13"
-}
-
-provider "ibm" {
-  ibmcloud_api_key = var.ibmcloud_api_key
-  region = var.region
-}
-
-module "dev_subnet" {
+```hcl
+module "ingress-subnets" {
   source = "cloud-native-toolkit/vpc-subnets/ibm"
-  
-  resource_group_id   = module.resource_groups.id
-  vpc_name            = module.vpc.name
-  acl_id              = module.vpc.acl_id
-  gateways            = module.gateways.gateways
-  _count              = var.vpc_subnet_count
-  region              = var.region
-  label               = var.label
-  ibmcloud_api_key    = var.ibmcloud_api_key
+
+
+  _count = var.ingress-subnets__count
+  acl_rules = var.ingress-subnets_acl_rules == null ? null : jsondecode(var.ingress-subnets_acl_rules)
+  common_tags = var.common_tags == null ? null : jsondecode(var.common_tags)
+  gateways = module.ibm-vpc-gateways.gateways
+  ipv4_address_count = var.ingress-subnets_ipv4_address_count
+  ipv4_cidr_blocks = var.ingress-subnets_ipv4_cidr_blocks == null ? null : jsondecode(var.ingress-subnets_ipv4_cidr_blocks)
+  label = var.ingress-subnets_label
+  provision = var.ingress-subnets_provision
+  region = var.region
+  resource_group_name = module.resource_group.name
+  tags = var.ingress-subnets_tags == null ? null : jsondecode(var.ingress-subnets_tags)
+  vpc_name = module.ibm-vpc.name
+  zone_offset = var.ingress-subnets_zone_offset
+}
+
 ```
+
+## Module details
+
+### Inputs
+
+| Name | Description | Required | Default | Source |
+|------|-------------|---------|----------|--------|
+| resource_group_name | The name of the IBM Cloud resource group where the VPC has been provisioned. | true |  | resource-group.name |
+| region | The IBM Cloud region where the cluster will be/has been installed. | true |  |  |
+| vpc_name | The name of the vpc instance | true |  | vpc.name |
+| zone_offset | The offset for the zone where the subnet should be created. The default offset is 0 which means the first subnet should be created in zone xxx-1 | false | 0 |  |
+| _count | The number of subnets that should be provisioned | false | 3 |  |
+| label | Label for the subnets created | false | default |  |
+| gateways | List of gateway ids and zones | false | [] | gateways.gateways |
+| ipv4_cidr_blocks | List of ipv4 cidr blocks for the subnets that will be created (e.g. ['10.10.10.0/24']). If you are providing cidr blocks then a value must be provided for each of the subnets. If you don't provide cidr blocks for each of the subnets then values will be generated using the {ipv4_address_count} value. | false |  |  |
+| ipv4_address_count | The size of the ipv4 cidr block that should be allocated to the subnet. If {ipv4_cidr_blocks} are provided then this value is ignored. | false | 256 |  |
+| provision | Flag indicating that the subnet should be provisioned. If 'false' then the subnet will be looked up. | false | true |  |
+| acl_rules | List of rules to set on the subnet access control list | false | [] |  |
+| tags | Tags that should be added to the instance | false |  |  |
+| common_tags | Common tags that should be added to the instance | false |  |  |
+
+### Outputs
+
+| Name | Description |
+|------|-------------|
+| count | The number of subnets created |
+| ids | The ids of the created subnets |
+| names | The ids of the created subnets |
+| subnets | The subnets that were created |
+| acl_id | The id of the network acl for the subnets |
+| vpc_name | The name of the VPC where the subnets were provisioned |
+| vpc_id | The id of the VPC where the subnets were provisioned |
+
+## Resources
+
+- [Documentation](https://operate.cloudnativetoolkit.dev)
+- [Module catalog](https://modules.cloudnativetoolkit.dev)
+
+> License: Apache License 2.0 | Generated by iascable (3.0.1)

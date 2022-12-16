@@ -1,0 +1,63 @@
+variables:
+  - name: ibmcloud_api_key
+    type: string
+    description: The api key used to access IBM Cloud
+    sensitive: true
+  - name: region
+    type: string
+  - name: zos_name_prefix
+    type: string
+    description: >-
+      The prefix name for the service. If not provided it will default to the
+      resource group name
+    value: ''
+  - name: kms_region
+    type: string
+    description: Geographic location of the resource (e.g. us-south, us-east)
+  - name: kms_service
+    type: string
+    description: The name of the KMS provider that should be used (keyprotect or hpcs)
+    value: keyprotect
+  - name: kms_resource_group_name
+    type: string
+    description: The name of the resource group
+  - name: at_resource_group_name
+    type: string
+    description: The name of the resource group
+  - name: zos_resource_group_name
+    type: string
+    description: The name of the resource group
+  - name: common_tags
+    type: list(string)
+    description: Common tags that should be added to the instance
+    value: []
+  - name: vpe-subnets__count
+    type: number
+    description: The number of subnets that should be provisioned
+    value: 1
+  - name: ingress-subnets__count
+    type: number
+    description: The number of subnets that should be provisioned
+    value: 1
+  - name: worker-subnets__count
+    type: number
+    description: The number of subnets that should be provisioned
+    value: 1
+  - name: egress-subnets__count
+    type: number
+    description: The number of subnets that should be provisioned
+    value: 1
+  - name: vsi-subnets__count
+    type: number
+    description: The number of subnets that should be provisioned
+    value: 1
+  - name: worker_count
+    type: number
+    description: >-
+      The number of worker nodes that should be provisioned for classic
+      infrastructure
+    value: 3
+  - name: cluster_flavor
+    type: string
+    description: The machine type that will be provisioned for classic infrastructure
+    value: bx2.4x16

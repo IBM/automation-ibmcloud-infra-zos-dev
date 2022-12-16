@@ -1,61 +1,91 @@
 # IBM Secrets Manager module
 
-Module to provision or lookup an instance of Secrets Manager on IBM Cloud. Optionally, the Secrets Manager instance can be encrypted with a root key from a KMS instance.
+Module to provision an IBM Cloud Secrets Manager instance
+
 
 ## Software dependencies
 
 The module depends on the following software components:
 
-### Command-line tools
+### Terraform version
 
-- terraform - v13
+- \>= v0.15
 
 ### Terraform providers
 
-- IBM Cloud provider >= 1.46.0
 
-## Module dependencies
+- ibm (ibm-cloud/ibm)
 
-This module makes use of the output from other modules:
+### Module dependencies
 
-- Resource Group - github.com/cloud-native-toolkit/terraform-ibm-resource-group
-- KMS Key - github.com/cloud-native-toolkit/terraform-ibm-kms-key
+
+- resource_group - [github.com/cloud-native-toolkit/terraform-ibm-resource-group](https://github.com/cloud-native-toolkit/terraform-ibm-resource-group) (>= 1.0.0)
+- kms_key - [github.com/cloud-native-toolkit/terraform-ibm-kms-key](https://github.com/cloud-native-toolkit/terraform-ibm-kms-key) (>= 0.0.0)
 
 ## Example usage
 
-[Refer test cases for more details](test/stages/stage2-secrets-manager.tf)
-
-```hcl-terraform
-terraform {
-  required_providers {
-    ibm = {
-      source = "ibm-cloud/ibm"
-    }
-  }
-  required_version = ">= 0.13"
-}
-
-provider "ibm" {
-  ibmcloud_api_key      = var.ibmcloud_api_key
-  region                = var.region
-}
-
-module "secrets-manager" {
+```hcl
+module "ibm-secrets-manager" {
   source = "github.com/cloud-native-toolkit/terraform-ibm-secrets-manager"
 
-  resource_group_name   = module.resource_group.name
-  region                = var.region
-  provision             = true
-  private_endpoint      = false
-  kms_private_endpoint  = true
-  kms_enabled           = true
-  kms_id                = module.kms_key.kms_id
-  kms_key_crn           = module.kms_key.crn
-  kms_private_url       = module.kms_key.kms_private_url
-  kms_public_url        = module.kms_key.kms_public_url
-  ibmcloud_api_key      = var.ibmcloud_api_key
-  name_prefix           = var.name_prefix
-  trial                 = true
+  create_auth = var.ibm-secrets-manager_create_auth
+  ibmcloud_api_key = var.ibmcloud_api_key
+  kms_enabled = var.ibm-secrets-manager_kms_enabled
+  kms_id = module.kms-key.kms_id
+  kms_key_crn = module.kms-key.crn
+  kms_private_endpoint = var.ibm-secrets-manager_kms_private_endpoint
+  kms_private_url = module.kms-key.kms_private_url
+  kms_public_url = module.kms-key.kms_public_url
+  label = var.ibm-secrets-manager_label
+  name = var.ibm-secrets-manager_name
+  name_prefix = var.zos_name_prefix
+  private_endpoint = var.ibm-secrets-manager_private_endpoint
+  provision = var.ibm-secrets-manager_provision
+  region = var.region
+  resource_group_name = module.zos_resource_group.name
+  trial = var.ibm-secrets-manager_trial
 }
+
 ```
 
+## Module details
+
+### Inputs
+
+| Name | Description | Required | Default | Source |
+|------|-------------|---------|----------|--------|
+| resource_group_name | The name of the IBM Cloud resource group where the Secrets Manager instance will be/has been provisioned. | true |  | resource_group.name |
+| region | The region where the Secrets Manager will be/has been provisioned. | true |  |  |
+| ibmcloud_api_key | The IBM Cloud api key | true |  |  |
+| provision | Flag indicating that the instance should be provisioned. If false then an existing instance will be looked up | false | true |  |
+| kms_enabled | Flag indicating that kms encryption should be enabled for this instance | true |  |  |
+| kms_id | The crn of the KMS instance that will be used to encrypt the instance. | false | null | kms_key.kms_id |
+| kms_public_url | The public url of the KMS instance that will be used to encrypt the instance. | false | null | kms_key.kms_public_url |
+| kms_private_url | The private url of the KMS instance that will be used to encrypt the instance. | false | null | kms_key.kms_private_url |
+| kms_private_endpoint | Flag indicating the KMS private endpoint should be used | false | true |  |
+| kms_key_crn | The crn of the root key in the KMS | false | null | kms_key.crn |
+| name_prefix | The name prefix for the Secrets Manager resource. If not provided will default to resource group name. | true |  |  |
+| name | Name of the Secrets Manager. If not provided will be generated as $name_prefix-$label | true |  |  |
+| label | Label used to build the Secrets Manager name if not provided. | false | sm |  |
+| private_endpoint | Flag indicating that the service should be access using private endpoints | false | true |  |
+| create_auth | Flag indicating the service authorization should be created to allow this service to access the KMS service | false | true |  |
+| trial | Flag indicating whether the instance to be deployed is to be a trial plan.  | true |  |  |
+
+### Outputs
+
+| Name | Description |
+|------|-------------|
+| id | The Secrets Manager instance CRN id |
+| guid | The Secrets Manager instance guid |
+| name | The Secrets Manager instance name |
+| crn | The crn of the Secrets Manager instance |
+| location | The Secrets Manager instance location |
+| service | The name of the service provisioned for the Secrets Manager instance |
+| plan | The plan of the service provisioned |
+
+## Resources
+
+- [Documentation](https://operate.cloudnativetoolkit.dev)
+- [Module catalog](https://modules.cloudnativetoolkit.dev)
+
+> License: Apache License 2.0 | Generated by iascable (3.0.1)

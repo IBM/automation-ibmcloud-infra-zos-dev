@@ -150,6 +150,11 @@ variable "kms-key_provision" {
   description = "Flag indicating that the key should be provisioned. If false then an existing key will be looked up"
   default = true
 }
+variable "kms-key_provision_key_rotation_policy" {
+  type = bool
+  description = "Flag indicating that the key rotation policy should be provisioned. If false then a rotation policy will not be created."
+  default = false
+}
 variable "kms-key_name" {
   type = string
   description = "The name of the root key in the kms instance. Required if kms_enabled is true"
@@ -620,12 +625,12 @@ variable "worker_count" {
 variable "cluster_flavor" {
   type = string
   description = "The machine type that will be provisioned for classic infrastructure"
-  default = "bx2.4x16"
+  default = "bx2.16x64"
 }
 variable "ocp_version" {
   type = string
   description = "The version of the OpenShift cluster that should be provisioned (format 4.x)"
-  default = "4.1"
+  default = "4.10"
 }
 variable "cluster_exists" {
   type = bool
@@ -695,7 +700,7 @@ variable "ibm-vpc-vsi_label" {
 variable "ibm-vpc-vsi_image_name" {
   type = string
   description = "The name of the image to use for the virtual server"
-  default = "ibm-zos-2-4-s390x-dev-test-wazi-1"
+  default = "ibm-zos-2-4-s390x-dev-test-wazi-5"
 }
 variable "ibm-vpc-vsi_profile_name" {
   type = string
@@ -765,7 +770,7 @@ variable "ibm-vpn-server_vpnclient_ip" {
 variable "ibm-vpn-server_vpc_cidr" {
   type = string
   description = "CIDR for the private VPC the VPN is connected to."
-  default = "10.0.0.0/12"
+  default = "10.0.0.0/8"
 }
 variable "ibm-vpn-server_dns_cidr" {
   type = string

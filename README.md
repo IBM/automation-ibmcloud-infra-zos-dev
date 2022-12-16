@@ -2,9 +2,10 @@
 
 ### Change Log
 
-- **06/2021** - Initial release
+- **12/2022** - Wazi Dev Spaces installation in OCP
+- **06/2022** - Initial release
 
-**⚠️ You must be allow-listed to use this content and provision IBM Z, LinuxONE Virtual Servers.**
+Use this content to provision IBM Z, Virtual Servers.
 
 > This collection of IBM Cloud terraform automation bundles has been crafted from a set of [Terraform modules](https://modules.cloudnativetoolkit.dev/) created by the IBM Ecosystem Lab team part of the [IBM Ecosystem organization](https://www.ibm.com/partnerworld/public?mhsrc=ibmsearch_a&mhq=partnerworld). Please contact **Matthew Perrins** __mjperrin@us.ibm.com__, **Sean Sundberg** __seansund@us.ibm.com__, or **Andrew Trice** __amtrice@us.ibm.com__ for more details or raise an issue on the repository for bugs or feature requests.
 
@@ -30,10 +31,6 @@ This suite of automation can be used for a Proof of Technology environment, or u
 **Network VPC**
 
 - Client to Site VPN server or Site to Site VPN Gateway
-- Bastion server(s)
-
-**Development VPC**
-
 - Virtual Server Instance running IBM Z, LinuxONE (S390x Architecture)  
 - Red Hat OpenShift cluster with SDLC tools provided from the [Cloud-Native Toolkit](https://cloudnativetoolkit.dev/)
 
@@ -41,12 +38,13 @@ This suite of automation can be used for a Proof of Technology environment, or u
 
 - OpenShift Pipelines (Tekton)
 - OpenShift GitOps (ArgoCD)
-- Artifactory
+<!-- - Artifactory
 - SonarQube
 - Swagger Editor
-- Developer Dashboard ( Starter Kits Code Samples )
+- Developer Dashboard ( Starter Kits Code Samples ) -->
 - Pre-validated Tekton Pipelines and Tasks
 - CLI Tools to assit pipeline creation
+- [Wazi Dev Spaces](https://www.ibm.com/docs/en/cloud-paks/z-modernization-stack/2022.4?topic=code-option-1-developing-wazi-dev-spaces)
 
 
 The following diagram gives a visual representation of the what your IBM Cloud account will contain after the automation has been successfully executed.
@@ -175,6 +173,26 @@ To connect to vpn:
 3. Exit the container by running the `exit` command.
 4. In the `automation-ibmcloud-infra-zos-dev` folder (root of this project), find the vpn profile.
 5. From your local operating system, use the vpn profile to connect the OpenVPN client to the VPN server.
+
+## Accessing Wazi Dev Spaces
+
+IBM® Wazi for Dev Spaces provides z/OS® application development capabilities in the OpenShift® Container Platform environment, on top of CodeReady Workspaces.  Wazi Dev Spaces will take approximately 15 minutes to complete installation on a fresh OpenShift cluster.  You can monitor Wazi Dev Spaces installation using the ArgoCD/OpenShift GitOps console.
+
+**This is only installed if you choose the `ocp` installation option when running the `setup-workspace.sh` script.**
+
+Once installation is complete, follow these steps to access Wazi Dev Spaces:
+
+1. Connect to the VPN using the steps above.
+2. Go to the OpenShift Dashboard
+
+   ![Wazi Routes](./wazi-routes.jpg)
+
+3. Search for the `Route` named `keycloak` in the `wazi-devspaces` project, and click on the url to access Keycloak.  Here you will need to configure user policies.  You can either add users manually, or enable user registration.  
+   - The Keycloak login credentials can be found in a secret named `che-identity-secret` in the `wazi-devspaces` project.
+4. After setting user login policies, search for the `Route` named `codeready-dashboard` in the `wazi-devspaces` project, and navigate to the route URL.
+5. Login to CodeReady Workspaces and start coding!
+
+   ![CodeReady Workspaces](./codeready-workspaces.jpg)
 
 
 ## Connecting to IBM Z, LinuxONE Virtual Server

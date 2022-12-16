@@ -1,58 +1,78 @@
-# Virtual Private Gateway module
+# VPE Gateway module
 
-Module to provision a Virtual Private Gateway for a provided resource into a provided set of subnets. It is expected that the subnets and the resource (e.g. object storage) have already been provisioned either at a previous time or by the appropriate terraform modules. This module takes the crn of the resource and the ids of the subnets as input then connects the two together with a Virtual Private Gateway. The result of this module will be a virtual private endpoint created in each of the subnets that provides a private network path between the VPC network and the resource through the gateway.
+Provisions a Virtual Private Gateway for a provided resource, connecting that resource to the provided subnet
 
-**Note:** This module follows the Terraform conventions regarding how provider configuration is defined within the Terraform template and passed into the module - https://www.terraform.io/docs/language/modules/develop/providers.html. The default provider configuration flows through to the module. If different configuration is required for a module, it can be explicitly passed in the `providers` block of the module - https://www.terraform.io/docs/language/modules/develop/providers.html#passing-providers-explicitly.
 
 ## Software dependencies
 
 The module depends on the following software components:
 
-### Command-line tools
+### Terraform version
 
-- terraform - v015
+- \>= v0.15
 
 ### Terraform providers
 
-- IBM Cloud provider >= 1.22.0
 
-## Module dependencies
+- ibm (ibm-cloud/ibm)
 
-This module makes use of the output from other modules:
+### Module dependencies
 
-- Resource group - github.com/cloud-native-toolkit/terraform-ibm-resource-grou
-- VPC - github.com/cloud-native-toolkit/terraform-ibm-vpc
-- VPC Subnets - github.com/cloud-native-toolkit/terraform-ibm-vpc-subnets
-- Resource module - [Any one of the modules that provision resources on IBM Cloud]
+
+- resource_group - [github.com/cloud-native-toolkit/terraform-ibm-resource-group](https://github.com/cloud-native-toolkit/terraform-ibm-resource-group) (>= 1.0.0)
+- subnets - [github.com/cloud-native-toolkit/terraform-ibm-vpc-subnets](https://github.com/cloud-native-toolkit/terraform-ibm-vpc-subnets) (>= 1.8.0)
+- resource - interface github.com/cloud-native-toolkit/automation-modules#ibm-service
+- sync - interface github.com/cloud-native-toolkit/automation-modules#sync
 
 ## Example usage
 
-```hcl-terraform
-terraform {
-  required_providers {
-    ibm = {
-      source = "ibm-cloud/ibm"
-    }
-  }
-  required_version = ">= 0.13"
-}
+```hcl
+module "vpe-cos" {
+  source = "github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpe-gateway"
 
-provider "ibm" {
   ibmcloud_api_key = var.ibmcloud_api_key
+  name_prefix = var.name_prefix
   region = var.region
-}
-
-module "vpe" {
-  source = "github.com/cloud-native-toolkit/terraform-ibm-vpe-gateway.git"
-
+  resource_crn = module.cos.crn
   resource_group_name = module.resource_group.name
-  region              = var.region
-  ibmcloud_api_key    = var.ibmcloud_api_key
-  name_prefix         = var.name_prefix
-  vpc_id              = module.vpc.id
-  vpc_subnets         = module.subnets.subnets
-  vpc_subnet_count    = module.subnets.count
-  resource_label      = "cos"
-  resource_crn        = module.cos.crn
+  resource_label = module.cos.label
+  resource_service = module.cos.service
+  sync = module.resource_group.sync
+  vpc_id = module.vpe-subnets.vpc_id
+  vpc_subnet_count = module.vpe-subnets.count
+  vpc_subnets = module.vpe-subnets.subnets
 }
+
 ```
+
+## Module details
+
+### Inputs
+
+| Name | Description | Required | Default | Source |
+|------|-------------|---------|----------|--------|
+| resource_group_name | The name of the IBM Cloud resource group where the VPC gateways will be created. | true |  | resource_group.name |
+| region | The IBM Cloud region where the cluster will be/has been installed. | true |  |  |
+| ibmcloud_api_key | The IBM Cloud api token | true |  |  |
+| name_prefix | The name of the vpc resource | true |  |  |
+| vpc_id | The id of the vpc instance | true |  | subnets.vpc_id |
+| vpc_subnet_count | Number of vpc subnets | true |  | subnets.count |
+| vpc_subnets | List of subnets with labels | true |  | subnets.subnets |
+| resource_label | The label for the resource to which the vpe will be connected. Used as a tag and as part of the vpe name. | true |  | resource.label |
+| resource_crn | The crn of the resource to which the vpe will be connected. | true |  | resource.crn |
+| resource_service | The endpoint gateway target resource type. Values can be provider_cloud_service, provider_infrastructure_service, ?. | true |  | resource.service |
+| sync | Value used to synchronize dependencies between modules | true |  | sync.sync |
+
+### Outputs
+
+| Name | Description |
+|------|-------------|
+| id | The id of the created VPE gateway |
+| sync | Value used to synchronize downstream modules |
+
+## Resources
+
+- [Documentation](https://operate.cloudnativetoolkit.dev)
+- [Module catalog](https://modules.cloudnativetoolkit.dev)
+
+> License: Apache License 2.0 | Generated by iascable (3.0.1)

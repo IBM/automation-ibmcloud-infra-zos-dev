@@ -9,6 +9,8 @@ metadata:
   annotations:
     displayName: Network VPC
     description: Network VPC with VPN and Bastion servers
+    dependencies.cloudnativetoolkit.dev/provides: ''
+    dependencies.cloudnativetoolkit.dev/needs: ''
 spec:
   modules:
     - name: ibm-access-group
@@ -73,7 +75,7 @@ spec:
           ref: kms_resource_group
     - name: ibm-kms-key
       alias: kms-key
-      version: v1.5.3
+      version: v1.5.4
       variables:
         - name: provision
           value: true
@@ -233,7 +235,7 @@ spec:
           alias: zos_name_prefix
           scope: global
         - name: image_name
-          value: ibm-zos-2-4-s390x-dev-test-wazi-1
+          value: ibm-zos-2-4-s390x-dev-test-wazi-5
         - name: profile_name
           value: mz2-2x16
         - name: security_group_rules
@@ -259,7 +261,7 @@ spec:
           ref: vpe-subnets
     - name: ibm-vpn-server
       alias: ibm-vpn-server
-      version: v0.2.1
+      version: v0.2.2
       dependencies:
         - name: subnets
           ref: ingress-subnets
@@ -278,7 +280,7 @@ spec:
     - name: kms_service
       type: string
       description: The name of the KMS provider that should be used (keyprotect or hpcs)
-      defaultValue: keyprotect
+      value: keyprotect
     - name: kms_resource_group_name
       type: string
       description: The name of the resource group
@@ -291,20 +293,20 @@ spec:
     - name: common_tags
       type: list(string)
       description: Common tags that should be added to the instance
-      defaultValue: []
+      value: []
     - name: ingress-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 1
+      value: 1
     - name: worker-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 1
+      value: 1
     - name: egress-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 1
+      value: 1
     - name: vpe-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 1
+      value: 1

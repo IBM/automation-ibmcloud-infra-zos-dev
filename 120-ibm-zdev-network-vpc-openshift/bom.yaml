@@ -9,6 +9,8 @@ metadata:
   annotations:
     displayName: Network VPC
     description: Network VPC with VPN and Bastion servers
+    dependencies.cloudnativetoolkit.dev/provides: cluster
+    dependencies.cloudnativetoolkit.dev/needs: ''
 spec:
   modules:
     - name: ibm-access-group
@@ -73,7 +75,7 @@ spec:
           ref: kms_resource_group
     - name: ibm-kms-key
       alias: kms-key
-      version: v1.5.3
+      version: v1.5.4
       variables:
         - name: provision
           value: true
@@ -252,7 +254,9 @@ spec:
           value: true
         - name: worker_count
         - name: ocp_version
-          value: 4.1
+          value: '4.10'
+        - name: cluster_flavor
+          value: bx2.16x64
       dependencies:
         - name: subnets
           ref: worker-subnets
@@ -269,7 +273,7 @@ spec:
       version: v1.12.3
       variables:
         - name: image_name
-          value: ibm-zos-2-4-s390x-dev-test-wazi-1
+          value: ibm-zos-2-4-s390x-dev-test-wazi-5
         - name: profile_name
           value: mz2-2x16
         - name: security_group_rules
@@ -295,7 +299,7 @@ spec:
           ref: vpe-subnets
     - name: ibm-vpn-server
       alias: ibm-vpn-server
-      version: v0.2.1
+      version: v0.2.2
       dependencies:
         - name: subnets
           ref: ingress-subnets
@@ -313,14 +317,14 @@ spec:
       description: >-
         The prefix name for the service. If not provided it will default to the
         resource group name
-      defaultValue: ''
+      value: ''
     - name: kms_region
       type: string
       description: Geographic location of the resource (e.g. us-south, us-east)
     - name: kms_service
       type: string
       description: The name of the KMS provider that should be used (keyprotect or hpcs)
-      defaultValue: keyprotect
+      value: keyprotect
     - name: kms_resource_group_name
       type: string
       description: The name of the resource group
@@ -333,34 +337,34 @@ spec:
     - name: common_tags
       type: list(string)
       description: Common tags that should be added to the instance
-      defaultValue: []
+      value: []
     - name: vpe-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 1
+      value: 1
     - name: ingress-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 1
+      value: 1
     - name: worker-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 1
+      value: 1
     - name: egress-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 1
+      value: 1
     - name: vsi-subnets__count
       type: number
       description: The number of subnets that should be provisioned
-      defaultValue: 1
+      value: 1
     - name: worker_count
       type: number
       description: >-
         The number of worker nodes that should be provisioned for classic
         infrastructure
-      defaultValue: 3
+      value: 3
     - name: cluster_flavor
       type: string
       description: The machine type that will be provisioned for classic infrastructure
-      defaultValue: bx2.4x16
+      value: bx2.4x16

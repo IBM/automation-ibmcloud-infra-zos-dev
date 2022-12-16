@@ -1,0 +1,216 @@
+apiVersion: cloud.ibm.com/v1alpha1
+kind: BillOfMaterial
+metadata:
+  name: 160-ibm-zdev-openshift-dev-tools
+  labels:
+    type: infrastructure
+    platform: ibm
+    code: '160'
+  annotations:
+    displayName: OpenShift Developer Tools and Wazi Dev Tools
+    description: Open-Source collection of assets for application development on OpenShift
+    vpn/required: 'true'
+    deployment-type/gitops: 'true'
+    dependencies.cloudnativetoolkit.dev/provides: gitops,cluster
+    dependencies.cloudnativetoolkit.dev/needs: ''
+spec:
+  modules:
+    - name: gitops-repo
+      alias: gitops_repo
+      version: v1.23.3
+    - name: argocd-bootstrap
+      alias: argocd-bootstrap
+      version: v1.12.0
+      variables:
+        - name: create_webhook
+          value: true
+    - name: gitops-cluster-config
+      alias: gitops-cluster-config
+      version: v1.1.1
+      variables:
+        - name: banner_text
+          value: Z/OS Development
+      dependencies:
+        - id: namespace
+          ref: tools_namespace
+    - name: gitops-namespace
+      alias: tools_namespace
+      version: v1.12.2
+      default: true
+      variables:
+        - name: name
+          value: tools
+    - name: gitops-namespace
+      alias: wazi_namespace
+      version: v1.12.2
+      variables:
+        - name: name
+          value: wazi-devspaces
+    - name: gitops-tekton-resources
+      alias: gitops-tekton-resources
+      version: v2.1.0
+      dependencies:
+        - id: namespace
+          ref: tools_namespace
+    - name: gitops-wazi-ds
+      alias: gitops-wazi-ds
+      version: v1.0.1
+      dependencies:
+        - id: namespace
+          ref: wazi_namespace
+    - name: gitops-wazi-ds-op
+      alias: gitops-wazi-ds-op
+      version: v1.0.0
+      dependencies:
+        - id: namespace
+          ref: wazi_namespace
+    - name: ibm-resource-group
+      alias: resource_group
+      version: v3.3.5
+      variables:
+        - name: provision
+          value: false
+        - name: resource_group_name
+          alias: zos_resource_group_name
+          scope: global
+    - name: ibm-ocp-vpc
+      alias: cluster
+      version: v1.16.3
+      dependencies:
+        - name: subnets
+          optional: true
+        - name: cos
+          optional: true
+        - name: vpc
+          optional: true
+        - name: kms_key
+          optional: true
+      variables:
+        - name: exists
+          value: true
+        - name: name
+          required: true
+        - name: vpc_subnet_count
+          value: 0
+        - name: vpc_subnets
+          value: '[]'
+        - name: cos_id
+          value: ''
+        - name: vpc_name
+          value: ''
+        - name: login
+          value: true
+        - name: resource_group_name
+          ref: zos_resource_group_name
+        - name: name_prefix
+          ref: zos_name_prefix
+    - name: namespace
+      alias: openshift-gitops
+      version: v3.2.4
+      variables:
+        - name: name
+          value: openshift-gitops
+    - name: namespace
+      alias: gitea_namespace
+      version: v3.2.4
+      variables:
+        - name: name
+          value: gitea
+    - name: gitea
+      alias: gitea
+      version: v0.5.1
+      dependencies:
+        - id: namespace
+          ref: gitea_namespace
+      variables:
+        - name: ca_cert
+          value: ''
+        - name: ca_cert_file
+          value: ''
+    - name: ibm-image-registry
+      alias: registry
+      version: v2.1.4
+      variables:
+        - name: registry_namespace
+          required: true
+          scope: global
+      dependencies:
+        - id: namespace
+          ref: openshift-gitops
+    - name: util-clis
+      version: v1.18.2
+    - name: olm
+      version: v1.3.5
+    - name: sealed-secret-cert
+      version: v1.0.1
+    - name: gitops-buildah-unprivileged
+      version: v1.1.1
+  variables:
+    - name: gitops_repo_host
+      type: string
+      description: >-
+        The host for the git repository. The git host used can be a GitHub,
+        GitHub Enterprise, Gitlab, Bitbucket, Gitea or Azure DevOps server. If
+        the host is null assumes in-cluster Gitea instance will be used.
+      value: ''
+    - name: gitops_repo_org
+      type: string
+      description: >-
+        The org/group where the git repository exists/will be provisioned. If
+        the value is left blank then the username org will be used.
+      value: ''
+    - name: gitops_repo_project
+      type: string
+      description: >-
+        The project that will be used for the git repo. (Primarily used for
+        Azure DevOps repos)
+      value: ''
+    - name: gitops_repo_username
+      type: string
+      description: The username of the user with access to the repository
+      value: ''
+    - name: gitops_repo_token
+      type: string
+      description: The personal access token used to access the repository
+      value: ''
+      sensitive: true
+    - name: gitops_repo_repo
+      type: string
+      description: >-
+        The short name of the repository (i.e. the part after the org/group
+        name)
+    - name: ibmcloud_api_key
+      type: string
+      description: The IBM Cloud api key
+      sensitive: true
+    - name: zos_resource_group_name
+      type: string
+      description: The name of the resource group
+    - name: region
+      type: string
+    - name: worker_count
+      type: number
+      description: >-
+        The number of worker nodes that should be provisioned for classic
+        infrastructure
+      value: 3
+    - name: cluster_flavor
+      type: string
+      description: The machine type that will be provisioned for classic infrastructure
+      value: bx2.4x16
+    - name: zos_name_prefix
+      type: string
+      description: >-
+        The prefix name for the service. If not provided it will default to the
+        resource group name
+      value: ''
+    - name: common_tags
+      type: list(string)
+      description: Common tags that should be added to the instance
+      value: []
+    - name: registry_namespace
+      type: string
+      description: >-
+        The namespace that will be created in the IBM Cloud image registry. If
+        not provided the value will default to the resource group
+      value: ''

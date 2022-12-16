@@ -1,3 +1,9 @@
+terraform.tfstate
+terraform.tfstate.backup
+credentials.yaml
+credentials.auto.tfvars
+.tmp/
+.terraform/
 credentials.properties
 .idea
 *.ovpn

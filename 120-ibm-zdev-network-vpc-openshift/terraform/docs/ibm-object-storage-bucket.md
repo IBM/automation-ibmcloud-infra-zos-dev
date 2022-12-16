@@ -1,205 +1,95 @@
-# terraform-ibm-object-storage-bucket
+# IBM Object Storage Bucket module
 
-Provisions an IBM Cloud Object Storage instance and creates a COS bucket
+Module to provision a Cloud Object Storage bucket
+
 
 ## Software dependencies
 
 The module depends on the following software components:
 
-### Command-line tools
+### Terraform version
 
-- terraform - v13
+- \>= v0.15
 
 ### Terraform providers
 
-- IBM Cloud provider >= 1.22.0
 
-## Module dependencies
+None
 
-- Resource group - github.com/cloud-native-toolkit/terraform-ibm-resource-group.git
-- Object storage - github.com/ibm-garage-cloud/terraform-ibm-object-storage.git
+### Module dependencies
+
+
+- resource_group - [github.com/cloud-native-toolkit/terraform-ibm-resource-group](https://github.com/cloud-native-toolkit/terraform-ibm-resource-group) (>= 1.0.0)
+- cos - [github.com/cloud-native-toolkit/terraform-ibm-object-storage](https://github.com/cloud-native-toolkit/terraform-ibm-object-storage) (>= 1.0.0)
+- kms_key - [github.com/cloud-native-toolkit/terraform-ibm-kms-key](https://github.com/cloud-native-toolkit/terraform-ibm-kms-key) (>= 1.0.0)
+- activity_tracker - [github.com/cloud-native-toolkit/terraform-ibm-activity-tracker](https://github.com/cloud-native-toolkit/terraform-ibm-activity-tracker) (>= 1.0.0)
+- metrics_monitoring - [github.com/cloud-native-toolkit/terraform-ibm-sysdig](https://github.com/cloud-native-toolkit/terraform-ibm-sysdig) (>= 1.0.0)
+- vpc - [github.com/cloud-native-toolkit/terraform-ibm-vpc](https://github.com/cloud-native-toolkit/terraform-ibm-vpc) (>= 1.11.1)
 
 ## Example usage
 
-[Refer test cases for more details](test/stages/stage3-cos-bucket.tf)
+```hcl
+module "flow_log_bucket" {
+  source = "github.com/terraform-ibm-modules/terraform-ibm-toolkit-object-storage-bucket"
 
-```hcl-terraform
-terraform {
-  required_providers {
-    ibm = {
-      source = "ibm-cloud/ibm"
-    }
-  }
-  required_version = ">= 0.13"
-}
-
-provider "ibm" {
-  region = var.region
+  activity_tracker_crn = module.ibm-activity-tracker.crn
+  allowed_ip = var.flow_log_bucket_allowed_ip == null ? null : jsondecode(var.flow_log_bucket_allowed_ip)
+  cos_instance_id = module.cos.id
+  cos_key_id = module.cos.key_id
+  cross_region_location = var.flow_log_bucket_cross_region_location
+  enable_object_versioning = var.flow_log_bucket_enable_object_versioning
   ibmcloud_api_key = var.ibmcloud_api_key
-}
-
-module "cos_bucket" {
-  source = "github.com/cloud-native-toolkit/terraform-ibm-object-storage-bucket.git"
-
+  kms_key_crn = module.kms-key.crn
+  label = var.flow_log_bucket_label
+  metrics_monitoring_crn = var.flow_log_bucket_metrics_monitoring_crn
+  name = var.flow_log_bucket_name
+  name_prefix = var.name_prefix
+  provision = var.flow_log_bucket_provision
+  region = var.region
   resource_group_name = module.resource_group.name
-  cos_instance_id     = module.cos.id
-  name_prefix         = var.name_prefix
-  ibmcloud_api_key    = var.ibmcloud_api_key
-  name                = "my-test-bucket"
-  region              = var.region
-  kms_key_crn         = module.hpcs_key.crn
+  storage_class = var.flow_log_bucket_storage_class
+  suffix = var.suffix
+  vpc_ip_addresses = module.ibm-vpc.addresses
 }
+
 ```
 
-## Attribution
+## Module details
 
-This work is derivative from https://github.com/terraform-ibm-modules/terraform-ibm-cos/tree/master/modules/bucket
+### Inputs
 
+| Name | Description | Required | Default | Source |
+|------|-------------|---------|----------|--------|
+| resource_group_name | The name of the IBM Cloud resource group where the VPC instance will be created. | true |  | resource_group.name |
+| provision | Flag indicating that the instance should be provisioned. If false then an existing instance will be looked up | false | true |  |
+| cos_instance_id | id of the COS instance | true |  | cos.id |
+| name_prefix | The name of the cos resource | true |  |  |
+| name | Name of the bucket | true |  |  |
+| label | Label used to build the bucket name of not provided. | false | bucket |  |
+| region | Bucket region | true |  |  |
+| cross_region_location | The cross-region location of the bucket. This value is optional. Valid values are (us, eu, and ap). This value takes precedence over others if provided. | true |  |  |
+| storage_class | Storage class of the bucket. Supported values are standard, vault, cold, flex, smart. | false | standard |  |
+| ibmcloud_api_key | The IBM Cloud api token | true |  |  |
+| kms_key_crn | The crn of the root key in the KMS | false | null | kms_key.crn |
+| activity_tracker_crn | The crn of the Activity Tracking instance | false | null | activity_tracker.crn |
+| metrics_monitoring_crn | The crn of the Metrics Monitoring instance | false | null | metrics_monitoring.crn |
+| allowed_ip | A list of IPv4 or IPv6 addresses in CIDR notation that you want to allow access to your IBM Cloud Object Storage bucket. | true |  |  |
+| vpc_ip_addresses | The list of ip addresses in the VPC that should be allowed to access the bucket. | true |  | vpc.addresses |
+| cos_key_id | The id of the key provisioned for the COS instance | true |  | cos.key_id |
+| enable_object_versioning | Object Versioning allows the COS user to keep multiple versions of an object in a bucket to protect against accidental deletion or overwrites. (Default = false) | true |  |  |
+| suffix | Value added to the generated name to ensure it is unique | true |  |  |
 
-## Delete the contents of bucket using MinIO, rclone and aws-cli
-## In this terraform module we are using MinIO
+### Outputs
 
-##MinIO
-### MinIO installation
-wget https://dl.min.io/client/mc/release/linux-amd64/mc
-### MinIO permissions
- chmod +x mc
- ### test setup
- ./mc --version
-### MinIO configration 
-mc config host add <ALIAS> <COS-ENDPOINT> <ACCESS-KEY> <SECRET-KEY> 
-### MinIO delete bucket contents
-./mc rm cos/<bucket name>/ --recursive --force
+| Name | Description |
+|------|-------------|
+| bucket_name | The name of the COS bucket instance |
+| id | The ID of the COS bucket instance |
+| crn | The CRN of the COS bucket instance |
 
+## Resources
 
-Other options 
+- [Documentation](https://operate.cloudnativetoolkit.dev)
+- [Module catalog](https://modules.cloudnativetoolkit.dev)
 
-##rclone
-
-cd && curl -O https://downloads.rclone.org/rclone-current-osx-amd64.zip
-
-unzip -a rclone-current-osx-amd64.zip && cd rclone-*-osx-amd64
-
-sudo mkdir -p /usr/local/bin
-sudo mv rclone /usr/local/bin/
-
-cd .. && rm -rf rclone-*-osx-amd64 rclone-current-osx-amd64.zip
-
-For more details please refer https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-rclone
-
-##Configure rclone
-
-rclone config
-
-No remotes found - make a new one
-        n) New remote
-        s) Set configuration password
-        q) Quit config
-        n/s/q> n
-
-yks is the name given for this configuration
-name> <YOUR NAME>
-
-Type of storage to configure
-Select S3 storage
-
-Choose your S3 provider.
-IBMCOS
-
-Get AWS credentials from runtime (environment variables or EC2/ECS meta data if no env vars).
-False
-
-AWS Access Key ID
-access_key_id
-secret_access_key
-
-Region to connect to.
-2 / Use this only if v4 signatures don't work, e.g. pre Jewel/v10 CEPH.
-   \ "other-v2-signature"
-
-Endpoint for IBM COS S3 API
-1 / US Cross Region Endpoint
-   \ "s3.us.cloud-object-storage.appdomain.cloud"
-
-Location constraint - must match endpoint when using IBM Cloud Public.
-1 / US Cross Region Standard
-   \ "us-standard"
-
-Canned ACL used when creating buckets and storing or copying objects.
-1 / Owner gets FULL_CONTROL. No one else has access rights (default). This acl is available on IBM Cloud (Infra), IBM Cloud (Storage), On-Premise COS
-   \ "private"
-
-Edit advanced config? (y/n)
-y) Yes
-n) No (default)
-y/n> n
-
-Remote config
---------------------
-[yks]
-type = s3
-provider = IBMCOS
-env_auth = false
-access_key_id = < IBM COS access_key_id>
-secret_access_key = < IBM COS secret_access_key>
-region = other-v2-signature
-endpoint = s3.us.cloud-object-storage.appdomain.cloud
-location_constraint = us-standard
-acl = private
---------------------
-
-
-y) Yes this is OK (default)
-e) Edit this remote
-d) Delete this remote
-y/e/d> y
-
-e) Edit existing remote
-n) New remote
-d) Delete remote
-r) Rename remote
-c) Copy remote
-s) Set configuration password
-q) Quit config
-e/n/d/r/c/s/q> q
-
-##To create a bucket:
-rclone mkdir yks:newyksbucket001  
-
-##To delete a file
-rclone delete yks:newyksbucket001/file.txt
-
-##To delete a directory
-rclone purge  yks:newyksbucket001/rclone
-
-##To delete bucket
-rclone mkdir yks:newyksbucket001
-
-##To list buckets
-rclone lsd yks:
-
-##To list contents of a bucket
-rclone ls yks:newyksbucket001  
-
-
-##aws-cli
-1. Install the [AWS CLI](https://aws.amazon.com/cli/)
-2. Configure Credentials for the IBM Cloud COS instance and select role as **Manager** and switch **Include HMAC Credential** as true
-3. Edit the `~/.aws/credentials` file and config the following values
-    ```
-    [default]
-    aws_access_key_id = <cos_hmac_keys/->access_key_id>
-    aws_secret_access_key = <cos_hmac_keys/->secret_access_key>
-    region=us-south
-    ```
-4. Make sure you are running VPN connection
-5. Check you list the buckets in the COS instance
-    ```
-    aws s3 --endpoint-url=https://s3.us-south.cloud-object-storage.appdomain.cloud  ls
-    ```
-5. Delete the contents of the bucket recursively using this CLI command, Make sure you are using the correct COS Endpoint
-    ```
-    aws s3 --endpoint-url=https://s3.us-south.cloud-object-storage.appdomain.cloud  ls s3://temenos-workload-flow-logs --recursive
-    ```
-6. This will delete the entire content of the COS bucket
-
+> License: Apache License 2.0 | Generated by iascable (3.0.1)

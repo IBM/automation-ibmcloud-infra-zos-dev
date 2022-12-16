@@ -9,6 +9,8 @@ metadata:
   annotations:
     displayName: Shared services
     description: Managed services that are shared across the development networks
+    dependencies.cloudnativetoolkit.dev/provides: ''
+    dependencies.cloudnativetoolkit.dev/needs: ''
 spec:
   modules:
     - name: ibm-access-group
@@ -165,7 +167,7 @@ spec:
     - name: kms_service
       type: string
       description: The name of the KMS provider that should be used (keyprotect or hpcs)
-      defaultValue: keyprotect
+      value: keyprotect
     - name: at_resource_group_name
       type: string
       description: The name of the resource group
@@ -178,4 +180,4 @@ spec:
     - name: common_tags
       type: list(string)
       description: Common tags that should be added to the instance
-      defaultValue: []
+      value: []

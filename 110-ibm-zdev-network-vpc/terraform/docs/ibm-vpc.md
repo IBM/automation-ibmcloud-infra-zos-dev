@@ -1,86 +1,83 @@
-# IBM Cloud VPC module
+# IBM VPC module
 
-Provisions a VPC instance and related resources. The full list of resources provisioned is as follows:
-
-- VPC instance
-- VPC network acl
-- VPC security group rules
-  - *ping* - icmp type 8
-  - *public dns* - `161.26.0.10` and `161.26.0.11`
-  - *private dns* - `161.26.0.7` and `161.26.0.8`
+Provisions the IBM Cloud VPC instance with network acls
 
 
 ## Software dependencies
 
 The module depends on the following software components:
 
-### Command-line tools
+### Terraform version
 
-- terraform - v13
+- \>= v0.15
 
 ### Terraform providers
 
-- IBM Cloud provider >= 1.25.0
 
-## Module dependencies
+- ibm (ibm-cloud/ibm)
 
-- Resource group - github.com/cloud-native-toolkit/terraform-ibm-resource-group.git
+### Module dependencies
+
+
+- resource_group - [github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group) (>= 2.1.0)
 
 ## Example usage
 
-[Refer test cases for more details](test/stages/stage2-vpc.tf)
+```hcl
+module "ibm-vpc" {
+  source = "cloud-native-toolkit/vpc/ibm"
 
-```hcl-terraform
-terraform {
-  required_providers {
-    ibm = {
-      source = "ibm-cloud/ibm"
-    }
-  }
-  required_version = ">= 0.13"
-}
 
-provider "ibm" {
-  ibmcloud_api_key = var.ibmcloud_api_key
+  address_prefix_count = var.ibm-vpc_address_prefix_count
+  address_prefixes = var.ibm-vpc_address_prefixes == null ? null : jsondecode(var.ibm-vpc_address_prefixes)
+  base_security_group_name = var.ibm-vpc_base_security_group_name
+  common_tags = var.common_tags == null ? null : jsondecode(var.common_tags)
+  internal_cidr = var.ibm-vpc_internal_cidr
+  name = var.ibm-vpc_name
+  name_prefix = var.name_prefix
+  provision = var.ibm-vpc_provision
   region = var.region
-}
-
-module "dev_vpc" {
-  source = "github.com/cloud-native-toolkit/terraform-ibm-vpc.git?ref=v1.7.2"
-  
-  resource_group_id   = module.resource_group.id
   resource_group_name = module.resource_group.name
-  region              = var.region
-  name_prefix         = var.name_prefix
+  tags = var.ibm-vpc_tags == null ? null : jsondecode(var.ibm-vpc_tags)
 }
+
 ```
 
-## Supporting resources
+## Module details
 
-### delete-vpc.sh
+### Inputs
 
-Cleaning up a VPC instance can be difficult because the resources need to be removed in a particular order. Running a `terraform delete` from the terraform state that provisioned the VPC instance is the most reliable way to clean up the resources. However, if the terraform state gets corrupted or lost or the VPC resources were provisioned by hand then an alternative approach is required. In order to address this issue, a script has been provided in [scripts/delete-vpc.sh](./scripts/delete-vpc.sh).
+| Name | Description | Required | Default | Source |
+|------|-------------|---------|----------|--------|
+| resource_group_name | The name of the IBM Cloud resource group where the VPC instance will be created. | true |  | resource_group.name |
+| region | The IBM Cloud region where the cluster will be/has been installed. | true |  |  |
+| name | The name of the vpc instance | true |  |  |
+| name_prefix | The name of the vpc resource | true |  |  |
+| provision | Flag indicating that the instance should be provisioned. If false then an existing instance will be looked up | false | true |  |
+| address_prefix_count | The number of ipv4_cidr_blocks | false | 0 |  |
+| address_prefixes | List of ipv4 cidr blocks for the address prefixes (e.g. ['10.10.10.0/24']). If you are providing cidr blocks then a value must be provided for each of the subnets. If you don't provide cidr blocks for each of the subnets then values will be generated using the {ipv4_address_count} value. | false |  |  |
+| base_security_group_name | The name of the base security group. If not provided the name will be based on the vpc name | true |  |  |
+| internal_cidr | The cidr range of the internal network | false | 10.0.0.0/8 |  |
+| tags | Tags that should be added to the instance | false |  |  |
+| common_tags | Common tags that should be added to the instance | false |  |  |
 
-#### Prerequisites
+### Outputs
 
-##### Software
+| Name | Description |
+|------|-------------|
+| name | The name of the vpc instance |
+| id | The id of the vpc instance |
+| acl_id | The id of the network acl |
+| crn | The CRN for the vpc instance |
+| count | The number of VPCs created by this module. Always set to 1 |
+| names | The name of the vpc instance |
+| ids | The id of the vpc instance |
+| base_security_group | The id of the base security group to be shared by other resources. The base group is different from the default security group. |
+| addresses | The ip address ranges for the VPC |
 
-The `delete-vpc.sh` script has the following software requirements:
+## Resources
 
-- ibmcloud cli - https://cloud.ibm.com/docs/cli?topic=cli-install-ibmcloud-cli
-- ibmcloud vpc infrastructure (is) plugin - https://cloud.ibm.com/docs/cli?topic=vpc-infrastructure-cli-plugin-vpc-reference
-- `jq` cli - https://stedolan.github.io/jq/download/
+- [Documentation](https://operate.cloudnativetoolkit.dev)
+- [Module catalog](https://modules.cloudnativetoolkit.dev)
 
-##### Environment
-
-The `delete-vpc.sh` script assumes that you have already logged into the IBM Cloud account where the VPC resources have been deployed using the ibmcloud cli. For more information see https://cloud.ibm.com/docs/cli?topic=cli-ibmcloud_cli#ibmcloud_login
-
-#### Usage
-
-Assuming the prerequisites have been met, the script can be run by passing the name of the VPC to remove as the only argument. E.g. 
-
-```shell
-./delete-vpc.sh my-vpc
-```
-
-The script will delete all of the resources under the VPC in order then finally delete the VPC instance itself.
+> License: Apache License 2.0 | Generated by iascable (3.0.1)
