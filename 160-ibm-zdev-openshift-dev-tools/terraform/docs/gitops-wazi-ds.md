@@ -32,7 +32,7 @@ module "gitops-wazi-ds" {
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  namespace = module.tools_namespace.name
+  namespace = module.wazi_namespace.name
   server_name = module.gitops_repo.server_name
 }
 

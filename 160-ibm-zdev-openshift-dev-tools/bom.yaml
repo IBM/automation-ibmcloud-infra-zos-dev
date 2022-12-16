@@ -52,6 +52,12 @@ spec:
       variables:
         - name: name
           value: tools
+    - name: gitops-namespace
+      alias: wazi_namespace
+      version: v1.12.2
+      variables:
+        - name: name
+          value: wazi-devspaces
     - name: gitops-pact-broker
       alias: gitops-pact-broker
       version: v1.2.0
@@ -75,7 +81,7 @@ spec:
       version: v1.0.0
       dependencies:
         - id: namespace
-          ref: tools_namespace
+          ref: wazi_namespace
     - name: ibm-resource-group
       alias: resource_group
       version: v3.3.5

@@ -63,6 +63,7 @@ already be in .gitignore.
 | [gitops-cluster-config](https://github.com/cloud-native-toolkit/terraform-gitops-cluster-config) | Module to populate a gitops repository with base configuration of the Red Hat OpenShift cluster (notification banner, help menus, etc) | v1.1.1 |
 | [gitops-dashboard](https://github.com/cloud-native-toolkit/terraform-gitops-dashboard) | Module to configure the provisioning of the Developer Dashboard in a GitOps repo | v1.7.0 |
 | [gitops-namespace](https://github.com/cloud-native-toolkit/terraform-gitops-namespace) | Module to configure the provisioning of a namespace in a GitOps repo | v1.12.2 |
+| [gitops-namespace](https://github.com/cloud-native-toolkit/terraform-gitops-namespace) | Module to configure the provisioning of a namespace in a GitOps repo | v1.12.2 |
 | [gitops-pact-broker](https://github.com/cloud-native-toolkit/terraform-gitops-pact-broker) | Module to populate gitops repo to deploy Pact Broker | v1.2.0 |
 | [gitops-sonarqube](https://github.com/cloud-native-toolkit/terraform-gitops-sonarqube) | Module to populate gitops repo to deploy SonarQube | v1.3.0 |
 | [gitops-tekton-resources](https://github.com/cloud-native-toolkit/terraform-gitops-tekton-resources) | Module to populate a gitops repo with Tekton resources (tasks and pipelines). | v2.1.0 |

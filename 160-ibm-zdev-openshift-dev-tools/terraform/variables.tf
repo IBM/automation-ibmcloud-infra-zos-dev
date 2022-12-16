@@ -202,6 +202,26 @@ variable "tools_namespace_argocd_namespace" {
   description = "The namespace where argocd has been deployed"
   default = "openshift-gitops"
 }
+variable "wazi_namespace_name" {
+  type = string
+  description = "The value that should be used for the namespace"
+  default = "wazi-devspaces"
+}
+variable "wazi_namespace_ci" {
+  type = bool
+  description = "Flag indicating that this namespace will be used for development (e.g. configmaps and secrets)"
+  default = false
+}
+variable "wazi_namespace_create_operator_group" {
+  type = bool
+  description = "Flag indicating that an operator group should be created in the namespace"
+  default = true
+}
+variable "wazi_namespace_argocd_namespace" {
+  type = string
+  description = "The namespace where argocd has been deployed"
+  default = "openshift-gitops"
+}
 variable "gitops-pact-broker_cluster_type" {
   type = string
   description = "The cluster type (openshift or ocp3 or ocp4 or kubernetes)"

@@ -153,6 +153,10 @@ output "tools_namespace_name" {
   description = "Namespace name"
   value = module.tools_namespace.name
 }
+output "wazi_namespace_name" {
+  description = "Namespace name"
+  value = module.wazi_namespace.name
+}
 output "gitops-pact-broker_name" {
   description = "The name of the module"
   value = module.gitops-pact-broker.name

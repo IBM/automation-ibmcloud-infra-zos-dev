@@ -169,12 +169,12 @@ module "gitops-tekton-resources" {
   task_release = var.gitops-tekton-resources_task_release
 }
 module "gitops-wazi-ds" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-wazi-dev-spaces?ref=v1.0.0"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-wazi-dev-spaces?ref=v1.0.1"
 
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config
   kubeseal_cert = module.gitops_repo.sealed_secrets_cert
-  namespace = module.tools_namespace.name
+  namespace = module.wazi_namespace.name
   server_name = module.gitops_repo.server_name
 }
 module "gitops-wazi-ds-op" {
@@ -266,4 +266,15 @@ module "util-clis" {
 
   bin_dir = var.util-clis_bin_dir
   clis = var.util-clis_clis == null ? null : jsondecode(var.util-clis_clis)
+}
+module "wazi_namespace" {
+  source = "github.com/cloud-native-toolkit/terraform-gitops-namespace?ref=v1.12.2"
+
+  argocd_namespace = var.wazi_namespace_argocd_namespace
+  ci = var.wazi_namespace_ci
+  create_operator_group = var.wazi_namespace_create_operator_group
+  git_credentials = module.gitops_repo.git_credentials
+  gitops_config = module.gitops_repo.gitops_config
+  name = var.wazi_namespace_name
+  server_name = module.gitops_repo.server_name
 }
