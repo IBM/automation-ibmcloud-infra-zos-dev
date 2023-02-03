@@ -148,7 +148,7 @@ spec:
       version: v4.1.0
     - name: ibm-secrets-manager
       alias: ibm-secrets-manager
-      version: v1.0.2
+      version: v1.1.0
       variables:
         - name: private_endpoint
           value: false

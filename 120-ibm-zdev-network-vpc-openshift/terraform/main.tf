@@ -148,21 +148,18 @@ module "ibm-flow-logs" {
   target_names = module.ibm-vpc.names
 }
 module "ibm-secrets-manager" {
-  source = "github.com/cloud-native-toolkit/terraform-ibm-secrets-manager?ref=v1.0.2"
+  source = "github.com/cloud-native-toolkit/terraform-ibm-secrets-manager?ref=v1.1.0"
 
   create_auth = var.ibm-secrets-manager_create_auth
   ibmcloud_api_key = var.ibmcloud_api_key
   kms_enabled = var.ibm-secrets-manager_kms_enabled
-  kms_id = module.kms-key.kms_id
   kms_key_crn = module.kms-key.crn
-  kms_private_endpoint = var.ibm-secrets-manager_kms_private_endpoint
-  kms_private_url = module.kms-key.kms_private_url
-  kms_public_url = module.kms-key.kms_public_url
   label = var.ibm-secrets-manager_label
   name = var.ibm-secrets-manager_name
   name_prefix = var.zos_name_prefix
   private_endpoint = var.ibm-secrets-manager_private_endpoint
   provision = var.ibm-secrets-manager_provision
+  purge = var.ibm-secrets-manager_purge
   region = var.region
   resource_group_name = module.zos_resource_group.name
   trial = var.ibm-secrets-manager_trial
@@ -235,7 +232,7 @@ module "ibm-vpc-vsi" {
   vpc_subnets = module.vsi-subnets.subnets
 }
 module "ibm-vpn-server" {
-  source = "github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpn-server?ref=v0.2.2"
+  source = "github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpn-server?ref=v0.2.3"
 
   auth_method = var.ibm-vpn-server_auth_method
   client_dns = var.ibm-vpn-server_client_dns == null ? null : jsondecode(var.ibm-vpn-server_client_dns)
@@ -248,6 +245,7 @@ module "ibm-vpn-server" {
   resource_label = var.ibm-vpn-server_resource_label
   secrets_manager_guid = module.ibm-secrets-manager.guid
   services_cidr = var.ibm-vpn-server_services_cidr
+  sm_region = var.ibm-vpn-server_sm_region
   subnet_ids = module.ingress-subnets.ids
   vpc_cidr = var.ibm-vpn-server_vpc_cidr
   vpc_id = module.ingress-subnets.vpc_id

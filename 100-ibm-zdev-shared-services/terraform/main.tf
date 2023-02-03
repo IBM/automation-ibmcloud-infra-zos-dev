@@ -85,21 +85,18 @@ module "ibm-activity-tracker" {
   tags = var.ibm-activity-tracker_tags == null ? null : jsondecode(var.ibm-activity-tracker_tags)
 }
 module "ibm-secrets-manager" {
-  source = "github.com/cloud-native-toolkit/terraform-ibm-secrets-manager?ref=v1.0.2"
+  source = "github.com/cloud-native-toolkit/terraform-ibm-secrets-manager?ref=v1.1.0"
 
   create_auth = var.ibm-secrets-manager_create_auth
   ibmcloud_api_key = var.ibmcloud_api_key
   kms_enabled = var.ibm-secrets-manager_kms_enabled
-  kms_id = var.ibm-secrets-manager_kms_id
   kms_key_crn = var.ibm-secrets-manager_kms_key_crn
-  kms_private_endpoint = var.ibm-secrets-manager_kms_private_endpoint
-  kms_private_url = var.ibm-secrets-manager_kms_private_url
-  kms_public_url = var.ibm-secrets-manager_kms_public_url
   label = var.ibm-secrets-manager_label
   name = var.ibm-secrets-manager_name
   name_prefix = var.zos_name_prefix
   private_endpoint = var.ibm-secrets-manager_private_endpoint
   provision = var.ibm-secrets-manager_provision
+  purge = var.ibm-secrets-manager_purge
   region = var.region
   resource_group_name = module.resource_group.name
   trial = var.ibm-secrets-manager_trial

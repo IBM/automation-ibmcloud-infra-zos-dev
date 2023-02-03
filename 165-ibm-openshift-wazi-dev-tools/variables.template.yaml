@@ -1,0 +1,39 @@
+variables:
+  - name: gitops_repo_host
+    type: string
+    description: >-
+      The host for the git repository. The git host used can be a GitHub, GitHub
+      Enterprise, Gitlab, Bitbucket, Gitea or Azure DevOps server. If the host
+      is null assumes in-cluster Gitea instance will be used.
+    value: ''
+  - name: gitops_repo_org
+    type: string
+    description: >-
+      The org/group where the git repository exists/will be provisioned. If the
+      value is left blank then the username org will be used.
+    value: ''
+  - name: gitops_repo_project
+    type: string
+    description: >-
+      The project that will be used for the git repo. (Primarily used for Azure
+      DevOps repos)
+    value: ''
+  - name: gitops_repo_username
+    type: string
+    description: The username of the user with access to the repository
+    value: ''
+  - name: gitops_repo_token
+    type: string
+    description: The personal access token used to access the repository
+    value: ''
+    sensitive: true
+  - name: gitops_repo_repo
+    type: string
+    description: The short name of the repository (i.e. the part after the org/group name)
+  - name: server_url
+    type: string
+    description: The url for the OpenShift api
+  - name: cluster_login_token
+    type: string
+    description: Token used for authentication
+    sensitive: true

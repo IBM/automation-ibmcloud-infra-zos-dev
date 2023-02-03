@@ -70,7 +70,7 @@ already be in .gitignore.
 | [ibm-resource-group](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group) | Creates a resource groups in the account | v3.3.5 |
 | [ibm-resource-group](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group) | Creates a resource groups in the account | v3.3.5 |
 | [ibm-object-storage](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-object-storage) | Module to work with an IBM Cloud Object Storage instance. | v4.1.0 |
-| [ibm-secrets-manager](https://github.com/cloud-native-toolkit/terraform-ibm-secrets-manager) | Module to provision an IBM Cloud Secrets Manager instance | v1.0.2 |
+| [ibm-secrets-manager](https://github.com/cloud-native-toolkit/terraform-ibm-secrets-manager) | Module to provision an IBM Cloud Secrets Manager instance | v1.1.0 |
 | [ibm-vpc](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpc) | Provisions the IBM Cloud VPC instance with network acls | v1.17.0 |
 | [ibm-vpc-gateways](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpc-gateways) | Terraform module to provision public gateways for an existing VPC instance | v1.10.0 |
 | [ibm-vpc-ssh](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpc-ssh) | Module to register an ssh key into the IBM Cloud infrastructure for use in securely accessing VPC resources | v1.7.3 |
@@ -81,7 +81,7 @@ already be in .gitignore.
 | [ibm-vpc-vpn-gateway](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpn-gateway) | Module to provision a VPN Gateway within a Virtual Private Cloud instance | v1.1.6 |
 | [ibm-vpc-vsi](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpc-vsi) | Module to provision virtual server instance | v1.12.3 |
 | [ibm-vpe-gateway](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpe-gateway) | Provisions a Virtual Private Gateway for a provided resource, connecting that resource to the provided subnet | v1.6.2 |
-| [ibm-vpn-server](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpn-server) | Module to provision a client to site VPN server instance in an IBM Cloud account | v0.2.2 |
+| [ibm-vpn-server](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-vpn-server) | Module to provision a client to site VPN server instance in an IBM Cloud account | v0.2.3 |
 
 ### Variables
 

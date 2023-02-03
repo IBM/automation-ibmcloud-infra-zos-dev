@@ -1,6 +1,6 @@
-# 160-ibm-zdev-openshift-dev-tools
+# 165-ibm-openshift-wazi-dev-tools
 
-Open-Source collection of assets for application development on OpenShift
+Open-Source collection of assets for application development on OpenShift, including Wazi for Dev Spaces
 
 ## Running the automation
 
@@ -57,23 +57,21 @@ already be in .gitignore.
 
 | Name | Description | Version |
 |------|-------------|---------|
-| [gitops-repo](https://github.com/cloud-native-toolkit/terraform-tools-gitops) | Module to provision and set up a GitOps repository | v1.23.3 |
 | [argocd-bootstrap](https://github.com/cloud-native-toolkit/terraform-tools-argocd-bootstrap) | Module to provision ArgoCD and bootstrap an application using the GitOps repo | v1.13.0 |
 | [gitops-cluster-config](https://github.com/cloud-native-toolkit/terraform-gitops-cluster-config) | Module to populate a gitops repository with base configuration of the Red Hat OpenShift cluster (notification banner, help menus, etc) | v1.1.1 |
-| [gitops-namespace](https://github.com/cloud-native-toolkit/terraform-gitops-namespace) | Module to configure the provisioning of a namespace in a GitOps repo | v1.12.2 |
-| [gitops-namespace](https://github.com/cloud-native-toolkit/terraform-gitops-namespace) | Module to configure the provisioning of a namespace in a GitOps repo | v1.12.2 |
-| [gitops-tekton-resources](https://github.com/cloud-native-toolkit/terraform-gitops-tekton-resources) | Module to populate a gitops repo with Tekton resources (tasks and pipelines). | v2.1.0 |
-| [gitops-wazi-ds](https://github.com/cloud-native-toolkit/terraform-gitops-wazi-dev-spaces) | Module to populate a gitops repo with the resources to provision wazi-dev-spaces | v1.0.1 |
-| [gitops-wazi-ds-op](https://github.com/cloud-native-toolkit/terraform-gitops-wazi-ds-operator) | Module to populate a gitops repo with the resources to provision wazi-dev-spaces-operator | v1.0.0 |
-| [ibm-resource-group](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group) | Creates a resource groups in the account | v3.3.5 |
-| [ibm-ocp-vpc](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-ocp-vpc) | Provisions an IBM Cloud OCP cluster | v1.16.3 |
 | [namespace](https://github.com/cloud-native-toolkit/terraform-k8s-namespace) | Creates a namespace in the cluster | v3.2.4 |
 | [namespace](https://github.com/cloud-native-toolkit/terraform-k8s-namespace) | Creates a namespace in the cluster | v3.2.4 |
 | [gitea](https://github.com/cloud-native-toolkit/terraform-tools-gitea) | Module to install Gitea into a cluster via an operator | v0.5.1 |
-| [ibm-image-registry](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-image-registry) | Module to set up a namespace in the IBM Container Registry and configure the cluster | v2.1.4 |
-| [util-clis](https://github.com/cloud-native-toolkit/terraform-util-clis) | Module to install clis into local bin directory | v1.18.2 |
+| [gitops-namespace](https://github.com/cloud-native-toolkit/terraform-gitops-namespace) | Module to configure the provisioning of a namespace in a GitOps repo | v1.12.2 |
+| [gitops-namespace](https://github.com/cloud-native-toolkit/terraform-gitops-namespace) | Module to configure the provisioning of a namespace in a GitOps repo | v1.12.2 |
+| [gitops-repo](https://github.com/cloud-native-toolkit/terraform-tools-gitops) | Module to provision and set up a GitOps repository | v1.23.3 |
+| [gitops-tekton-resources](https://github.com/cloud-native-toolkit/terraform-gitops-tekton-resources) | Module to populate a gitops repo with Tekton resources (tasks and pipelines). | v2.1.0 |
+| [gitops-wazi-ds](https://github.com/cloud-native-toolkit/terraform-gitops-wazi-dev-spaces) | Module to populate a gitops repo with the resources to provision wazi-dev-spaces | v1.0.1 |
+| [gitops-wazi-ds-op](https://github.com/cloud-native-toolkit/terraform-gitops-wazi-ds-operator) | Module to populate a gitops repo with the resources to provision wazi-dev-spaces-operator | v1.0.0 |
+| [ocp-login](https://github.com/cloud-native-toolkit/terraform-ocp-login) | Module to perform a simple cluster login and provide the cluster path | v1.6.2 |
 | [olm](https://github.com/cloud-native-toolkit/terraform-k8s-olm) | Installs Operator Lifecycle Manager in the cluster | v1.3.5 |
 | [sealed-secret-cert](https://github.com/cloud-native-toolkit/terraform-util-sealed-secret-cert) | Module to collect or generate the certificate and private key used for the sealed secret component | v1.0.1 |
+| [util-clis](https://github.com/cloud-native-toolkit/terraform-util-clis) | Module to install clis into local bin directory | v1.18.2 |
 | [gitops-buildah-unprivileged](https://github.com/cloud-native-toolkit/terraform-gitops-buildah-unprivileged) | Module to populate a gitops repo to set up a Red Hat OpenShift cluster to allow buildah to run unprivileged. | v1.1.1 |
 
 ### Variables
@@ -86,14 +84,8 @@ already be in .gitignore.
 | gitops_repo_username | The username of the user with access to the repository |  |  |
 | gitops_repo_token | The personal access token used to access the repository | true |  |
 | gitops_repo_repo | The short name of the repository (i.e. the part after the org/group name) |  |  |
-| ibmcloud_api_key | The IBM Cloud api key | true |  |
-| zos_resource_group_name | The name of the resource group |  |  |
-| region |  |  |  |
-| worker_count | The number of worker nodes that should be provisioned for classic infrastructure |  | 3 |
-| cluster_flavor | The machine type that will be provisioned for classic infrastructure |  | bx2.4x16 |
-| zos_name_prefix | The prefix name for the service. If not provided it will default to the resource group name |  |  |
-| common_tags | Common tags that should be added to the instance |  |  |
-| registry_namespace | The namespace that will be created in the IBM Cloud image registry. If not provided the value will default to the resource group |  |  |
+| server_url | The url for the OpenShift api |  |  |
+| cluster_login_token | Token used for authentication | true |  |
 
 ## Troubleshooting
 

@@ -1,0 +1,148 @@
+apiVersion: cloud.ibm.com/v1alpha1
+kind: BillOfMaterial
+metadata:
+  name: 165-ibm-openshift-wazi-dev-tools
+  labels:
+    type: infrastructure
+    platform: ibm
+    code: '165'
+  annotations:
+    displayName: >-
+      OpenShift Developer Tools and Wazi for Dev Spaces installation on an
+      existing OpenShift cluster
+    description: >-
+      Open-Source collection of assets for application development on OpenShift,
+      including Wazi for Dev Spaces
+    vpn/required: 'false'
+    deployment-type/gitops: 'true'
+    dependencies.cloudnativetoolkit.dev/provides: gitops
+    dependencies.cloudnativetoolkit.dev/needs: cluster
+spec:
+  modules:
+    - name: argocd-bootstrap
+      alias: argocd-bootstrap
+      version: v1.13.0
+      variables:
+        - name: create_webhook
+          value: true
+    - name: gitops-cluster-config
+      alias: gitops-cluster-config
+      version: v1.1.1
+      variables:
+        - name: banner_text
+          value: Z/OS Development
+      dependencies:
+        - id: namespace
+          ref: tools_namespace
+    - name: namespace
+      alias: openshift-gitops
+      version: v3.2.4
+      variables:
+        - name: name
+          value: openshift-gitops
+      dependencies:
+        - id: namespace
+          ref: openshift-gitops
+    - name: namespace
+      alias: gitea_namespace
+      version: v3.2.4
+      variables:
+        - name: name
+          value: gitea
+    - name: gitea
+      alias: gitea
+      version: v0.5.1
+      dependencies:
+        - id: namespace
+          ref: gitea_namespace
+      variables:
+        - name: ca_cert
+          value: ''
+        - name: ca_cert_file
+          value: ''
+    - name: gitops-namespace
+      alias: tools_namespace
+      version: v1.12.2
+      default: true
+      variables:
+        - name: name
+          value: tools
+    - name: gitops-namespace
+      alias: wazi_namespace
+      version: v1.12.2
+      variables:
+        - name: name
+          value: wazi-devspaces
+    - name: gitops-repo
+      alias: gitops_repo
+      version: v1.23.3
+    - name: gitops-tekton-resources
+      alias: gitops-tekton-resources
+      version: v2.1.0
+      dependencies:
+        - id: namespace
+          ref: tools_namespace
+    - name: gitops-wazi-ds
+      alias: gitops-wazi-ds
+      version: v1.0.1
+      dependencies:
+        - id: namespace
+          ref: wazi_namespace
+    - name: gitops-wazi-ds-op
+      alias: gitops-wazi-ds-op
+      version: v1.0.0
+      dependencies:
+        - id: namespace
+          ref: wazi_namespace
+    - name: ocp-login
+      alias: cluster
+      version: v1.6.2
+    - name: olm
+      version: v1.3.5
+    - name: sealed-secret-cert
+      version: v1.0.1
+    - name: util-clis
+      version: v1.18.2
+    - name: gitops-buildah-unprivileged
+      version: v1.1.1
+  variables:
+    - name: gitops_repo_host
+      type: string
+      description: >-
+        The host for the git repository. The git host used can be a GitHub,
+        GitHub Enterprise, Gitlab, Bitbucket, Gitea or Azure DevOps server. If
+        the host is null assumes in-cluster Gitea instance will be used.
+      value: ''
+    - name: gitops_repo_org
+      type: string
+      description: >-
+        The org/group where the git repository exists/will be provisioned. If
+        the value is left blank then the username org will be used.
+      value: ''
+    - name: gitops_repo_project
+      type: string
+      description: >-
+        The project that will be used for the git repo. (Primarily used for
+        Azure DevOps repos)
+      value: ''
+    - name: gitops_repo_username
+      type: string
+      description: The username of the user with access to the repository
+      value: ''
+    - name: gitops_repo_token
+      type: string
+      description: The personal access token used to access the repository
+      value: ''
+      sensitive: true
+    - name: gitops_repo_repo
+      type: string
+      description: >-
+        The short name of the repository (i.e. the part after the org/group
+        name)
+    - name: server_url
+      type: string
+      description: The url for the OpenShift api
+    - name: cluster_login_token
+      type: string
+      description: Token used for authentication
+      sensitive: true

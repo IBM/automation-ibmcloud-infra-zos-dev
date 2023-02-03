@@ -40,6 +40,7 @@ module "ibm-vpn-server" {
   resource_label = var.ibm-vpn-server_resource_label
   secrets_manager_guid = module.ibm-secrets-manager.guid
   services_cidr = var.ibm-vpn-server_services_cidr
+  sm_region = var.ibm-vpn-server_sm_region
   subnet_ids = module.ingress-subnets.ids
   vpc_cidr = var.ibm-vpn-server_vpc_cidr
   vpc_id = module.ingress-subnets.vpc_id
@@ -59,6 +60,7 @@ module "ibm-vpn-server" {
 |------|-------------|---------|----------|--------|
 | ibmcloud_api_key | The IBM Cloud api key | true |  |  |
 | region | The IBM Cloud region where the resources will be provisioned. | true |  |  |
+| sm_region | The IBM Cloud region where the Service Manager resides if different from VPC and VPN server | true |  |  |
 | resource_label | The label for the resource to which the vpe will be connected. Used as a tag and as part of the vpe name. | false | vpn |  |
 | resource_group_name | The name of the IBM Cloud resource group where the resources will be provisioned. | true |  | resource_group.name |
 | secrets_manager_guid | The secrets manager instance guid. | true |  | secrets-manager.guid |

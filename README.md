@@ -5,7 +5,7 @@
 - **12/2022** - Wazi Dev Spaces installation in OCP
 - **06/2022** - Initial release
 
-Use this content to provision IBM Z, Virtual Servers.
+Use this content to deploy IBM Wazi for Dev Spaces onto an existing OpenShift cluster, or to provision IBM Z, Virtual Servers and/or OpenShift clusters.
 
 > This collection of IBM Cloud terraform automation bundles has been crafted from a set of [Terraform modules](https://modules.cloudnativetoolkit.dev/) created by the IBM Ecosystem Lab team part of the [IBM Ecosystem organization](https://www.ibm.com/partnerworld/public?mhsrc=ibmsearch_a&mhq=partnerworld). Please contact **Matthew Perrins** __mjperrin@us.ibm.com__, **Sean Sundberg** __seansund@us.ibm.com__, or **Andrew Trice** __amtrice@us.ibm.com__ for more details or raise an issue on the repository for bugs or feature requests.
 
@@ -19,7 +19,9 @@ This `README.md` describes the SRE steps required to provision an environment th
 
 This suite of automation can be used for a Proof of Technology environment, or used as a foundation for production workloads with a fully working end-to-end cloud-native environment. The base environment provides a collection of shared services, an edge network, a management network, and a workload network. This automation contains includes OpenShift Developer Tools from the [Cloud-Native Toolkit project](https://cloudnativetoolkit.dev/)
 
+--- 
 
+If choosing to create new infrastructure, the following services on IBM Cloud will be provisioned:
 **Shared services**
 
 - IBM Key Protect _- For the highest level of security, you can also use a Hyper Protect Crypto Service_ instance
@@ -59,7 +61,7 @@ Automation is provided in following Terraform packages that will need to be run 
 
 Clone this repository to access the automation to provision this reference architecture on the IBM Cloud. This repo contains the following defined _Bill of Materials_ or **BOMS** for short. They logically build up to deliver a set of IBM Cloud best practices. The reason for having them separate at this stage is to enable a layered approach to success. This enables SREs to use them in logical blocks. One set for Shared Services for a collection of **Network VPC**, **Development VPC**  that maybe installed in separate regions.
 
-### z/OS Development Environemnt 
+### z/OS Development Environment 
 
 | BOM ID | Name                                                                                        | Description                                                                                                                                             | Run Time |
 |--------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------| -------- |
@@ -69,12 +71,13 @@ Clone this repository to access the automation to provision this reference archi
 | 120    | [120 - IBM z/OS Dev Development VPC no OpenShift](./120-ibm-zdev-development-vpc) | Provision a **Development VPC** with IBM Z Virtual Server and connect to Transit Gateway                                                                | 45 mins  |
 | 130    | [130 - IBM z/OS Dev Development OpenShift Cluster](./130-ibm-zdev-development-vpc-openshift) | Provision a **Development VPC** with IBM Z Virtual Server, Red Hat OpenShift Cluster and connect to Transit Gateway                                     | 45 mins  |
 | 160    | [160 - IBM z/OS Dev Developer Tools Cluster](./160-ibm-zdev-openshift-dev-tools)            | Provision a set of common CNCF developer tools into Red Hat OpenShift to provide a DevSecOps SDLC that support industry common best practices for CI/CD | 20 mins  |
+| 165    | [160 - IBM z/OS Dev Developer Tools for an existing Cluster](./165-ibm-openshift-wazi-dev-tools)            | Deploy IBM Wazi for Dev Spaces into an existing OpenShift cluster on any cloud. | 15 mins  |
 
 ### Configuration guidance
 
 There are a couple of things to keep in mind when preparing to deploy the architectures that will impact the naming conventions:
 
-#### Creating multiple Management 
+#### Creating multiple instances 
 
 If you are planning to create multiple instances of the Development architecture in the same account, the following must be accounted for:
 
@@ -82,18 +85,22 @@ If you are planning to create multiple instances of the Development architecture
 
 ## Prerequisites
 
+If creating new infrastructure, the following prerequisites are required:
+
 1. Have access to an IBM Cloud Account, Enterprise account is best for workload isolation but if you only have a Pay Go account this set of terraform can be run in that level of account.
 
 2. Download OpenVPN Client from https://openvpn.net/vpn-server-resources/connecting-to-access-server-with-macos/#installing-a-client-application for your client device, this has been tested on MacOS
 
 3. At this time the most reliable way of running this automation is with Terraform in your local machine either through a bootstrapped docker image or with native tools installed. We provide a Container image that has all the common SRE tools installed. [CLI Tools Image,](https://quay.io/repository/ibmgaragecloud/cli-tools?tab=tags) [Source Code for CLI Tools](https://github.com/cloud-native-toolkit/image-cli-tools)
 
+If deploying Wazi for Dev Spaces into an existing cluster, please make sure your cluster meets the minimum requirements:
+https://www.ibm.com/docs/en/cloud-paks/z-modernization-stack/2022.4?topic=admin-requirements
 
 ## Setup
 
 ### Key Management
 
-The first step in this automation is to provision a Key Management service instance.  By default, this Terraform automation will provision an instance of the Key Protect key management service.  Optionally, you can provision a Hyper Protect Crypto Services instance into the nominated account and initialise the key ceronmony by changing the `kms_service` tfvar value to `hpcs`. You can do this with the following automation. We recommend to follow the product docs to perform the quick initialization.
+The first step in the infrastructure automation is to provision a Key Management service instance.  By default, this Terraform automation will provision an instance of the Key Protect key management service.  Optionally, you can provision a Hyper Protect Crypto Services instance into the nominated account and initialise the key ceronmony by changing the `kms_service` tfvar value to `hpcs`. You can do this with the following automation. We recommend to follow the product docs to perform the quick initialization.
 
 [Hyper Protect Cyrpto Service Documentation](https://cloud.ibm.com/docs/hs-crypto?topic=hs-crypto-get-started)
 
@@ -105,7 +112,7 @@ For proof of technology environments we recommend using the `auto-init` feature.
 2. Determine which reference architecture you will be deploying. There are currently two options available:
    - `vpc`: IBM Cloud - VPC with virtual servers reference architecture
    - `ocp`: IBM Cloud - VPC with Red Hat OpenShift reference architecture
-   - `all`: Will copy all the terraform bundles into your workspace bundles prefixed `000` to `160`
+   - `existing`: Will copy the terraform bundles for deploying Wazi for Dev Spaces into an existing OpenShift cluster
 3. Run the `setup-workspace.sh -a {ARCH}` script to create a copy of the Terraform scripts in a `/workspace/current` directory and generate the SSH keys needed for the various VSI instances.
    ```
    ./setup-workspace.sh -a ocp
@@ -119,7 +126,11 @@ There are two methods of deployment: automatic or manual:
 ### Set up credentials
 
 1. Copy `credentials.template` to `credentials.properties`.
-2. Provide your IBM Cloud API key as the value for the `ibmcloud.api.key` variable in `credentials.properties` (**Note:** `*.properties` has been added to `.gitignore` to ensure that the file containing the apikey cannot be checked into Git.)
+2. If creating VSI or OpenShift infrastructure, then you will need to provide your IBM Cloud API key as the value for the `ibmcloud_api_key` variable in `credentials.properties` (**Note:** `*.properties` has been added to `.gitignore` to ensure that the file containing the apikey cannot be checked into Git.)
+3. If you are deploying IBM Wazi for Dev Spaces into an existing cluster, you will need to provide credentials into `server_url` and `cluster_login_token` in the `credentials.properties` file.  
+  - From you OpenShift console click on top right menu and select Copy login command and click on Display Token
+  - Copy the API Token value into the cluster_login_token value
+  - Copy the Server URL into the server_url value, only the part starting with https
 
 ### Automatically apply the entire solution
 
@@ -164,7 +175,7 @@ User the `./apply-all.sh` script to deploy all components of this solution autom
 
 ## Connecting to VPN
 
-The `110-ibm-zdev-network-vpc` layer creates a VPN that you can use to connect to the private VPC network.  During execution of this layer, a client-side VPN profile will also be created.  You can use this with the [OpenVPN](https://openvpn.net/vpn-server-resources/connecting-to-access-server-with-macos) client to connect your computer to the VPN service.
+When provisioning infrastructure on IBM Cloud, the `110-ibm-zdev-network-vpc` layer creates a VPN that you can use to connect to the private VPC network.  During execution of this layer, a client-side VPN profile will also be created.  You can use this with the [OpenVPN](https://openvpn.net/vpn-server-resources/connecting-to-access-server-with-macos) client to connect your computer to the VPN service.
 
 To connect to vpn:
 

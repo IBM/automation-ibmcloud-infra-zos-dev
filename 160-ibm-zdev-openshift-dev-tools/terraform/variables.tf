@@ -348,11 +348,6 @@ variable "gitea_password" {
   description = "The password for the instance"
   default = ""
 }
-variable "gitea_ca_cert" {
-  type = string
-  description = "The ca certificate"
-  default = ""
-}
 variable "gitea_ca_cert_file" {
   type = string
   description = "The path to the file that contains the ca certificate"

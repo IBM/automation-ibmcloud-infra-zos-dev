@@ -31,16 +31,13 @@ module "ibm-secrets-manager" {
   create_auth = var.ibm-secrets-manager_create_auth
   ibmcloud_api_key = var.ibmcloud_api_key
   kms_enabled = var.ibm-secrets-manager_kms_enabled
-  kms_id = var.ibm-secrets-manager_kms_id
   kms_key_crn = var.ibm-secrets-manager_kms_key_crn
-  kms_private_endpoint = var.ibm-secrets-manager_kms_private_endpoint
-  kms_private_url = var.ibm-secrets-manager_kms_private_url
-  kms_public_url = var.ibm-secrets-manager_kms_public_url
   label = var.ibm-secrets-manager_label
   name = var.ibm-secrets-manager_name
   name_prefix = var.name_prefix
   private_endpoint = var.ibm-secrets-manager_private_endpoint
   provision = var.ibm-secrets-manager_provision
+  purge = var.ibm-secrets-manager_purge
   region = var.region
   resource_group_name = module.resource_group.name
   trial = var.ibm-secrets-manager_trial
@@ -59,17 +56,14 @@ module "ibm-secrets-manager" {
 | ibmcloud_api_key | The IBM Cloud api key | true |  |  |
 | provision | Flag indicating that the instance should be provisioned. If false then an existing instance will be looked up | false | true |  |
 | kms_enabled | Flag indicating that kms encryption should be enabled for this instance | true |  |  |
-| kms_id | The crn of the KMS instance that will be used to encrypt the instance. | false | null | kms_key.kms_id |
-| kms_public_url | The public url of the KMS instance that will be used to encrypt the instance. | false | null | kms_key.kms_public_url |
-| kms_private_url | The private url of the KMS instance that will be used to encrypt the instance. | false | null | kms_key.kms_private_url |
-| kms_private_endpoint | Flag indicating the KMS private endpoint should be used | false | true |  |
-| kms_key_crn | The crn of the root key in the KMS | false | null | kms_key.crn |
+| kms_key_crn | The crn of the root key in the KMS to encrypt secret content | false | null | kms_key.crn |
 | name_prefix | The name prefix for the Secrets Manager resource. If not provided will default to resource group name. | true |  |  |
 | name | Name of the Secrets Manager. If not provided will be generated as $name_prefix-$label | true |  |  |
 | label | Label used to build the Secrets Manager name if not provided. | false | sm |  |
 | private_endpoint | Flag indicating that the service should be access using private endpoints | false | true |  |
 | create_auth | Flag indicating the service authorization should be created to allow this service to access the KMS service | false | true |  |
 | trial | Flag indicating whether the instance to be deployed is to be a trial plan.  | true |  |  |
+| purge | Flag indicating whether the instance should be purged from reclamation on destroy | true |  |  |
 
 ### Outputs
 

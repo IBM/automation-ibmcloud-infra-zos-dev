@@ -10,7 +10,7 @@ Usage()
    echo "Usage: setup-workspace.sh -a REF_ARCH"
    echo "  options:"
    #echo "  t     the template to use for the deployment (small or full)"
-   echo "  a     the reference architecture to deploy (vpc or ocp or all)"
+   echo "  a     the reference architecture to deploy (vpc or ocp or existing)"
    echo "  h     Print this help"
    echo
 }
@@ -32,7 +32,7 @@ while getopts ":a:t:" option; do
    esac
 done
 
-if [[ -z "${TEMPLATE_FLAVOR}" ]] || [[ ! "${TEMPLATE_FLAVOR}" =~ small|full|zdev ]] || [[ -z "${REF_ARCH}" ]] || [[ ! "${REF_ARCH}" =~ ocp|vpc|all ]]; then
+if [[ -z "${TEMPLATE_FLAVOR}" ]] || [[ ! "${TEMPLATE_FLAVOR}" =~ small|full|zdev ]] || [[ -z "${REF_ARCH}" ]] || [[ ! "${REF_ARCH}" =~ ocp|vpc|existing ]]; then
   Usage
   exit 1
 fi
@@ -51,8 +51,10 @@ cd "${WORKSPACE_DIR}"
 
 echo "Setting up workspace in '${WORKSPACE_DIR}'"
 echo "*****"
+if [[ "${REF_ARCH}" != "existing" ]]; then
+  ${SCRIPT_DIR}/create-ssh-keys.sh
+fi
 
-${SCRIPT_DIR}/create-ssh-keys.sh
 cp "${SCRIPT_DIR}/terraform.tfvars.template-${TEMPLATE_FLAVOR}" ./terraform.tfvars
 
 # append random string into suffix variable in tfvars  to prevent name collisions in object storage buckets
@@ -75,6 +77,7 @@ WORKSPACE_DIR=$(cd "${WORKSPACE_DIR}"; pwd -P)
 
 VPC_ARCH="000|100|110"
 OCP_ARCH="000|100|120|160"
+EXISTING_ARCH="165"
 
 echo "Setting up automation  ${WORKSPACE_DIR}"
 
@@ -96,7 +99,7 @@ do
     continue
   fi
 
-  if [[ "${REF_ARCH}" == "all" ]] && [[ ! "${name}" =~ ${VPC_ARCH}|${OCP_ARCH} ]]; then
+  if [[ "${REF_ARCH}" == "existing" ]] && [[ ! "${name}" =~ ${EXISTING_ARCH} ]]; then
     continue
   fi
 
@@ -108,7 +111,9 @@ do
   cp -R "${SCRIPT_DIR}/${name}/bom.yaml" .
   cp -R "${SCRIPT_DIR}/${name}/terraform/"* .
   ln -s "${WORKSPACE_DIR}"/terraform.tfvars ./terraform.tfvars
-  ln -s "${WORKSPACE_DIR}"/ssh-* .
+  if [[ "${REF_ARCH}" != "existing" ]]; then
+    ln -s "${WORKSPACE_DIR}"/ssh-* .
+  fi
   ln -s "${SCRIPT_DIR}/apply.sh" ./apply.sh
   ln -s "${SCRIPT_DIR}/destroy.sh" ./destroy.sh
 

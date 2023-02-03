@@ -452,29 +452,9 @@ variable "ibm-secrets-manager_kms_enabled" {
   description = "Flag indicating that kms encryption should be enabled for this instance"
   default = false
 }
-variable "ibm-secrets-manager_kms_id" {
-  type = string
-  description = "The crn of the KMS instance that will be used to encrypt the instance."
-  default = null
-}
-variable "ibm-secrets-manager_kms_public_url" {
-  type = string
-  description = "The public url of the KMS instance that will be used to encrypt the instance."
-  default = null
-}
-variable "ibm-secrets-manager_kms_private_url" {
-  type = string
-  description = "The private url of the KMS instance that will be used to encrypt the instance."
-  default = null
-}
-variable "ibm-secrets-manager_kms_private_endpoint" {
-  type = bool
-  description = "Flag indicating the KMS private endpoint should be used"
-  default = true
-}
 variable "ibm-secrets-manager_kms_key_crn" {
   type = string
-  description = "The crn of the root key in the KMS"
+  description = "The crn of the root key in the KMS to encrypt secret content"
   default = null
 }
 variable "ibm-secrets-manager_name" {
@@ -500,5 +480,10 @@ variable "ibm-secrets-manager_create_auth" {
 variable "ibm-secrets-manager_trial" {
   type = bool
   description = "Flag indicating whether the instance to be deployed is to be a trial plan. "
+  default = false
+}
+variable "ibm-secrets-manager_purge" {
+  type = bool
+  description = "Flag indicating whether the instance should be purged from reclamation on destroy"
   default = false
 }

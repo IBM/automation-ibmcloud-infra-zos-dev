@@ -122,7 +122,7 @@ spec:
           ref: zos_resource_group
     - name: ibm-secrets-manager
       alias: ibm-secrets-manager
-      version: v1.0.2
+      version: v1.1.0
       variables:
         - name: provision
           value: false
@@ -299,7 +299,7 @@ spec:
           ref: vpe-subnets
     - name: ibm-vpn-server
       alias: ibm-vpn-server
-      version: v0.2.2
+      version: v0.2.3
       dependencies:
         - name: subnets
           ref: ingress-subnets
