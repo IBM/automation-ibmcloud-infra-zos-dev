@@ -146,13 +146,13 @@ Use the `./apply-all.sh` script to deploy all components of this solution automa
 
 ### Manually apply each architecture in the solution
 
-1. From the root of the cloned repository directory, run `./launch.sh`. This will start a docker container that contains the required libraries to run the terraform scripts.
+If you choose not to use the `apply-all.sh` script, then you can execute each layer individually using these steps:
 
-2. The container should have opened in the `/terraform` as the working directory which should be mounted from repository directory on the host.  ⚠ Be sure to change to the `/workspace/current` directory.
-3. Change directory to the terraform layer that will be applied (e.g. `000-account-setup` and `100-common-services`)
-4. Initialize the environment with `terraform init`
-5. Apply the terraform with `terraform apply -auto-approve`. If all is configured properly you should not be prompted again and the terraform should run to completion.
-6. It is recommended to run Terraform bundles in this order:
+1. The container should have opened in the `/terraform` as the working directory which should be mounted from repository directory on the host.  ⚠ Be sure to change to the `/workspace/current` directory.
+2. Change directory to the terraform layer that will be applied (e.g. `000-account-setup` and `100-common-services`)
+3. Initialize the environment with `terraform init`
+4. Apply the terraform with `terraform apply -auto-approve`. If all is configured properly you should not be prompted again and the terraform should run to completion.
+5. It is recommended to run Terraform bundles in this order:
    - `000`
    - `110`
    - `120`|`130` (you should not run both)
