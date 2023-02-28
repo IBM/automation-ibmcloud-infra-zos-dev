@@ -9,8 +9,6 @@ metadata:
   annotations:
     displayName: Shared services
     description: Managed services that are shared across the development networks
-    dependencies.cloudnativetoolkit.dev/provides: ''
-    dependencies.cloudnativetoolkit.dev/needs: ''
 spec:
   modules:
     - name: ibm-access-group

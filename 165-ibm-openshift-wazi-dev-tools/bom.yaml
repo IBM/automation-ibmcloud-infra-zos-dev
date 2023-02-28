@@ -17,6 +17,8 @@ metadata:
     deployment-type/gitops: 'true'
     dependencies.cloudnativetoolkit.dev/provides: gitops
     dependencies.cloudnativetoolkit.dev/needs: cluster
+    dependencies.cloudnativetoolkit.dev/provides_gitops: gitops_repo
+    dependencies.cloudnativetoolkit.dev/needs_cluster: cluster
 spec:
   modules:
     - name: argocd-bootstrap

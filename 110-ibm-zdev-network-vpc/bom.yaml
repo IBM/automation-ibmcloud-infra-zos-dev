@@ -9,8 +9,6 @@ metadata:
   annotations:
     displayName: Network VPC
     description: Network VPC with VPN and Bastion servers
-    dependencies.cloudnativetoolkit.dev/provides: ''
-    dependencies.cloudnativetoolkit.dev/needs: ''
 spec:
   modules:
     - name: ibm-access-group

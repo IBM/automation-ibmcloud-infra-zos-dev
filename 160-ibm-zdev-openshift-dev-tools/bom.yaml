@@ -11,8 +11,9 @@ metadata:
     description: Open-Source collection of assets for application development on OpenShift
     vpn/required: 'true'
     deployment-type/gitops: 'true'
-    dependencies.cloudnativetoolkit.dev/provides: gitops,cluster
-    dependencies.cloudnativetoolkit.dev/needs: ''
+    dependencies.cloudnativetoolkit.dev/provides: cluster,gitops
+    dependencies.cloudnativetoolkit.dev/provides_cluster: cluster
+    dependencies.cloudnativetoolkit.dev/provides_gitops: gitops_repo
 spec:
   modules:
     - name: gitops-repo
