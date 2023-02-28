@@ -65,7 +65,6 @@ Clone this repository to access the automation to provision this reference archi
 
 | BOM ID | Name                                                                                        | Description                                                                                                                                             | Run Time |
 |--------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------| -------- |
-| 000    | [000 - IBM z/OS Dev Account Setup](./000-ibm-zdev-account-setup)                            | Set up account and provision a set of account-wide services. This is intended to only be run one time in an account                                     | 5 Mins   |
 | 100    | [100 - IBM z/OS Dev Shared Services](./100-ibm-zdev-shared-services)                        | Provision a set of common cloud managed services that can be shared with **Network** and **Development** VPCs                                           | 5 Mins   |
 | 110    | [110 - IBM z/OS Dev Network VPC](./110-ibm-zdev-edge-vpc)                                   | Provision an **Network VPC** with Client to Site VPN & Bastion                                                                                          | 10 Mins  |
 | 120    | [120 - IBM z/OS Dev Development VPC no OpenShift](./120-ibm-zdev-development-vpc) | Provision a **Development VPC** with IBM Z Virtual Server and connect to Transit Gateway                                                                | 45 mins  |
@@ -149,11 +148,10 @@ Use the `./apply-all.sh` script to deploy all components of this solution automa
 If you choose not to use the `apply-all.sh` script, then you can execute each layer individually using these steps:
 
 1. The container should have opened in the `/terraform` as the working directory which should be mounted from repository directory on the host.  ⚠ Be sure to change to the `/workspace/current` directory.
-2. Change directory to the terraform layer that will be applied (e.g. `000-account-setup` and `100-common-services`)
+2. Change directory to the terraform layer that will be applied (e.g. `100-common-services`)
 3. Initialize the environment with `terraform init`
 4. Apply the terraform with `terraform apply -auto-approve`. If all is configured properly you should not be prompted again and the terraform should run to completion.
 5. It is recommended to run Terraform bundles in this order:
-   - `000`
    - `110`
    - `120`|`130` (you should not run both)
    - Connect to the VPN (see instructions below)

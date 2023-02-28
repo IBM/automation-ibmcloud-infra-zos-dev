@@ -47,8 +47,8 @@ module "cluster" {
 module "gitea" {
   source = "github.com/cloud-native-toolkit/terraform-tools-gitea?ref=v0.5.1"
 
-  #ca_cert = module.cluster.ca_cert
-  #ca_cert_file = var.gitea_ca_cert_file
+  ca_cert = module.cluster.ca_cert
+  ca_cert_file = var.gitea_ca_cert_file
   cluster_config_file = module.cluster.config_file_path
   cluster_type = module.cluster.platform.type_code
   instance_name = var.gitea_instance_name
