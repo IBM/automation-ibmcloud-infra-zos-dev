@@ -127,25 +127,31 @@ There are two methods of deployment: automatic or manual:
 1. Copy `credentials.template` to `credentials.properties`.
 2. If creating VSI or OpenShift infrastructure, then you will need to provide your IBM Cloud API key as the value for the `ibmcloud_api_key` variable in `credentials.properties` (**Note:** `*.properties` has been added to `.gitignore` to ensure that the file containing the apikey cannot be checked into Git.)
 3. If you are deploying IBM Wazi for Dev Spaces into an existing cluster, you will need to provide credentials into `server_url` and `cluster_login_token` in the `credentials.properties` file.  
-  - From you OpenShift console click on top right menu and select Copy login command and click on Display Token
-  - Copy the API Token value into the cluster_login_token value
-  - Copy the Server URL into the server_url value, only the part starting with https
+    - From you OpenShift console click on top right menu and select Copy login command and click on Display Token
+      - Copy the API Token value into the cluster_login_token value
+      - Copy the Server URL into the server_url value, only the part starting with https
+
+### Launch the automation runtime
+
+We recommend using Docker Desktop for running this automation, however Multipass (Ubuntu Virtual Machine) can also be used to execute this automation in a controlled environment configuration. Detailed instructions for downloading and configuring both Docker Desktop and Multipass can be found in [RUNTIMES.md](https://github.com/IBM/ibm-cloud-reference-architectures/blob/main/RUNTIMES.md)
+
+After setting your credentials, then launch the automation runtime.
+- If using Docker Desktop, run `./launch.sh`. This will start a container image with the prompt opened in the `/terraform` directory.
+- If using Multipass, run `mutlipass shell cli-tools` to start the interactive shell, and cd into the `/automation/{template}` directory, where `{template}` is the folder you've cloned this repo. Be sure to run `source credentials.properties` once in the shell.
 
 ### Automatically apply the entire solution
 
-User the `./apply-all.sh` script to deploy all components of this solution automatically.  This will deploy all layers of the solution, and automatically connect to the VPN to install development tools in the OpenShift cluster.  If you chose this option, skip ahead to the **Connecting to VPN** section to connect your local machine to the VPN instance..
+Use the `./apply-all.sh` script to deploy all components of this solution automatically.  This will deploy all layers of the solution, and automatically connect to the VPN to install development tools in the OpenShift cluster.  If you chose this option, skip ahead to the **Connecting to VPN** section to connect your local machine to the VPN instance..
 
 ### Manually apply each architecture in the solution
 
-1. From the root of the cloned repository directory, run `./launch.sh`. This will start a docker container that contains the required libraries to run the terraform scripts.
+If you choose not to use the `apply-all.sh` script, then you can execute each layer individually using these steps:
 
-   > This `launch.sh` currently has a dependency on Docker Desktop we are working on alternative solution. 
-
-2. The container should have opened in the `/terraform` as the working directory which should be mounted from repository directory on the host.  ⚠ Be sure to change to the `/workspace/current` directory.
-3. Change directory to the terraform layer that will be applied (e.g. `100-common-services`)
-4. Initialize the environment with `terraform init`
-5. Apply the terraform with `terraform apply -auto-approve`. If all is configured properly you should not be prompted again and the terraform should run to completion.
-6. It is recommended to run Terraform bundles in this order:
+1. The container should have opened in the `/terraform` as the working directory which should be mounted from repository directory on the host.  ⚠ Be sure to change to the `/workspace/current` directory.
+2. Change directory to the terraform layer that will be applied (e.g. `100-common-services`)
+3. Initialize the environment with `terraform init`
+4. Apply the terraform with `terraform apply -auto-approve`. If all is configured properly you should not be prompted again and the terraform should run to completion.
+5. It is recommended to run Terraform bundles in this order:
    - `110`
    - `120`|`130` (you should not run both)
    - Connect to the VPN (see instructions below)
