@@ -568,13 +568,13 @@ output "ibm-vpc-vsi_security_group" {
   description = "The security group that was created"
   value = module.ibm-vpc-vsi.security_group
 }
-output "ibm-vpc-vsi_output network_interface_ids {" {
-  description = "the value of ibm-vpc-vsi_output network_interface_ids {"
-  value = module.ibm-vpc-vsi.output network_interface_ids {
+output "ibm-vpc-vsi_network_interface_ids" {
+  description = "the value of ibm-vpc-vsi_network_interface_ids"
+  value = module.ibm-vpc-vsi.network_interface_ids
 }
-output "ibm-vpc-vsi_output count {" {
+output "ibm-vpc-vsi_count" {
   description = "The number of vsi instances created. Should be the same as length(names)"
-  value = module.ibm-vpc-vsi.output count {
+  value = module.ibm-vpc-vsi.count
 }
 output "vpe-cos_id" {
   description = "The id of the created VPE gateway"
