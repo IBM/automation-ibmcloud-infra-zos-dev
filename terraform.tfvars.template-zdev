@@ -51,7 +51,7 @@ zos_name_prefix="zos"
 ibm-vpc-vsi_profile_name="mz2-2x16"
 
 # The name of the image to use for the virtual server
-ibm-vpc-vsi_image_name="ibm-zos-2-4-s390x-dev-test-wazi-5"
+ibm-vpc-vsi_image_name="ibm-zos-2-4-s390x-dev-test-wazi-7"
 
 
 
@@ -71,7 +71,7 @@ cluster-config_banner_background_color="green"
 ## Misc Variables
 ## ***************
 
-registry_namespace = ""
+registry_namespace = "wazi-dev-cluster-RANDOM"
 gitops_repo_repo = "wazi-dev-cluster"
 
 ## ***************

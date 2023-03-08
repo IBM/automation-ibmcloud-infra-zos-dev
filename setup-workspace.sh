@@ -55,7 +55,10 @@ if [[ "${REF_ARCH}" != "existing" ]]; then
   ${SCRIPT_DIR}/create-ssh-keys.sh
 fi
 
-cp "${SCRIPT_DIR}/terraform.tfvars.template-${TEMPLATE_FLAVOR}" ./terraform.tfvars
+echo "copying terraform.tfvars"
+cat "${SCRIPT_DIR}/terraform.tfvars.template-${TEMPLATE_FLAVOR}"  | \
+  sed "s/RANDOM/${RANDOM}/g"  \
+  > "${WORKSPACE_DIR}"/terraform.tfvars
 
 # append random string into suffix variable in tfvars  to prevent name collisions in object storage buckets
 if command -v openssl &> /dev/null
