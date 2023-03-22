@@ -55,7 +55,7 @@ spec:
           ref: tools_namespace
     - name: gitops-wazi-ds
       alias: gitops-wazi-ds
-      version: v1.0.1
+      version: v1.0.2
       dependencies:
         - id: namespace
           ref: wazi_namespace

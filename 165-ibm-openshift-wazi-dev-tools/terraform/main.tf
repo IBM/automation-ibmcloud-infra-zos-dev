@@ -102,7 +102,7 @@ module "gitops-tekton-resources" {
   task_release = var.gitops-tekton-resources_task_release
 }
 module "gitops-wazi-ds" {
-  source = "github.com/cloud-native-toolkit/terraform-gitops-wazi-dev-spaces?ref=v1.0.1"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-wazi-dev-spaces?ref=v1.0.2"
 
   git_credentials = module.gitops_repo.git_credentials
   gitops_config = module.gitops_repo.gitops_config

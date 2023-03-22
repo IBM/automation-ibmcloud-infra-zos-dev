@@ -66,7 +66,7 @@ already be in .gitignore.
 | [gitops-namespace](https://github.com/cloud-native-toolkit/terraform-gitops-namespace) | Module to configure the provisioning of a namespace in a GitOps repo | v1.12.2 |
 | [gitops-repo](https://github.com/cloud-native-toolkit/terraform-tools-gitops) | Module to provision and set up a GitOps repository | v1.23.3 |
 | [gitops-tekton-resources](https://github.com/cloud-native-toolkit/terraform-gitops-tekton-resources) | Module to populate a gitops repo with Tekton resources (tasks and pipelines). | v2.1.0 |
-| [gitops-wazi-ds](https://github.com/cloud-native-toolkit/terraform-gitops-wazi-dev-spaces) | Module to populate a gitops repo with the resources to provision wazi-dev-spaces | v1.0.1 |
+| [gitops-wazi-ds](https://github.com/cloud-native-toolkit/terraform-gitops-wazi-dev-spaces) | Module to populate a gitops repo with the resources to provision wazi-dev-spaces | v1.0.2 |
 | [gitops-wazi-ds-op](https://github.com/cloud-native-toolkit/terraform-gitops-wazi-ds-operator) | Module to populate a gitops repo with the resources to provision wazi-dev-spaces-operator | v1.0.0 |
 | [ocp-login](https://github.com/cloud-native-toolkit/terraform-ocp-login) | Module to perform a simple cluster login and provide the cluster path | v1.6.2 |
 | [olm](https://github.com/cloud-native-toolkit/terraform-k8s-olm) | Installs Operator Lifecycle Manager in the cluster | v1.3.5 |

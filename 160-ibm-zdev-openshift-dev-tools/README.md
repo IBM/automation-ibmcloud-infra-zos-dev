@@ -63,7 +63,7 @@ already be in .gitignore.
 | [gitops-namespace](https://github.com/cloud-native-toolkit/terraform-gitops-namespace) | Module to configure the provisioning of a namespace in a GitOps repo | v1.12.2 |
 | [gitops-namespace](https://github.com/cloud-native-toolkit/terraform-gitops-namespace) | Module to configure the provisioning of a namespace in a GitOps repo | v1.12.2 |
 | [gitops-tekton-resources](https://github.com/cloud-native-toolkit/terraform-gitops-tekton-resources) | Module to populate a gitops repo with Tekton resources (tasks and pipelines). | v2.1.0 |
-| [gitops-wazi-ds](https://github.com/cloud-native-toolkit/terraform-gitops-wazi-dev-spaces) | Module to populate a gitops repo with the resources to provision wazi-dev-spaces | v1.0.1 |
+| [gitops-wazi-ds](https://github.com/cloud-native-toolkit/terraform-gitops-wazi-dev-spaces) | Module to populate a gitops repo with the resources to provision wazi-dev-spaces | v1.0.2 |
 | [gitops-wazi-ds-op](https://github.com/cloud-native-toolkit/terraform-gitops-wazi-ds-operator) | Module to populate a gitops repo with the resources to provision wazi-dev-spaces-operator | v1.0.0 |
 | [ibm-resource-group](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-resource-group) | Creates a resource groups in the account | v3.3.5 |
 | [ibm-ocp-vpc](https://github.com/terraform-ibm-modules/terraform-ibm-toolkit-ocp-vpc) | Provisions an IBM Cloud OCP cluster | v1.16.3 |
